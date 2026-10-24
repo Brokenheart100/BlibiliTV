@@ -1,0 +1,61 @@
+{
+  "recordedAtUtc": "2026-10-24T14:57:35.614847Z",
+  "videoId": "BV1wR4Xz6EqG",
+  "part": 2,
+  "cid": "40027951034",
+  "codec": "avc1.640033",
+  "quality": 16,
+  "tracks": [
+    {
+      "id": 32,
+      "codecs": "avc1.640033",
+      "width": 852,
+      "height": 480
+    },
+    {
+      "id": 32,
+      "codecs": "hvc1.1.6.L120.90",
+      "width": 852,
+      "height": 480
+    },
+    {
+      "id": 32,
+      "codecs": "av01.0.08M.08.0.110.01.01.01.0",
+      "width": 852,
+      "height": 480
+    },
+    {
+      "id": 16,
+      "codecs": "hvc1.1.6.L120.90",
+      "width": 640,
+      "height": 360
+    },
+    {
+      "id": 16,
+      "codecs": "avc1.640033",
+      "width": 640,
+      "height": 360
+    },
+    {
+      "id": 16,
+      "codecs": "av01.0.08M.08.0.110.01.01.01.0",
+      "width": 640,
+      "height": 360
+    }
+  ],
+  "checks": [
+    {
+      "kind": "video",
+      "httpStatus": 206,
+      "contentType": "application/octet-stream",
+      "receivedBytes": 1024
+    },
+    {
+      "kind": "audio",
+      "httpStatus": 206,
+      "contentType": "application/octet-stream",
+      "receivedBytes": 1024
+    }
+  ],
+  "signedUrlsPersisted": false
+}

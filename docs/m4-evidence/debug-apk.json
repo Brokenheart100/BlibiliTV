@@ -1,0 +1,8 @@
+{
+  "recordedAtUtc": "2026-10-24T15:23:32.6375400Z",
+  "entrypoint": "lib/main.dart",
+  "path": "build/app/outputs/flutter-apk/app-debug.apk",
+  "bytes": 239406077,
+  "sha256": "6eb44d6ec752e2fbddd4c3ba02766085b7b3f02c9e2f898ada6419b25933c505",
+  "releaseSigned": false
+}

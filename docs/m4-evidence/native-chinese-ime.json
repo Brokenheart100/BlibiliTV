@@ -1,0 +1,17 @@
+{
+  "recordedAtUtc": "2026-10-24T14:43:05.755424Z",
+  "device": "Android TV API 36 x86_64 emulator-5554",
+  "ime": "Gboard 17.3.11.902587967-tv_release-x86_64",
+  "language": "Chinese (Simplified)",
+  "selectedSubtype": 617035939,
+  "query": "记录",
+  "input": "native IME virtual keyboard using D-pad arrows and select",
+  "pinyinSequence": "j i l u",
+  "candidateCommitted": true,
+  "keyboardDismissedWithBack": true,
+  "downThenSelectSubmitted": true,
+  "resultCaptionObserved": "“记录”的搜索结果",
+  "flutterDriverTextInjectionUsedForChinese": false,
+  "realResultsRendered": true,
+  "settingsRestoredAfterValidation": true
+}

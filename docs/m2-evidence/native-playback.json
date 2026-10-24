@@ -1,0 +1,25 @@
+{
+  "recordedAtUtc": "2026-10-24T09:19:17.990842Z",
+  "videoId": "BV1U3n46GEzY",
+  "partId": "42988143830",
+  "width": 640,
+  "height": 360,
+  "audioSampleRate": 48000,
+  "pausedAtMs": 3133,
+  "seekedToMs": 13133,
+  "savedAtMs": 13133,
+  "resumedFromMs": 13133,
+  "actualResumePositionMs": 13133,
+  "switchCount": 20,
+  "switchVideoIds": [
+    "BV1U3n46GEzY",
+    "BV12qnt6VEM1"
+  ],
+  "maximumLiveEngines": 1,
+  "enginesCreated": 22,
+  "enginesReleased": 22,
+  "liveAfterBack": 0,
+  "returnedToOriginalCard": true,
+  "database": "dedicated native validation SQLite",
+  "accountLoginAttempted": false
+}

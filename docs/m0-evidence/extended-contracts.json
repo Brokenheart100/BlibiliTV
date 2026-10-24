@@ -1,0 +1,24 @@
+{
+  "recordedAtUtc": "2026-10-24T07:35:59.084260Z",
+  "bvid": "BV1U3n46GEzY",
+  "dashQualityIds": [
+    16,
+    32
+  ],
+  "urlDeadlinePresent": true,
+  "observedUrlTtlSeconds": 7199,
+  "multipartCandidatesInspected": 1,
+  "multipart": {
+    "passed": true,
+    "bvid": "BV1wR4Xz6EqG",
+    "parts": 103,
+    "firstCid": 40027950776,
+    "secondCid": 40027951034,
+    "secondPartHasVideoAndAudio": true
+  },
+  "limitations": [
+    "Quality IDs describe returned metadata, not all decoded profiles",
+    "Actual expiry and re-resolution are not exercised"
+  ],
+  "credentialsAndUrlsRedacted": true
+}

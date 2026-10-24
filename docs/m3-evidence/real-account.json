@@ -1,0 +1,44 @@
+{
+  "recordedAtUtc": "2026-10-24T10:36:34.1824885Z",
+  "device": "Android TV emulator-5554 / API 36 / x86_64",
+  "accountConfirmation": "Phone QR scan confirmed by user",
+  "freshProcessIds": [
+    9163,
+    9622,
+    9948
+  ],
+  "restoredSession": {
+    "status": "authenticated",
+    "persisted": true,
+    "notice": false
+  },
+  "authenticatedContracts": {
+    "navAuthenticated": true,
+    "ownerMatchesNav": true,
+    "credentialBoundToApi": true,
+    "catalogCount": 12,
+    "detailAndPart": true,
+    "separateAvcAndAac": true,
+    "videoId": "BV1U3n46GEzY",
+    "quality": 16
+  },
+  "nativePlayer": {
+    "screenshot": "authenticated-playing.png",
+    "phase": "playing",
+    "observedPosition": "00:08"
+  },
+  "logout": {
+    "status": "anonymous",
+    "persisted": false,
+    "notice": false
+  },
+  "serverLogoutConfirmed": true,
+  "coldStartAfterLogout": {
+    "status": "anonymous",
+    "persisted": false,
+    "notice": false
+  },
+  "naturalRefreshValidated": false,
+  "realExpiryReloginValidated": false,
+  "credentialsAndAccountIdentifiersIncluded": false
+}

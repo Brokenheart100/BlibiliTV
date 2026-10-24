@@ -1,0 +1,21 @@
+{
+  "recordedAtUtc": "2026-10-24T07:35:13.474632Z",
+  "bvid": "BV1U3n46GEzY",
+  "cid": 42988143830,
+  "codec": "avc1.64001E",
+  "quality": 16,
+  "videoOutput": "mediacodec_embed",
+  "requestedHwdec": "mediacodec",
+  "firstFrameMs": 530,
+  "width": 640,
+  "height": 360,
+  "audioSampleRate": 48000,
+  "audioChannels": 2,
+  "hwPixelFormat": null,
+  "pausePassed": true,
+  "seekPositionMs": 10433,
+  "secureStorageSyntheticRoundTrip": true,
+  "engineErrorCount": 0,
+  "mediaUrlsRedacted": true,
+  "limitation": "Decoder/render evidence only; no human audibility or physical-TV hardware claim"
+}

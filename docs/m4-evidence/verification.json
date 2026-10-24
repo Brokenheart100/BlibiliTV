@@ -1,0 +1,36 @@
+{
+  "date": "2026-10-24",
+  "milestone": "M4",
+  "scope": "local unit/widget tests and Android TV API 36 x86_64 emulator-5554",
+  "unitAndWidget": { "passed": 89, "failed": 0, "addedForM4": 22 },
+  "staticAnalysis": {
+    "flutterAnalyze": "No issues found",
+    "dartMcpAnalyze": "No errors"
+  },
+  "flutterMcp": {
+    "hotReload": "success",
+    "runtimeErrorsAtFinalCheck": []
+  },
+  "nativeDiscovery": "native-discovery.json",
+  "nativePlaybackRegression": "native-playback-regression.json",
+  "nativeChineseIme": "native-chinese-ime.json",
+  "defaultProductEntrypoint": {
+    "entrypoint": "lib/main.dart",
+    "debugApkBuild": "passed",
+    "installedWithReplace": true,
+    "tvLauncherColdStart": "passed",
+    "historyRecovery": "cold-search-history.json",
+    "visibleSecondPartPlayback": "p2-playing.png",
+    "publicVideoId": "BV1wR4Xz6EqG",
+    "part": 2,
+    "screenshotPlaybackPosition": "00:03",
+    "apkMetadata": "debug-apk.json"
+  },
+  "notValidatedInM4": [
+    "physical TV and ARM devices",
+    "manual speaker listening",
+    "new real-account personalized recommendation ranking",
+    "long-running and P95 performance",
+    "release signing"
+  ]
+}

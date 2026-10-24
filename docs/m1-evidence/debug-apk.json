@@ -1,0 +1,15 @@
+{
+  "recordedAtUtc": "2026-10-24T08:41:05.7146996Z",
+  "target": "lib/main.dart",
+  "buildVariant": "debug",
+  "package": "app.mamba.mambatv",
+  "apkPath": "build/app/outputs/flutter-apk/app-debug.apk",
+  "bytes": 234808816,
+  "sha256": "7598927f9de12d9e5215c934da6324c6337a3501d3ab2b88ba8f78d845440d2e",
+  "testedDevice": "emulator-5554",
+  "androidApi": 36,
+  "abi": "x86_64",
+  "localTestsPassed": 21,
+  "nativeIntegrationPassed": true,
+  "catalogSource": "fake"
+}

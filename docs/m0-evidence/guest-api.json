@@ -1,0 +1,32 @@
+{
+  "recordedAtUtc": "2026-10-24T07:12:18.027654Z",
+  "environment": "Windows Dart CLI; no login confirmation",
+  "checks": [
+    {
+      "capability": "popular",
+      "passed": true,
+      "detail": "items=20; sample=BV1U3n46GEzY"
+    },
+    {
+      "capability": "search",
+      "passed": true,
+      "detail": "results=20"
+    },
+    {
+      "capability": "detail_and_parts",
+      "passed": true,
+      "detail": "bvid=BV1U3n46GEzY; parts=1"
+    },
+    {
+      "capability": "dash_playback_source",
+      "passed": true,
+      "detail": "bvid=BV1U3n46GEzY; cid=42988143830; video=2; audio=3; codec=avc1.64001E; quality=16"
+    }
+  ],
+  "qr": {
+    "generated": true,
+    "pollCode": 86101,
+    "challengeRedacted": true
+  },
+  "mediaUrlsRedacted": true
+}

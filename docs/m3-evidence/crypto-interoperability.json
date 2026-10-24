@@ -1,0 +1,8 @@
+{
+  "recordedAtUtc": "2026-10-24T10:36:36.061Z",
+  "algorithm": "RSA-1024 OAEP SHA-256",
+  "encryptor": "PointyCastle 4.0.0",
+  "independentDecryptor": "Node v24.21.0 OpenSSL",
+  "syntheticKeyOnly": true,
+  "passed": true
+}

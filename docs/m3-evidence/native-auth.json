@@ -1,0 +1,13 @@
+{
+  "recordedAtUtc": "2026-10-24T10:24:24.504647Z",
+  "fixture": "synthetic account; real Android storage plugins; isolated validation namespace",
+  "dpadLoginAndLogout": true,
+  "backStopsPolling": true,
+  "scannedAndCompletedStates": true,
+  "secureCommit": true,
+  "newRepositoryRestoredFromPlatformStorage": true,
+  "logoutRemovedCredential": true,
+  "newRepositoryAfterLogoutIsGuest": true,
+  "realAccountConfirmed": false,
+  "fullProcessRestartValidated": false
+}

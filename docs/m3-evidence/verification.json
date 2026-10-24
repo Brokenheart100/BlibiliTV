@@ -1,0 +1,18 @@
+{
+  "recordedAtUtc": "2026-10-24T10:42:50.8583267Z",
+  "codeGeneration": "passed",
+  "flutterAnalyze": "No issues found",
+  "mcpAnalyze": "No errors",
+  "unitAndWidgetTests": 64,
+  "unitAndWidgetFailures": 0,
+  "nativeSyntheticAuth": "passed",
+  "realAccountCoreFlow": "passed; user phone confirmation; signed out after validation",
+  "mcpHotReload": "passed",
+  "mcpRuntimeErrorsAtFinalCheck": 0,
+  "productApkBuild": "passed",
+  "productApkInstall": "Success",
+  "leanbackColdLaunch": "Status ok",
+  "releaseSigned": false,
+  "naturalRefreshValidated": false,
+  "physicalTvValidated": false
+}

@@ -1,0 +1,15 @@
+{
+  "recordedAtUtc": "2026-10-24T07:40:01.2935268Z",
+  "entryPoint": "tool/m0_app.dart",
+  "mode": "debug",
+  "applicationId": "app.mamba.mambatv",
+  "minimumApi": 24,
+  "compileApi": 36,
+  "targetApi": 36,
+  "leanbackLauncher": true,
+  "touchscreenRequired": false,
+  "bytes": 153973024,
+  "sha256": "7D7C1ABD2CB9CF5E042B4DB18392709FF22CE8D29D8F05D27E6882C6BBF065E9",
+  "releaseSigned": false,
+  "sourceState": "M0 working tree after initial baseline 466bece"
+}

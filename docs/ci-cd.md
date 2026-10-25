@@ -1,6 +1,6 @@
 # CI/CD：GitHub Actions 与 Android APK 发布
 
-日期：2026-10-25。仓库 `Brokenheart100/mambatv`，默认分支 `master`。配置和本地验证先落地；不把未推送的工作流称为远端已运行成功，也不把自动打包等同于 M7 真机／正式发布验收。验证结果见 [ci-cd-validation.json](ci-cd-validation.json)。
+日期：2026-10-25。仓库 `Brokenheart100/BlibiliTV`，默认分支 `master`；仓库 ID 与原 `Brokenheart100/mambatv` 相同，本地远端已更新为新地址。应用与工作流提交 `c7f0c9226376e49c083f15af17daa9a47936a5f9` 的[首次托管 CI](https://github.com/Brokenheart100/BlibiliTV/actions/runs/40179970843)已通过：工作流检查、质量检查和 Android APK 构建全部成功，覆盖率与三架构 Debug APK 已上传。本次没有创建 tag 或 Release；自动打包不等同于 M7 真机／正式发布验收。验证结果见 [ci-cd-validation.json](ci-cd-validation.json)。
 
 ## 流程与触发
 
@@ -31,7 +31,7 @@ flowchart TD
 
 ## 工具链与检查
 
-唯一工具链清单是 [toolchain.json](../tool/ci/toolchain.json)：Flutter 3.47.5 stable、框架修订 `6a19cca56475dbfba1478ee68d7bd0c2ef891da1`、Dart 3.13.4、Temurin JDK 21、Android API 36、Build Tools 36.0.0、NDK 28.2.13676358；Gradle 9.3.1 使用官方分发 SHA256。官方 stable 的框架修订与本机自定义分支所指提交一致。CI 使用 Ubuntu 24.04；本机 Windows 构建验证的 JDK 仍为 25，不能据此声称 Linux 托管运行已验收。
+唯一工具链清单是 [toolchain.json](../tool/ci/toolchain.json)：Flutter 3.47.5 stable、框架修订 `6a19cca56475dbfba1478ee68d7bd0c2ef891da1`、Dart 3.13.4、Temurin JDK 21、Android API 36、Build Tools 36.0.0、NDK 28.2.13676358；Gradle 9.3.1 使用官方分发 SHA256。官方 stable 的框架修订与本机自定义分支所指提交一致。Windows 本地构建使用 JDK 25；Ubuntu 24.04／Temurin 21 的托管构建也已单独通过，并非用本机结果代替。
 
 直接引用的 Actions 固定完整提交 SHA，版本注释用于人工升级。Flutter／Pub／Gradle 使用缓存，Gradle 仅允许 `master` 写缓存；依赖仍通过 `flutter pub get --enforce-lockfile` 校验，不以缓存代替锁文件。
 
@@ -61,10 +61,10 @@ Flutter 会在干净检出时补充被模板忽略的 Gradle wrapper 脚本／ja
 
 ```powershell
 keytool -genkeypair -keystore D:\private-keys\mambatv-release.jks -alias mambatv -keyalg RSA -keysize 4096 -validity 10000
-[Convert]::ToBase64String([IO.File]::ReadAllBytes('D:\private-keys\mambatv-release.jks')) | gh secret set ANDROID_KEYSTORE_BASE64 --repo Brokenheart100/mambatv
-gh secret set ANDROID_KEYSTORE_PASSWORD --repo Brokenheart100/mambatv
-gh secret set ANDROID_KEY_ALIAS --repo Brokenheart100/mambatv
-gh secret set ANDROID_KEY_PASSWORD --repo Brokenheart100/mambatv
+[Convert]::ToBase64String([IO.File]::ReadAllBytes('D:\private-keys\mambatv-release.jks')) | gh secret set ANDROID_KEYSTORE_BASE64 --repo Brokenheart100/BlibiliTV
+gh secret set ANDROID_KEYSTORE_PASSWORD --repo Brokenheart100/BlibiliTV
+gh secret set ANDROID_KEY_ALIAS --repo Brokenheart100/BlibiliTV
+gh secret set ANDROID_KEY_PASSWORD --repo Brokenheart100/BlibiliTV
 ```
 
 后三条命令交互录入值，不把密码写到命令历史或文档。Base64 是编码，仍须按秘密保管。CI 将密钥独占写入 runner 临时目录，仅向 Gradle 构建步骤注入必要环境变量，`always()` 清理临时密钥；产物只上传 APK、公开证书指纹和构建说明。
@@ -77,7 +77,7 @@ gh secret set ANDROID_KEY_PASSWORD --repo Brokenheart100/mambatv
 
 当前 `pubspec.yaml` 是 `1.0.0+1`，对应 tag 为 **`v1.0.0`**；`+1` 是基础 versionCode。支持 `1.0.1-rc.1+2` 对应 `v1.0.1-rc.1`，此类版本自动标为 prerelease。拆分 APK 的实际 versionCode 由 Flutter 按 ABI 生成，逐包记录在构建信息中，不伪称它们都等于基础 buildNumber。
 
-先提交并推送包含应用、生成代码与 CI 配置的完整提交；当前工作区已有 M5 和 HTTP 缓存改动，不能只推送一个脱离这些代码的版本标签。首次 CI 运行通过后，再配置上述签名 Secrets，并由维护者推送版本标签。例如确认当前版本就是要发布的版本后：
+首次应用提交已包含 M5、HTTP 缓存、生成代码和 CI 配置，并已通过托管 CI。后续版本同样应先提交推送完整代码，不能只推送一个脱离应用代码的版本标签。正式发布前配置上述签名 Secrets，并由维护者推送版本标签。例如确认当前版本就是要发布的版本后：
 
 ```powershell
 git push origin master
@@ -96,7 +96,7 @@ git push origin refs/tags/v1.0.0
 
 ARM64／ARM32 对应目标电视或盒子架构；x86_64 供模拟器。先通过 aapt 和 apksigner 校验，再计算所有上传文件的 SHA256；发布 job 下载同一次运行的签名 artifacts 后再次核验校验和。构建信息记录提交、版本、工具链清单、实际构建宿主／Java、锁文件 SHA256、ABI、实际 versionCode 和公开证书指纹；托管 CI 构建若修改来源文件则拒绝产物。签名 artifacts 保留 30 天，成功后在 GitHub Release 发布。
 
-本机验证使用一次性测试密钥，验证结束删除，不作为用户下载／升级渠道；不会用它写入仓库 Secrets 或发布 Release。正式密钥、首次远端运行和实际发布仍需在配置提交后验证。
+本机 Release 验证使用一次性测试密钥，验证结束删除，不作为用户下载／升级渠道；不会用它写入仓库 Secrets 或发布 Release。托管 Debug 构建、APK 校验及产物上传已通过；正式密钥、首次真实签名发布和签名升级仍需另行验证。
 
 ## 官方依据
 

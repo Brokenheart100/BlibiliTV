@@ -1,10 +1,10 @@
 {
   "date": "2026-10-25",
-  "recordedAtHostUtc": "2026-10-25T09:12:58.5558557Z",
-  "scope": "CI/CD configuration and Windows local verification, not a hosted Actions run",
-  "repository": "Brokenheart100/mambatv",
+  "recordedAtHostUtc": "2026-10-25T09:29:52.9063537Z",
+  "scope": "Windows local checks and successful Ubuntu 24.04 / Temurin 21 hosted CI",
+  "repository": "Brokenheart100/BlibiliTV",
   "defaultBranch": "master",
-  "status": "implemented_locally_verified_not_pushed",
+  "status": "hosted_ci_passed",
   "workflowLint": {
     "localPyflakes": false,
     "version": "1.7.12",
@@ -38,7 +38,7 @@
   "intendedHostedRunner": {
     "java": "Temurin 21",
     "os": "ubuntu-24.04",
-    "verifiedHosted": false
+    "verifiedHosted": true
   },
   "negativeSigningChecks": {
     "missingReleaseCredentials": "preReleaseBuild failed as required",
@@ -83,19 +83,55 @@
     "privateKeyFilesRemaining": 0
   },
   "pubspecLockSha256": "81a36b2794c508958d2b1f1e109889e452b074d41ad1fb9e1edb48ae55afa437",
-  "workingTree": "Existing M5 and HTTP cache changes preserved; no commit made",
+  "workingTree": "Application and pipeline committed and pushed as c7f0c9226376e49c083f15af17daa9a47936a5f9; documentation records that verified commit",
   "remoteState": {
-    "pushed": false,
+    "pushed": true,
     "workflowCountAtInspection": 0,
     "releaseCreated": false,
     "tagCreated": false,
     "signingSecretsAtInspection": 0,
-    "repositorySettingsChanged": false
+    "repositorySettingsChanged": false,
+    "repositoryId": 1432991794,
+    "formerRepository": "Brokenheart100/mambatv",
+    "applicationCommit": "c7f0c9226376e49c083f15af17daa9a47936a5f9"
   },
   "remaining": [
-    "Commit/push the reviewed application and workflow changes, then confirm the first hosted Linux run",
     "Configure the four production signing Secrets using an owner-controlled key",
-    "Run the first real tag release after its CI passes",
+    "Run the first real signed tag release after its CI passes",
     "Physical-device, speaker/lip-sync, upgrade and M7 release acceptance remain separate"
-  ]
+  ],
+  "hostedRun": {
+    "id": 40179970843,
+    "url": "https://github.com/Brokenheart100/BlibiliTV/actions/runs/40179970843",
+    "commit": "c7f0c9226376e49c083f15af17daa9a47936a5f9",
+    "status": "completed",
+    "conclusion": "success",
+    "workflowValidation": "success",
+    "qualityChecks": "success",
+    "androidDebugApks": "success",
+    "flutterTestsPassed": 152,
+    "pipelineTestsPassed": 12,
+    "generatedSourcesClean": true,
+    "artifactSourceClean": true,
+    "buildHost": "Ubuntu 24.04 / Temurin 21",
+    "artifacts": [
+      {
+        "name": "coverage-c7f0c9226376e49c083f15af17daa9a47936a5f9",
+        "bytes": 12349,
+        "id": 12594406780
+      },
+      {
+        "packageAndSigningVerified": true,
+        "name": "android-debug-c7f0c9226376e49c083f15af17daa9a47936a5f9",
+        "abis": [
+          "armeabi-v7a",
+          "arm64-v8a",
+          "x86_64"
+        ],
+        "checksumsVerified": true,
+        "id": 12593513507,
+        "bytes": 339058632
+      }
+    ]
+  }
 }

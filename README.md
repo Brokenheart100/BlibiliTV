@@ -21,7 +21,7 @@ M5 播放器控制与受限恢复已实现：画质／AAC 音轨、倍速／音�
 
 GitHub Actions 在 PR／推送 `master` 时检查工作流、依赖锁定、生成代码、格式、分析、测试，并构建三个 ABI 的 Debug APK。推送与 `pubspec.yaml` 一致的 `v*` tag 后，完整重跑 CI、使用正式密钥签名、验证 APK／SHA256 并发布 GitHub Release。
 
-首次使用需提交推送配置，并设置文档中的四项签名 Secrets。当前 `1.0.0+1` 对应 `v1.0.0`；缺少密钥时 Release 会失败，Debug／profile 不受影响。本次仅完成配置与本地验证，不自动创建 tag 或公开发布，详见 [CI/CD 说明](docs/ci-cd.md)。
+应用和工作流已推送至 `Brokenheart100/BlibiliTV` 并通过 GitHub 托管 CI，见[验收记录](docs/ci-cd-validation.json)。正式发布前仍需配置文档中的四项签名 Secrets。当前 `1.0.0+1` 对应 `v1.0.0`；缺少密钥时 Release 会失败，Debug／profile 不受影响。本次没有创建 tag 或发布 Release，详见 [CI/CD 说明](docs/ci-cd.md)。
 
 ## 运行
 

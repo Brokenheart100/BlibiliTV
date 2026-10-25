@@ -3,10 +3,15 @@ import 'package:drift/drift.dart';
 import '../../core/result.dart';
 import '../../domain/playback/playback.dart';
 import '../services/local/app_database.dart';
+import '../../domain/entities/app_models.dart';
+import 'drift_history_repository.dart';
 
 class LocalProgressRepository implements ProgressRepository {
   LocalProgressRepository(this.database);
   final AppDatabase database;
+  @override
+  Future<Result<void>> rememberVideo(String ownerKey, VideoSummary video) =>
+      DriftHistoryRepository(database).rememberVideo(ownerKey, video);
   @override
   Future<Result<WatchProgress?>> latestForVideo(
     String ownerKey,

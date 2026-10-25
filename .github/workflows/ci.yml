@@ -52,6 +52,8 @@ jobs:
         run: python3 -m unittest discover -s tool/ci -p 'test_*.py' -v
       - name: Restore locked dependencies
         run: flutter pub get --enforce-lockfile
+      - name: Check dependency notice inventory
+        run: python3 tool/release/dependencies.py --check
       - name: Generate Riverpod, Freezed, JSON and Drift code
         run: dart run build_runner build --delete-conflicting-outputs
       - name: Check generated sources are committed

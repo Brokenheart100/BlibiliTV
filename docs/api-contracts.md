@@ -86,9 +86,9 @@ M3 真实申请返回的二维码目标为 HTTPS `account.bilibili.com`；实现
 
 ## 仍未完成的契约
 
-- 已确认账号下的 nav、列表和播放资源一致性。
-- 启动恢复、刷新凭据、远端退出与持久化会话，属于 M3。
-- 收藏、稍后再看、远端历史、字幕／弹幕和受限内容，按计划阶段接入。
+- nav／启动恢复／刷新／退出的实现与证据见 M3；自然续期和真实过期场景仍待补验。
+- 真实账号个人列表 GET 已在 M6 验证；写入与心跳本次按只读授权保留。
+- 字幕／弹幕和受限内容按后续计划接入。
 - 权限不足、资源失效、风控／限流等真实故障与契约变更样本，不伪造已实测结果。
 
 ## 重现
@@ -96,3 +96,26 @@ M3 真实申请返回的二维码目标为 HTTPS `account.bilibili.com`；实现
 2026-10-25 缓存更新：热门与搜索最多 1 分钟、详情与相关视频最多 3 分钟；按会话隔离，HTTP 200 的非零业务 code 不保存。nav、推荐、登录和播放地址不经过缓存，真实签名仍正常生成。固定寿命、服务端 no-store 与强制刷新策略见 [ADR 0005](adr/0005-scoped-http-cache.md)，原验收数据保留为历史快照。
 
 执行 `dart run tool/m0_probe.dart` 可重现游客与二维码未扫描探测，写出脱敏报告。运行 M0 应用时，扫码需要用户在手机上主动确认；本项目不会从浏览器或其他应用读取已有 Cookie。
+
+## M6 账号列表与进度
+
+2026-10-25，来源：[PiliPlus 固定提交的 API 定义](https://github.com/bggRGjQaUbCoE/PiliPlus/blob/058794483080f5bf3d760e005118c0bd4698c51b/lib/http/api.dart)、同提交 `lib/http/{user,fav,video}.dart` 及稍后再看 controller。补充完整列表语义见[固定协议资料](https://github.com/replace5/bilibili-API-collect-mirror/blob/271b123a083698bf576101c21f534b3418768a43/docs/historytoview/toview.md)。这些属于第三方 Web 协议实现依据，不是 B 站官方稳定 SDK。
+
+主机 `api.bilibili.com`，均绑定当前账号 Cookie／代次，私有数据绕过通用缓存。固定 User-Agent／Referer 沿用内容接口。真实账号验证仅 GET，见 [只读报告](m6-evidence/real-readonly.json)。
+
+| 能力 | 方法与路径 | 关键字段／分页 | 验证 |
+| --- | --- | --- | --- |
+| 远端历史 | GET `/x/web-interface/history/cursor` | type=archive、ps=24、max／view_at／business；下页取最后原始行 history.oid／view_at／history.business，相同游标停止 | 真实首／下一页 |
+| 收藏夹 | GET `/x/v3/fav/folder/created/list` | up_mid、pn、ps=24；list／has_more | 真实首屏；页码合成 |
+| 夹内视频 | GET `/x/v3/fav/resource/list` | media_id、pn、ps=24、order=mtime、type=0、tid=0、platform=web；medias／has_more | 真实读取 |
+| 稍后再看分页 | GET `/x/v2/history/toview/web`，WBI | pn、ps=24、viewed=0、key 空、asc=false、need_split=true、web_location=333.881；list／count | 真实首屏；下一页合成 |
+| 收藏状态 | GET `/x/v3/fav/folder/created/list-all` | up_mid、rid=aid、type=2；list[].fav_state=1 为选中 | 真实读取 |
+| 完整稍后列表 | GET `/x/v2/history/toview` | list[].aid／bvid 与目标匹配；count 大于已返回条数且未找到目标时，拒绝把缺失当作未加入 | 真实读取／不完整合成 |
+| 加入稍后再看 | POST `/x/v2/history/toview/add` | form bvid、csrf=bili_jct | 合成传输，真实未执行 |
+| 移出稍后再看 | POST `/x/v2/history/toview/v2/dels` | form resources=aid 字符串、csrf；不是 `aid:2` | 合成传输，真实未执行 |
+| 收藏夹变更 | POST `/x/v3/fav/resource/batch-deal` | resources=`aid:2`、add_media_ids／del_media_ids、csrf | 合成传输，真实未执行 |
+| 观看进度 | POST `/x/click-interface/web/heartbeat` | bvid、cid、played_time 秒、type=3、csrf | 合成传输／时钟，真实未执行 |
+
+详情没有 aid 时先读取已验证的 WBI view 解析真实 aid，不能由 BVID 猜测。空 list 兼容 null；不支持的历史 business／空 BVID 保留为不可播放条目。权限、鉴权、限流、网络、超时、契约错误使用安全 Failure，不展示服务端原始响应或个人内容。
+
+所有个人列表命令都先读当前状态，最多发出一次 POST，再读确认。响应丢失但目标状态已观察到时确认成功；未确认时保留原始意图，关闭／重开弹层也不会在同一会话盲目重放。账号替换销毁原 API scope，旧请求取消；不将未确认命令持久化或排队到新账号。

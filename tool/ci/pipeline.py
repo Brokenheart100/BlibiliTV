@@ -15,6 +15,7 @@ import sys
 ROOT = Path(__file__).resolve().parents[2]
 CONFIG = json.loads((Path(__file__).with_name("toolchain.json")).read_text())
 ABIS = ("armeabi-v7a", "arm64-v8a", "x86_64")
+RELEASE_ABIS = ("armeabi-v7a", "arm64-v8a")
 VERSION = re.compile(
     r"(?m)^version:\s*['\"]?(?P<name>(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\."
     r"(?:0|[1-9]\d*)(?:-[0-9A-Za-z]+(?:[.-][0-9A-Za-z]+)*)?)"
@@ -151,7 +152,7 @@ def java_version():
     return match[1]
 
 
-def apk_identity(text, name, abi, mode):
+def apk_identity(text, name, abi, mode, build_number=None):
     match = re.search(r"package: name='([^']+)' versionCode='(\d+)' versionName='([^']+)'", text)
     if not match or match[1] != "app.mamba.mambatv" or match[3] != name or int(match[2]) <= 0:
         raise ValueError("APK package or version does not match the product")
@@ -162,6 +163,10 @@ def apk_identity(text, name, abi, mode):
         raise ValueError("APK debuggable flag does not match the requested build mode")
     if "leanback-launchable-activity:" not in text:
         raise ValueError("APK has no Android TV launcher activity")
+    if build_number is not None:
+        expected = {"armeabi-v7a": 1, "arm64-v8a": 2, "x86_64": 4}[abi] * 1000 + build_number
+        if int(match[2]) != expected:
+            raise ValueError("APK versionCode does not match the locked build number and ABI")
     return int(match[2])
 
 
@@ -179,10 +184,10 @@ def package(mode, destination):
     target.mkdir(parents=True, exist_ok=True)
     artifacts = []
     fingerprints = set()
-    for abi in ABIS:
+    for abi in RELEASE_ABIS if mode == "release" else ABIS:
         source = ROOT / "build/app/outputs/flutter-apk" / f"app-{abi}-{mode}.apk"
         badging = run(str(aapt), "dump", "badging", str(source))
-        version_code = apk_identity(badging, name, abi, mode)
+        version_code = apk_identity(badging, name, abi, mode, code)
         digest = certificate(run(str(signer), "verify", "--verbose", "--print-certs", str(source)), mode)
         fingerprints.add(digest)
         filename = f"mambatv-{name}+{code}-{abi}-{mode}.apk"
@@ -207,11 +212,22 @@ def package(mode, destination):
     (target / "build-metadata.json").write_text(json.dumps(metadata, indent=2) + "\n", encoding="utf-8")
     notes = (
         f"MambaTV {name} ({code})\n\n"
-        "Choose arm64-v8a for 64-bit TV/boxes, armeabi-v7a for 32-bit ARM, or x86_64 for emulators.\n\n"
+        "Release downloads: arm64-v8a for 64-bit Android systems; armeabi-v7a for 32-bit ARM systems.\n"
+        "Check the device ABI list; a 64-bit CPU may run a 32-bit Android system.\n"
+        "x86_64 is available in CI debug artifacts for emulator validation.\n\n"
         "Verify SHA256SUMS before installing. Build and signing checks do not replace physical-device acceptance.\n"
         f"Signing certificate SHA-256: {next(iter(fingerprints))}\n"
     )
+    changelog = ROOT / "docs/release/changelog.md"
+    if not changelog.is_file():
+        raise ValueError("Missing release changelog")
+    notes += "\n" + changelog.read_text(encoding="utf-8-sig")
     (target / "release-notes.md").write_text(notes, encoding="utf-8")
+    for name in ("dependencies.json", "THIRD_PARTY_NOTICES.txt", "NATIVE_NOTICES.txt", "installation.md", "known-limitations.md", "sources.md"):
+        source = ROOT / "docs/release" / name
+        if not source.is_file():
+            raise ValueError("Missing release documentation: " + name)
+        shutil.copyfile(source, target / name)
     checksums = []
     for file in sorted(target.iterdir()):
         with file.open("rb") as stream:

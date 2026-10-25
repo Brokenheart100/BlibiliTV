@@ -10,6 +10,7 @@ import '../../../../domain/entities/app_models.dart';
 import '../../../../domain/playback/playback.dart';
 import '../../../../domain/playback/playback_coordinator.dart';
 import '../../../../domain/playback/start_playback.dart';
+import '../../../../domain/playback/history_progress_reporter.dart';
 
 part 'player_view_model.freezed.dart';
 part 'player_view_model.g.dart';
@@ -62,6 +63,8 @@ class PlayerViewModel extends _$PlayerViewModel {
   CancellationSignal? _active;
   WatchProgress? _lastValid;
   PlaybackPlan? _plan;
+  HistoryProgressReporter? _reporter;
+  bool _preferencesApplied = false;
   Future<void> _writes = Future<void>.value();
   Future<void> _operations = Future<void>.value();
   Future<void>? _releasing;
@@ -87,6 +90,7 @@ class PlayerViewModel extends _$PlayerViewModel {
     _interruptions = _focus.interruptions.listen((_) => unawaited(suspend()));
     ref.onDispose(() {
       _epoch++;
+      _reporter?.close();
       _active?.cancel();
       final lease = _lease;
       _lease = null;
@@ -129,9 +133,14 @@ class PlayerViewModel extends _$PlayerViewModel {
     }
   }
 
-  Future<void> start(String videoId, {String? partId}) {
+  Future<void> start(String videoId, {String? partId, Duration? remoteResume}) {
     _wantPlay = true;
-    return _replace(videoId, partId: partId, manual: true);
+    return _replace(
+      videoId,
+      partId: partId,
+      manual: true,
+      fallbackPosition: remoteResume,
+    );
   }
 
   Future<void> _replace(
@@ -142,6 +151,7 @@ class PlayerViewModel extends _$PlayerViewModel {
     int? audioId,
     bool manual = false,
     PlaybackSource? source,
+    Duration? fallbackPosition,
   }) {
     if (!_foreground) return Future.value();
     if (manual) {
@@ -183,6 +193,9 @@ class PlayerViewModel extends _$PlayerViewModel {
                 startAt: position ?? Duration.zero,
                 rememberProgress: oldPlan.rememberProgress,
                 parts: oldPlan.parts,
+                initialRate: oldPlan.initialRate,
+                autoNext: oldPlan.autoNext,
+                syncHistory: oldPlan.syncHistory,
               )
             : await _wait(
                 _start(
@@ -193,11 +206,32 @@ class PlayerViewModel extends _$PlayerViewModel {
                   quality: quality,
                   audioId: audioId,
                   position: position,
+                  fallbackPosition: fallbackPosition,
                 ),
                 signal,
               );
         if (!_current(epoch, signal)) return;
         _plan = plan;
+        if (!_preferencesApplied) {
+          _preferencesApplied = true;
+          state = state.copyWith(
+            rate: plan.initialRate,
+            autoNext: plan.autoNext,
+          );
+        }
+        if (plan.syncHistory && ownerKey != 'guest') {
+          _reporter = HistoryProgressReporter(
+            ref.read(libraryRepositoryProvider),
+            ownerKey,
+            plan.videoId,
+            plan.partId,
+            onFailure: () {
+              if (_current(epoch, signal)) {
+                state = state.copyWith(notice: '账号进度同步未确认，本地记录继续保存');
+              }
+            },
+          );
+        }
         _targetPosition = plan.startAt;
         _targetQuality = plan.source.quality;
         _request = (videoId: plan.videoId, partId: plan.partId);
@@ -212,6 +246,7 @@ class PlayerViewModel extends _$PlayerViewModel {
           audioTracks: plan.source.audioTracks,
           audioId: plan.source.audioId,
           resumedFrom: plan.startAt,
+          notice: plan.preferenceNotice,
           snapshot: const EngineSnapshot(),
         );
         if (_wantPlay) {
@@ -255,6 +290,7 @@ class PlayerViewModel extends _$PlayerViewModel {
             phase: phase,
             failure: snapshot.failure,
           );
+          if (!opening) _reporter?.accept(snapshot);
           if (snapshot.position >= plan.startAt - const Duration(seconds: 2)) {
             resumeConfirmed = true;
           }
@@ -400,6 +436,8 @@ class PlayerViewModel extends _$PlayerViewModel {
   }
 
   Future<void> _releaseNow() async {
+    _reporter?.close();
+    _reporter = null;
     _save();
     final subscription = _subscription, lease = _lease;
     _subscription = null;

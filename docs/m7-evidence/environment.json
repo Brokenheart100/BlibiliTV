@@ -1,0 +1,22 @@
+{
+  "recordedAtUtc": "2026-10-25T15:18:19.089336+00:00",
+  "serial": "emulator-5554",
+  "avd": "Mamba_TV_API36",
+  "android": "16",
+  "api": "36",
+  "abi": "x86_64",
+  "buildFingerprint": "google/sdk_google_atv64_x86_64/emu64xa:16/BT2A.260319.001/15058170:user/dev-keys",
+  "physicalTv": false,
+  "hostNativeBuildsDuringRetry": false,
+  "requestedSoakSeconds": 900,
+  "playbackSourceSha256": {
+    "lib/domain/playback/history_progress_reporter.dart": "e8bd7615a87313f66e64dbc703229767a6087184c421052a71ba442bd2c6076f",
+    "lib/domain/playback/playback.dart": "fb4e28507d02baad1a53e1ab22d294f065a630f289d2ee619985ff366389f6ff",
+    "lib/domain/playback/playback_coordinator.dart": "e5cd4b332d760830ce9ccac362cf1cf11e269ed992ee0b868d311c1cf21271df",
+    "lib/domain/playback/start_playback.dart": "8792bc798f2a6b949c4fd76ad1dd965f251f7c81a75ec9cdee07e8ab4e052570",
+    "lib/ui/features/player/views/player_page.dart": "6e55551c58770a203d1aa4e096fa884cb832dd0a1244cf17d39d7529358e34d0",
+    "lib/ui/features/player/view_models/player_view_model.dart": "c4e5f34d0af2b5a078dfac9ce4b0c850bfc2419d84184bd199475f9eff974f76",
+    "lib/data/services/playback/audio_session_focus.dart": "2c1a099f73e0413a2e87e0441fcd63014f3f49209eb844a535a4a3ac9640d6c0",
+    "lib/data/services/playback/media_kit_engine.dart": "ba1af168b9d94b13b4401bf77a6d47bec47b66ecf9bae5ebd4d9364b7345b492"
+  }
+}

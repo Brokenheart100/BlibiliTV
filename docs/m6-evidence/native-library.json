@@ -1,0 +1,16 @@
+{
+  "recordedAtUtc": "2026-10-25T07:26:29.758255Z",
+  "isolatedPackage": true,
+  "nativeDriftHistory": true,
+  "localResumeSeconds": 25,
+  "initialRate": 1.5,
+  "ownerScopedClear": true,
+  "nativeCacheClearPreservesRecordsAndSettings": true,
+  "syntheticWriteCommands": 1,
+  "realRemoteWriteCommands": 0,
+  "accountSequence": [
+    "synthetic-A",
+    "guest",
+    "synthetic-B"
+  ]
+}

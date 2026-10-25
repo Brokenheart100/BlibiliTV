@@ -29,6 +29,9 @@ class BilibiliApi {
   final Future<void> Function(int generation)? onAuthenticationFailure;
   final _scope = CancellationSignal();
   final BilibiliCacheScope _cache;
+  int _writesSent = 0;
+  int get remoteWriteRequestsSent => _writesSent;
+  Future<void> clearCache() => _cache.clear();
   void close() {
     _scope.cancel();
     unawaited(_cache.close());
@@ -48,6 +51,59 @@ class BilibiliApi {
 
   String? _imageKey, _subKey;
   DateTime? _keyTime;
+
+  Future<void> postForm(
+    String path,
+    Map<String, Object> values,
+    CancellationSignal cancellation,
+  ) async {
+    if (const bool.fromEnvironment('MAMBA_READ_ONLY_VALIDATION')) {
+      throw const AppFailure(FailureKind.permission, '本次只读验收不执行账号变更');
+    }
+    if (!identity.session.isAuthenticated || identity.cookie == null) {
+      throw const AppFailure(FailureKind.authentication, '请先扫码登录');
+    }
+    if (_scope.isCancelled || cancellation.isCancelled) {
+      throw const AppFailure(FailureKind.cancelled, '账号状态已变化');
+    }
+    final csrf = identity.cookie!
+        .split(';')
+        .map((v) => v.trim())
+        .where((v) => v.startsWith('bili_jct='))
+        .map((v) => v.substring(9))
+        .firstOrNull;
+    if (csrf == null || csrf.isEmpty) {
+      throw const AppFailure(FailureKind.authentication, '登录凭据不完整，请重新扫码');
+    }
+    final token = CancelToken();
+    final remove = cancellation.onCancel(() => token.cancel('cancelled'));
+    final removeScope = _scope.onCancel(() => token.cancel('session_changed'));
+    try {
+      _writesSent++;
+      final response = await client.post<Object?>(
+        'https://api.bilibili.com$path',
+        data: {...values, 'csrf': csrf},
+        cancelToken: token,
+        options: Options(
+          contentType: Headers.formUrlEncodedContentType,
+          followRedirects: false,
+          headers: {...bilibiliMediaHeaders, 'Cookie': identity.cookie},
+        ),
+      );
+      if (_scope.isCancelled || cancellation.isCancelled) {
+        throw const AppFailure(FailureKind.cancelled, '账号状态已变化');
+      }
+      final code = jsonInteger(jsonObject(response.data)['code']);
+      if (code == -101) _unauthorized();
+      if (code != 0) throw businessFailure(code);
+    } on DioException catch (error) {
+      if (error.response?.statusCode == 401) _unauthorized();
+      throw safeApiFailure(error);
+    } finally {
+      remove();
+      removeScope();
+    }
+  }
 
   Future<Map<String, Object?>> get(
     String path,

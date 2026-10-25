@@ -54,6 +54,9 @@ class ReleaseGuardsTest(unittest.TestCase):
 
     def test_apk_identity_and_mode(self):
         text = self.badging()
+        self.assertEqual(pipeline.apk_identity(text, "1.0.0", "arm64-v8a", "release", 1), 2001)
+        with self.assertRaisesRegex(ValueError, "versionCode"):
+            pipeline.apk_identity(text, "1.0.0", "arm64-v8a", "release", 2)
         self.assertEqual(pipeline.apk_identity(text, "1.0.0", "arm64-v8a", "release"), 2001)
         for changed in (
             text.replace("app.mamba.mambatv", "app.mamba.mambatv.validation"),
@@ -90,18 +93,29 @@ class ReleaseGuardsTest(unittest.TestCase):
             with patch.object(pipeline, "ROOT", root), patch.dict(os.environ, {"ANDROID_HOME": temporary, "RELEASE_TAG": "v1.0.0"}), patch.object(pipeline, "run", side_effect=self.package_command), patch.object(pipeline, "java_version", return_value="21-test"):
                 pipeline.package("release", destination)
             entries = (destination / "SHA256SUMS").read_text().splitlines()
-            self.assertEqual(len(entries), 5)
+            self.assertEqual(len(entries), 10)
             for entry in entries:
                 digest, filename = entry.split("  ", 1)
                 self.assertEqual(digest, hashlib.sha256((destination / filename).read_bytes()).hexdigest())
             metadata = json.loads((destination / "build-metadata.json").read_text())
-            self.assertEqual(len(metadata["artifacts"]), 3)
+            self.assertEqual({item["abi"] for item in metadata["artifacts"]}, {"armeabi-v7a", "arm64-v8a"})
+            self.assertFalse(any("x86" in file.name for file in destination.iterdir()))
             self.assertFalse(metadata["workingTreeDirty"])
+
+    def test_debug_packaging_keeps_emulator_abi(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = self.package_fixture(temporary)
+            destination = root / "artifacts"
+            with patch.object(pipeline, "ROOT", root), patch.dict(os.environ, {"ANDROID_HOME": temporary}), patch.object(pipeline, "run", side_effect=self.package_command), patch.object(pipeline, "java_version", return_value="21-test"):
+                pipeline.package("debug", destination)
+            metadata = json.loads((destination / "build-metadata.json").read_text())
+            self.assertEqual({item["abi"] for item in metadata["artifacts"]}, set(pipeline.ABIS))
+            self.assertEqual(len((destination / "SHA256SUMS").read_text().splitlines()), 11)
 
     def test_packaging_rejects_mixed_signing_keys(self):
         def mixed(*args):
             response = self.package_command(*args)
-            if "verify" in args and "x86_64" in args[-1]:
+            if "verify" in args and "arm64-v8a" in args[-1]:
                 response = response.replace("ab" * 32, "cd" * 32)
             return response
 
@@ -146,10 +160,15 @@ class ReleaseGuardsTest(unittest.TestCase):
         root = Path(temporary)
         (root / "pubspec.yaml").write_text("version: 1.0.0+1\n")
         (root / "pubspec.lock").write_text("# synthetic lockfile\n")
+        docs = root / "docs/release"
+        docs.mkdir(parents=True)
+        for name in ("dependencies.json", "THIRD_PARTY_NOTICES.txt", "NATIVE_NOTICES.txt", "installation.md", "known-limitations.md", "sources.md", "changelog.md"):
+            (docs / name).write_text("Synthetic release documentation\n")
         output = root / "build/app/outputs/flutter-apk"
         output.mkdir(parents=True)
         for abi in pipeline.ABIS:
             (output / f"app-{abi}-release.apk").write_bytes(f"synthetic {abi} APK".encode())
+            (output / f"app-{abi}-debug.apk").write_bytes(f"synthetic debug {abi} APK".encode())
         return root
 
     @classmethod
@@ -157,7 +176,9 @@ class ReleaseGuardsTest(unittest.TestCase):
         if "badging" in args:
             for abi in pipeline.ABIS:
                 if f"app-{abi}-" in args[-1]:
-                    return cls.badging().replace("arm64-v8a", abi)
+                    code = {"armeabi-v7a": 1001, "arm64-v8a": 2001, "x86_64": 4001}[abi]
+                    result = cls.badging().replace("arm64-v8a", abi).replace("versionCode='2001'", f"versionCode='{code}'")
+                    return result + ("application-debuggable\n" if "-debug.apk" in args[-1] else "")
         if "verify" in args:
             return "Signer #1 certificate SHA-256 digest: " + "ab" * 32
         if args[:3] == ("git", "rev-parse", "HEAD"):

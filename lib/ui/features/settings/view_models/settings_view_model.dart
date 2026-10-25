@@ -2,6 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../../app/providers/repository_providers.dart';
+import '../../../../app/providers/maintenance_providers.dart';
 import '../../../../core/result.dart';
 import '../../../../domain/entities/app_models.dart';
 
@@ -35,5 +36,22 @@ class SettingsViewModel extends _$SettingsViewModel {
         current.copyWith(saving: false, message: failure.message),
       ),
     };
+  }
+
+  Future<void> clearCaches() async {
+    final old = state.value;
+    if (old == null || old.saving) return;
+    final clean = ref.read(cacheCleanerProvider);
+    state = AsyncData(old.copyWith(saving: true, message: null));
+    try {
+      await clean();
+      if (ref.mounted) {
+        state = AsyncData(old.copyWith(message: '封面与临时缓存已清理，观看记录和账号已保留'));
+      }
+    } catch (_) {
+      if (ref.mounted) {
+        state = AsyncData(old.copyWith(message: '缓存清理未完成，请稍后重试'));
+      }
+    }
   }
 }

@@ -1,0 +1,25 @@
+{
+  "source": "native-15-minute.json",
+  "continuousWindowSeconds": 900,
+  "reportElapsedIncludesCleanupSeconds": 902,
+  "cumulativeMediaAtEndMs": 899333,
+  "naturalTransitions": 1,
+  "resourceCycles": 20,
+  "maximumEngines": 1,
+  "created": 22,
+  "released": 22,
+  "liveAfterReturn": 0,
+  "lastFiveClosedCycleRssMinBytes": 344899584,
+  "lastFiveClosedCycleRssMaxBytes": 351662080,
+  "lastFiveClosedCycleRssRangeBytes": 6762496,
+  "maxSampleAbsAvSyncSeconds": 14.300016,
+  "avSyncOutlierSampleSeconds": [
+    540
+  ],
+  "followingSampleRecovered": true,
+  "nativeErrors": [],
+  "buildWindowP95Ms": 1.782,
+  "rasterWindowP95Ms": 6.847,
+  "manualLipSyncVerified": false,
+  "physicalTv": false
+}

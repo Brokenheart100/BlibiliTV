@@ -77,7 +77,7 @@ jobs:
           MAMBA_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
           MAMBA_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
           MAMBA_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
-        run: flutter build apk --release --split-per-abi --target lib/main.dart
+        run: flutter build apk --release --split-per-abi --target-platform android-arm,android-arm64 --target lib/main.dart
       - name: Verify package identity, certificates and checksums
         env:
           RELEASE_TAG: ${{ needs.preflight.outputs.tag }}

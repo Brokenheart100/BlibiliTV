@@ -42,6 +42,7 @@ android {
 
     defaultConfig {
         applicationId = if (validationApp) "app.mamba.mambatv.validation" else "app.mamba.mambatv"
+        manifestPlaceholders["mambaLabel"] = if (validationApp) "MambaTV 验证" else "MambaTV"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = 24

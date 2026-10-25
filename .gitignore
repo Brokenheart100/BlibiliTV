@@ -55,4 +55,8 @@ app.*.map.json
 !.env.example
 *.jks
 *.keystore
+*.p12
 key.properties
+
+# Local architecture exploration and screenshots
+/.archify/

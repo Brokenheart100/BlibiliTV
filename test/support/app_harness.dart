@@ -15,6 +15,12 @@ import 'memory_preferences.dart';
 import 'fake_playback.dart';
 import 'fake_auth.dart';
 import 'memory_search_history.dart';
+import 'fake_library.dart';
+
+import 'package:mambatv/ui/features/settings/view_models/licenses_view_model.dart';
+
+import 'package:mambatv/domain/library/library.dart';
+import 'package:mambatv/app/providers/maintenance_providers.dart';
 
 Future<ProviderContainer> pumpMamba(
   WidgetTester tester, {
@@ -27,6 +33,10 @@ Future<ProviderContainer> pumpMamba(
   MemorySessionRepository? sessions,
   FakeAuthRepository? auth,
   SearchHistoryRepository? history,
+  LocalHistoryRepository? localHistory,
+  LibraryRepository? library,
+  CacheCleaner? cacheCleaner,
+  List<LicenseNotice>? licenses,
 }) async {
   tester.view.physicalSize = size;
   tester.view.devicePixelRatio = 1;
@@ -38,6 +48,16 @@ Future<ProviderContainer> pumpMamba(
   final container = ProviderContainer(
     retry: (_, _) => null,
     overrides: [
+      if (licenses != null)
+        licenseNoticesProvider.overrideWith((ref) async => licenses),
+      localHistoryRepositoryProvider.overrideWithValue(
+        localHistory ?? MemoryLocalHistory(),
+      ),
+      libraryRepositoryProvider.overrideWithValue(
+        library ?? FakeLibraryRepository(),
+      ),
+      cacheCleanerProvider.overrideWithValue(cacheCleaner ?? () async {}),
+      installedAppVersionProvider.overrideWith((ref) async => '1.0.0+1'),
       searchHistoryRepositoryProvider.overrideWithValue(
         history ?? MemorySearchHistoryRepository(),
       ),

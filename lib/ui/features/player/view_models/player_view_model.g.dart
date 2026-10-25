@@ -58,7 +58,7 @@ final class PlayerViewModelProvider
   }
 }
 
-String _$playerViewModelHash() => r'8a70f62e574d803002c14c3ef5dd546805c5b93a';
+String _$playerViewModelHash() => r'22e36692369d0de6a0c494d4b31981154fc81360';
 
 final class PlayerViewModelFamily extends $Family
     with

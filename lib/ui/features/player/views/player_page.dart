@@ -21,10 +21,12 @@ class PlayerPage extends ConsumerStatefulWidget {
     required this.videoId,
     required this.pageId,
     this.partId,
+    this.remoteResume,
     super.key,
   });
   final String videoId, pageId;
   final String? partId;
+  final Duration? remoteResume;
   @override
   ConsumerState<PlayerPage> createState() => _PlayerPageState();
 }
@@ -57,7 +59,13 @@ class _PlayerPageState extends ConsumerState<PlayerPage> {
         pageId: widget.pageId,
         ownerKey: routeOwner!,
       );
-      unawaited(vm.start(widget.videoId, partId: widget.partId));
+      unawaited(
+        vm.start(
+          widget.videoId,
+          partId: widget.partId,
+          remoteResume: widget.remoteResume,
+        ),
+      );
     });
   }
 

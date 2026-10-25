@@ -1140,7 +1140,7 @@ $VideoSummaryCopyWith<$Res> get video {
 /// @nodoc
 mixin _$AppSettings {
 
- bool get reducedMotion; bool get resumePlayback;
+ bool get reducedMotion; bool get resumePlayback; double get defaultRate; int get defaultQuality; bool get autoNext; bool get syncHistory;
 /// Create a copy of AppSettings
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -1152,20 +1152,20 @@ $AppSettingsCopyWith<AppSettings> get copyWith => _$AppSettingsCopyWithImpl<AppS
 @override
 bool operator ==(Object other) {
   final _this = this as AppSettings;
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AppSettings&&(identical(other.reducedMotion, _this.reducedMotion) || other.reducedMotion == _this.reducedMotion)&&(identical(other.resumePlayback, _this.resumePlayback) || other.resumePlayback == _this.resumePlayback));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AppSettings&&(identical(other.reducedMotion, _this.reducedMotion) || other.reducedMotion == _this.reducedMotion)&&(identical(other.resumePlayback, _this.resumePlayback) || other.resumePlayback == _this.resumePlayback)&&(identical(other.defaultRate, _this.defaultRate) || other.defaultRate == _this.defaultRate)&&(identical(other.defaultQuality, _this.defaultQuality) || other.defaultQuality == _this.defaultQuality)&&(identical(other.autoNext, _this.autoNext) || other.autoNext == _this.autoNext)&&(identical(other.syncHistory, _this.syncHistory) || other.syncHistory == _this.syncHistory));
 }
 
 
 @override
 int get hashCode {
   final _this = this as AppSettings;
-  return Object.hash(runtimeType,_this.reducedMotion,_this.resumePlayback);
+  return Object.hash(runtimeType,_this.reducedMotion,_this.resumePlayback,_this.defaultRate,_this.defaultQuality,_this.autoNext,_this.syncHistory);
 }
 
 @override
 String toString() {
   final _this = this as AppSettings;
-  return 'AppSettings(reducedMotion: ${_this.reducedMotion}, resumePlayback: ${_this.resumePlayback})';
+  return 'AppSettings(reducedMotion: ${_this.reducedMotion}, resumePlayback: ${_this.resumePlayback}, defaultRate: ${_this.defaultRate}, defaultQuality: ${_this.defaultQuality}, autoNext: ${_this.autoNext}, syncHistory: ${_this.syncHistory})';
 }
 
 
@@ -1176,7 +1176,7 @@ abstract mixin class $AppSettingsCopyWith<$Res>  {
   factory $AppSettingsCopyWith(AppSettings value, $Res Function(AppSettings) _then) = _$AppSettingsCopyWithImpl;
 @useResult
 $Res call({
- bool reducedMotion, bool resumePlayback
+ bool reducedMotion, bool resumePlayback, double defaultRate, int defaultQuality, bool autoNext, bool syncHistory
 });
 
 
@@ -1193,10 +1193,14 @@ class _$AppSettingsCopyWithImpl<$Res>
 
 /// Create a copy of AppSettings
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? reducedMotion = null,Object? resumePlayback = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? reducedMotion = null,Object? resumePlayback = null,Object? defaultRate = null,Object? defaultQuality = null,Object? autoNext = null,Object? syncHistory = null,}) {
   return _then(AppSettings(
 reducedMotion: null == reducedMotion ? _self.reducedMotion : reducedMotion // ignore: cast_nullable_to_non_nullable
 as bool,resumePlayback: null == resumePlayback ? _self.resumePlayback : resumePlayback // ignore: cast_nullable_to_non_nullable
+as bool,defaultRate: null == defaultRate ? _self.defaultRate : defaultRate // ignore: cast_nullable_to_non_nullable
+as double,defaultQuality: null == defaultQuality ? _self.defaultQuality : defaultQuality // ignore: cast_nullable_to_non_nullable
+as int,autoNext: null == autoNext ? _self.autoNext : autoNext // ignore: cast_nullable_to_non_nullable
+as bool,syncHistory: null == syncHistory ? _self.syncHistory : syncHistory // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
 }
@@ -1282,10 +1286,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool reducedMotion,  bool resumePlayback)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool reducedMotion,  bool resumePlayback,  double defaultRate,  int defaultQuality,  bool autoNext,  bool syncHistory)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _AppSettings() when $default != null:
-return $default(_that.reducedMotion,_that.resumePlayback);case _:
+return $default(_that.reducedMotion,_that.resumePlayback,_that.defaultRate,_that.defaultQuality,_that.autoNext,_that.syncHistory);case _:
   return orElse();
 
 }
@@ -1303,10 +1307,10 @@ return $default(_that.reducedMotion,_that.resumePlayback);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool reducedMotion,  bool resumePlayback)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool reducedMotion,  bool resumePlayback,  double defaultRate,  int defaultQuality,  bool autoNext,  bool syncHistory)  $default,) {final _that = this;
 switch (_that) {
 case _AppSettings():
-return $default(_that.reducedMotion,_that.resumePlayback);case _:
+return $default(_that.reducedMotion,_that.resumePlayback,_that.defaultRate,_that.defaultQuality,_that.autoNext,_that.syncHistory);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -1323,10 +1327,10 @@ return $default(_that.reducedMotion,_that.resumePlayback);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool reducedMotion,  bool resumePlayback)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool reducedMotion,  bool resumePlayback,  double defaultRate,  int defaultQuality,  bool autoNext,  bool syncHistory)?  $default,) {final _that = this;
 switch (_that) {
 case _AppSettings() when $default != null:
-return $default(_that.reducedMotion,_that.resumePlayback);case _:
+return $default(_that.reducedMotion,_that.resumePlayback,_that.defaultRate,_that.defaultQuality,_that.autoNext,_that.syncHistory);case _:
   return null;
 
 }
@@ -1338,11 +1342,15 @@ return $default(_that.reducedMotion,_that.resumePlayback);case _:
 
 
 class _AppSettings implements AppSettings {
-  const _AppSettings({this.reducedMotion = false, this.resumePlayback = true});
+  const _AppSettings({this.reducedMotion = false, this.resumePlayback = true, this.defaultRate = 1.0, this.defaultQuality = 0, this.autoNext = false, this.syncHistory = false});
   
 
 @override@JsonKey() final  bool reducedMotion;
 @override@JsonKey() final  bool resumePlayback;
+@override@JsonKey() final  double defaultRate;
+@override@JsonKey() final  int defaultQuality;
+@override@JsonKey() final  bool autoNext;
+@override@JsonKey() final  bool syncHistory;
 
 /// Create a copy of AppSettings
 /// with the given fields replaced by the non-null parameter values.
@@ -1354,18 +1362,18 @@ _$AppSettingsCopyWith<_AppSettings> get copyWith => __$AppSettingsCopyWithImpl<_
 
 @override
 bool operator ==(Object other) {
-    return identical(this, other) || (other.runtimeType == runtimeType&&other is _AppSettings&&(identical(other.reducedMotion, reducedMotion) || other.reducedMotion == reducedMotion)&&(identical(other.resumePlayback, resumePlayback) || other.resumePlayback == resumePlayback));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _AppSettings&&(identical(other.reducedMotion, reducedMotion) || other.reducedMotion == reducedMotion)&&(identical(other.resumePlayback, resumePlayback) || other.resumePlayback == resumePlayback)&&(identical(other.defaultRate, defaultRate) || other.defaultRate == defaultRate)&&(identical(other.defaultQuality, defaultQuality) || other.defaultQuality == defaultQuality)&&(identical(other.autoNext, autoNext) || other.autoNext == autoNext)&&(identical(other.syncHistory, syncHistory) || other.syncHistory == syncHistory));
 }
 
 
 @override
 int get hashCode {
-    return Object.hash(runtimeType,reducedMotion,resumePlayback);
+    return Object.hash(runtimeType,reducedMotion,resumePlayback,defaultRate,defaultQuality,autoNext,syncHistory);
 }
 
 @override
 String toString() {
-    return 'AppSettings(reducedMotion: $reducedMotion, resumePlayback: $resumePlayback)';
+    return 'AppSettings(reducedMotion: $reducedMotion, resumePlayback: $resumePlayback, defaultRate: $defaultRate, defaultQuality: $defaultQuality, autoNext: $autoNext, syncHistory: $syncHistory)';
 }
 
 
@@ -1376,7 +1384,7 @@ abstract mixin class _$AppSettingsCopyWith<$Res> implements $AppSettingsCopyWith
   factory _$AppSettingsCopyWith(_AppSettings value, $Res Function(_AppSettings) _then) = __$AppSettingsCopyWithImpl;
 @override @useResult
 $Res call({
- bool reducedMotion, bool resumePlayback
+ bool reducedMotion, bool resumePlayback, double defaultRate, int defaultQuality, bool autoNext, bool syncHistory
 });
 
 
@@ -1393,10 +1401,14 @@ class __$AppSettingsCopyWithImpl<$Res>
 
 /// Create a copy of AppSettings
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? reducedMotion = null,Object? resumePlayback = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? reducedMotion = null,Object? resumePlayback = null,Object? defaultRate = null,Object? defaultQuality = null,Object? autoNext = null,Object? syncHistory = null,}) {
   return _then(_AppSettings(
 reducedMotion: null == reducedMotion ? _self.reducedMotion : reducedMotion // ignore: cast_nullable_to_non_nullable
 as bool,resumePlayback: null == resumePlayback ? _self.resumePlayback : resumePlayback // ignore: cast_nullable_to_non_nullable
+as bool,defaultRate: null == defaultRate ? _self.defaultRate : defaultRate // ignore: cast_nullable_to_non_nullable
+as double,defaultQuality: null == defaultQuality ? _self.defaultQuality : defaultQuality // ignore: cast_nullable_to_non_nullable
+as int,autoNext: null == autoNext ? _self.autoNext : autoNext // ignore: cast_nullable_to_non_nullable
+as bool,syncHistory: null == syncHistory ? _self.syncHistory : syncHistory // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
 }

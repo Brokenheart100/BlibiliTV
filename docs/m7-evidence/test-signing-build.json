@@ -1,0 +1,46 @@
+{
+  "formalSigning": false,
+  "keyRemoved": true,
+  "upgradePairChecks": [
+    {
+      "versionCode": 4001,
+      "certificateSha256": "8b3b7d68f88df30bc0137faa51d87aa9750989b925c88f0cf68d2607303cd275",
+      "sha256": "7f3437f2a459ebb8d1cf7b135d9e9ab60ce1f61cc0fedd8c6b1b1b125d874278"
+    },
+    {
+      "versionCode": 4002,
+      "certificateSha256": "8b3b7d68f88df30bc0137faa51d87aa9750989b925c88f0cf68d2607303cd275",
+      "sha256": "ce5e7b32ab426d8a22a54100c9d54a6634534471309adc95ed37dbf8e2222cdd"
+    }
+  ],
+  "releaseBuildAndThreeAbiVerification": true,
+  "baseCommit": "de71da9f6b134e16ed412e72c7d8142c2bbc9f63",
+  "workingTreeDirty": true,
+  "artifacts": [
+    {
+      "file": "mambatv-1.0.0+1-armeabi-v7a-release.apk",
+      "abi": "armeabi-v7a",
+      "versionCode": 1001,
+      "certificateSha256": "8b3b7d68f88df30bc0137faa51d87aa9750989b925c88f0cf68d2607303cd275"
+    },
+    {
+      "file": "mambatv-1.0.0+1-arm64-v8a-release.apk",
+      "abi": "arm64-v8a",
+      "versionCode": 2001,
+      "certificateSha256": "8b3b7d68f88df30bc0137faa51d87aa9750989b925c88f0cf68d2607303cd275"
+    },
+    {
+      "file": "mambatv-1.0.0+1-x86_64-release.apk",
+      "abi": "x86_64",
+      "versionCode": 4001,
+      "certificateSha256": "8b3b7d68f88df30bc0137faa51d87aa9750989b925c88f0cf68d2607303cd275"
+    }
+  ],
+  "upgradePair": {
+    "beforeVersionCode": 4001,
+    "afterVersionCode": 4002,
+    "before": ".m0\\m7-signing-27ee6ae3\\before-upgrade.apk",
+    "after": ".m0\\m7-signing-27ee6ae3\\after-upgrade.apk"
+  },
+  "workDirectory": ".m0\\m7-signing-27ee6ae3"
+}

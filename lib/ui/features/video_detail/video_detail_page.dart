@@ -17,6 +17,7 @@ import '../../core/widgets/tv_button.dart';
 import '../../core/widgets/tv_state_panel.dart';
 import '../../core/widgets/tv_video_card.dart';
 import 'view_models/video_detail_view_model.dart';
+import '../library/views/personal_actions_dialog.dart';
 
 class VideoDetailPage extends ConsumerStatefulWidget {
   const VideoDetailPage({required this.id, required this.pageId, super.key});
@@ -140,28 +141,17 @@ class _VideoDetailPageState extends ConsumerState<VideoDetailPage> {
 
   Future<void> _personal() async {
     final previous = FocusManager.instance.primaryFocus;
+    if (ref.read(sessionProvider).value?.isAuthenticated != true) {
+      await context.push<void>('/login?returnTo=%2Fvideo%2F${widget.id}');
+      if (mounted) personal.requestFocus();
+      return;
+    }
     await showDialog<void>(
       context: context,
       requestFocus: true,
       traversalEdgeBehavior: TraversalEdgeBehavior.closedLoop,
-      builder: (dialogContext) => AlertDialog(
-        title: const Text('收藏与稍后再看'),
-        content: const Text('这项功能即将开放。你可以先继续浏览和观看，或查看当前账号。'),
-        actions: [
-          TvButton(
-            label: '返回',
-            autofocus: true,
-            onPressed: () => Navigator.pop(dialogContext),
-          ),
-          TvButton(
-            label: '我的账号',
-            onPressed: () {
-              Navigator.pop(dialogContext);
-              context.go('/library');
-            },
-          ),
-        ],
-      ),
+      builder: (_) =>
+          PersonalActionsDialog(videoId: widget.id, ownerKey: owner),
     );
     if (mounted && previous?.context != null) previous!.requestFocus();
   }

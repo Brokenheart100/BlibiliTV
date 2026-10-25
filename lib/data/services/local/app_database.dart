@@ -22,15 +22,30 @@ class SearchEntries extends Table {
   Set<Column<Object>> get primaryKey => {ownerKey, query};
 }
 
-@DriftDatabase(tables: [WatchProgressRows, SearchEntries])
+class HistoryVideos extends Table {
+  TextColumn get ownerKey => text()();
+  TextColumn get videoId => text()();
+  TextColumn get title => text()();
+  TextColumn get creator => text()();
+  TextColumn get coverUrl => text().nullable()();
+  IntColumn get durationSeconds => integer()();
+  IntColumn get viewCount => integer().withDefault(const Constant(0))();
+  @override
+  Set<Column<Object>> get primaryKey => {ownerKey, videoId};
+}
+
+@DriftDatabase(tables: [WatchProgressRows, SearchEntries, HistoryVideos])
 class AppDatabase extends _$AppDatabase {
   AppDatabase(super.executor);
   AppDatabase.defaults() : super(driftDatabase(name: 'mambatv'));
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
   @override
   MigrationStrategy get migration => MigrationStrategy(
     onCreate: (migrator) => migrator.createAll(),
+    onUpgrade: (migrator, from, to) async {
+      if (from < 2) await migrator.createTable(historyVideos);
+    },
     beforeOpen: (_) async {
       await customStatement('PRAGMA foreign_keys = ON');
     },

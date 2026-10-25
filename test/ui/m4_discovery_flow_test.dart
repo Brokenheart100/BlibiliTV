@@ -224,7 +224,7 @@ void main() {
     },
   );
   testWidgets(
-    'continue action chooses the saved part; personal entry remains explicit about availability',
+    'continue action chooses the saved part; guest personal entry requests login',
     (tester) async {
       final catalog = LongDetailCatalog();
       final progress = MemoryProgressRepository();
@@ -243,8 +243,8 @@ void main() {
       expect(find.text('继续播放 · P2 0:25'), findsOneWidget);
       await press(tester, LogicalKeyboardKey.arrowRight);
       await press(tester, LogicalKeyboardKey.select);
-      expect(find.text('这项功能即将开放。你可以先继续浏览和观看，或查看当前账号。'), findsOneWidget);
-      await press(tester, LogicalKeyboardKey.select);
+      expect(find.text('以游客继续探索'), findsOneWidget);
+      await press(tester, LogicalKeyboardKey.goBack);
       expect(find.byType(AlertDialog), findsNothing);
     },
   );

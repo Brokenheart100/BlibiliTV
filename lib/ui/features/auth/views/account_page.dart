@@ -23,6 +23,7 @@ class AccountPage extends ConsumerStatefulWidget {
 class _AccountPageState extends ConsumerState<AccountPage> {
   final primary = FocusNode(debugLabel: 'account-primary');
   final secondary = FocusNode(debugLabel: 'account-secondary');
+  final records = FocusNode(debugLabel: 'account-records');
   TvShellScope? shell;
   bool busy = false;
   void _entry() => primary.requestFocus();
@@ -38,6 +39,7 @@ class _AccountPageState extends ConsumerState<AccountPage> {
     shell?.unregisterContent(2, _entry);
     primary.dispose();
     secondary.dispose();
+    records.dispose();
     super.dispose();
   }
 
@@ -47,7 +49,16 @@ class _AccountPageState extends ConsumerState<AccountPage> {
       shell?.focusNavigation();
     } else if (event.logicalKey == LogicalKeyboardKey.arrowDown ||
         event.logicalKey == LogicalKeyboardKey.arrowUp) {
-      (first ? secondary : primary).requestFocus();
+      final nodes = [primary, records, secondary];
+      final index = nodes.indexOf(FocusManager.instance.primaryFocus!);
+      final target =
+          nodes[(index +
+                  (event.logicalKey == LogicalKeyboardKey.arrowDown ? 1 : -1))
+              .clamp(0, 2)];
+      target.requestFocus();
+      if (target.context != null) {
+        unawaited(Scrollable.ensureVisible(target.context!, alignment: .6));
+      }
     } else {
       return KeyEventResult.ignored;
     }
@@ -124,7 +135,7 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                     Text(
                       session.notice ??
                           (auth
-                              ? '账号已在本机安全保存，收藏与历史列表将在后续开放。'
+                              ? '账号已在本机安全保存，观看记录与个人列表按账号分别展示。'
                               : '游客可浏览和播放公开视频。登录后可按账号保存播放位置。'),
                       style: const TextStyle(color: TvColors.muted),
                     ),
@@ -159,6 +170,19 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                           );
                         }
                       },
+                    ),
+                    const SizedBox(height: 12),
+                    TvButton(
+                      key: const Key('account-records'),
+                      label: '观看记录与个人列表',
+                      focusNode: records,
+                      icon: CupertinoIcons.collections,
+                      onKeyEvent: (e) => _key(e, false),
+                      onPressed: () => unawaited(
+                        context.push<void>('/library/records').then((_) {
+                          if (mounted) records.requestFocus();
+                        }),
+                      ),
                     ),
                     const SizedBox(height: 12),
                     TvButton(

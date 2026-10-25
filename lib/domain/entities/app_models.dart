@@ -63,5 +63,9 @@ abstract class AppSettings with _$AppSettings {
   const factory AppSettings({
     @Default(false) bool reducedMotion,
     @Default(true) bool resumePlayback,
+    @Default(1.0) double defaultRate,
+    @Default(0) int defaultQuality,
+    @Default(false) bool autoNext,
+    @Default(false) bool syncHistory,
   }) = _AppSettings;
 }

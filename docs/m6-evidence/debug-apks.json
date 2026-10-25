@@ -1,0 +1,37 @@
+{
+  "recordedAtUtc": "2026-10-25T10:29:23.388751+00:00",
+  "applicationId": "app.mamba.mambatv",
+  "versionName": "1.0.0",
+  "buildNumber": 1,
+  "mode": "debug",
+  "baseCommit": "de71da9f6b134e16ed412e72c7d8142c2bbc9f63",
+  "workingTreeDirty": true,
+  "productEntrypoint": "lib/main.dart",
+  "packageVersionAbiDebugFlagTvLauncherAndSignatureVerified": true,
+  "artifacts": [
+    {
+      "file": "mambatv-1.0.0+1-armeabi-v7a-debug.apk",
+      "abi": "armeabi-v7a",
+      "versionCode": 1001,
+      "certificateSha256": "95f1a495fece83b0c170218ae91d3d75a10124569ecfffc96e1028b477f59541",
+      "bytes": 102261645,
+      "sha256": "b44ba503bd2ae6f898cb59ba97b5adab7de6cb7ff09c3d91355707cd3da17433"
+    },
+    {
+      "file": "mambatv-1.0.0+1-arm64-v8a-debug.apk",
+      "abi": "arm64-v8a",
+      "versionCode": 2001,
+      "certificateSha256": "95f1a495fece83b0c170218ae91d3d75a10124569ecfffc96e1028b477f59541",
+      "bytes": 123952973,
+      "sha256": "67be35af7410bb46e649a3ba951cc3a241b697817bc0dc15cc3bd8ad88ee217b"
+    },
+    {
+      "file": "mambatv-1.0.0+1-x86_64-debug.apk",
+      "abi": "x86_64",
+      "versionCode": 4001,
+      "certificateSha256": "95f1a495fece83b0c170218ae91d3d75a10124569ecfffc96e1028b477f59541",
+      "bytes": 113394743,
+      "sha256": "16191ac18d8022f7f42c8a127b16052a7988512516529d9247ed4cfcf1895f4b"
+    }
+  ]
+}

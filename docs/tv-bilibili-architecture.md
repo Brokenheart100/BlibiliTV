@@ -347,14 +347,14 @@ M2 已落地最小游客实现：StartPlayback + 端口/仓储 + 全局引擎协
 | 存储 | 数据 | 策略 |
 | --- | --- | --- |
 | 安全存储 | 账号凭据、刷新材料 | 不进入 SQLite、普通偏好、源码、测试样本或日志；备份策略按插件和 Android 配置验证 |
-| Drift | 本地观看进度、观看记录、搜索历史、元数据／收藏缓存 | 事务写入、schema 版本、迁移测试、容量和过期清理 |
+| Drift | 本地观看进度、观看记录元数据、搜索历史（v2） | 事务写入、schema 版本、迁移测试、容量和过期清理 |
 | 简单偏好 | 默认倍速、首选画质、字幕／弹幕偏好、主题／安全区 | 可恢复的简单配置 |
 | 内存 | 页面快照、播放资源、临时会话状态 | 限量、短期；账号退出或内容切换时释放 |
 | 图片磁盘缓存 | 公共封面等 | 尺寸／容量限制，提供清理入口 |
 
 游客与账号数据使用不同 ownerKey。游客记录默认保留在游客范围，不自动上传；是否合并由后续明确的产品行为决定。账号退出后清除该账号私人列表缓存与搜索记录，保留的本地续播数据必须按账号隔离并提供清理入口，游客不能读取。重新登录其他账号时，不复用上一账号页面快照或请求结果。
 
-本地进度是本设备续播的默认来源；远端历史单独展示。没有本地记录时才在已验证语义下使用远端位置，不以一个不可靠时间戳无条件覆盖本地记录。服务器收藏与稍后再看是账号列表事实来源，本地仅缓存；离线时不悄悄排队执行账号写操作。
+本地进度是本设备续播的默认来源；远端历史单独展示。没有本地记录时才在已验证语义下使用远端位置，不以一个不可靠时间戳无条件覆盖本地记录。服务器收藏与稍后再看是账号列表事实来源，仅保留当前会话内存页面；离线时不悄悄排队执行账号写操作。
 
 ## 12. 可验证性与完成定义
 
@@ -385,3 +385,15 @@ M0 隔离验证入口已实现真实游客接口、扫码申请和模拟器音�
 - [media_kit](https://pub.dev/packages/media_kit)：媒体引擎、渲染与原生库拆分，以及外部音轨和请求头能力；具体 B 站链路仍需验证。
 - [Drift](https://drift.simonbinder.eu/)、[shared_preferences](https://pub.dev/packages/shared_preferences)、[flutter_secure_storage](https://pub.dev/packages/flutter_secure_storage)：持久化职责与平台配置资料。
 - [PiliPlus](https://github.com/bggRGjQaUbCoE/PiliPlus)、[依赖](https://github.com/bggRGjQaUbCoE/PiliPlus/blob/main/pubspec.yaml)、[登录实现](https://github.com/bggRGjQaUbCoE/PiliPlus/blob/main/lib/http/login.dart)、[视频实现](https://github.com/bggRGjQaUbCoE/PiliPlus/blob/main/lib/http/video.dart)、[许可证原文](https://github.com/bggRGjQaUbCoE/PiliPlus/blob/main/LICENSE)：上游参考，后续实际复用时固定提交。
+
+
+### M6 实现补充（2026-10-25）
+
+采用 [ADR 0007](adr/0007-personal-library-and-history.md) 的 LibraryRepository／LocalHistoryRepository 端口、Riverpod AsyncNotifier 与 Freezed 页面状态。我的保留账号管理入口，个人列表位于独立 `/library/records` 路由，每次进入及换号默认本地页签；页内返回恢复可达的页签／条目焦点。Drift v2 只新增标题和封面快照，原 v1 数据保留。设置的缓存清理不涉及账号及持久记录。
+
+进度同步默认关闭，显式启用后只对实际播放每至少 30 秒上报；失败不排队重试。个人写命令先读、最多单次提交、再读确认；待确认时保留原意图，build／刷新只读。真实账号验收以只读构建阻止这些 POST，范围与证据见 [M6](m6-validation.md)。
+
+
+### M7 发布准备补充（2026-10-25）
+
+按 [ADR 0008](adr/0008-release-readiness-and-validation.md) 保持包名／版本策略和数据边界，新增品牌资源、按需加载的 TV 许可页与发布材料校验；验证包显示独立的“验证”名称。稳定性按用户调整为 15 分钟，真实 TV 与正式签名不由测试证书或模拟器替代。结果及已记录的时钟波动见 [M7](m7-validation.md)。

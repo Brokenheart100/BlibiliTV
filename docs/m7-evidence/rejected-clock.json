@@ -1,0 +1,10 @@
+{
+  "status": "rejected",
+  "reason": "Media timeline differed from monotonic elapsed time by 212982ms; threshold was 30000ms.",
+  "lastValidSampleElapsedSeconds": 180,
+  "lastValidMediaPositionMs": 181500,
+  "sampleId": "BV1wR4Xz6EqG",
+  "concurrentHostWork": "Release AOT compilation",
+  "cause": "not established; cold emulator retry with no concurrent native builds",
+  "testCleanupIssue": "Teardown after assertion closed SQLite before the active player completed saving. Harness now closes the player and widget before database shutdown."
+}

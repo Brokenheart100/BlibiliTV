@@ -1,0 +1,11 @@
+{
+  "hotRestart": "succeeded",
+  "runtimeErrorsAfterRestart": 0,
+  "scope": "separate read-only debug validation package on Mamba_TV_API36",
+  "sourceEntrypoint": "tool/m6_app.dart",
+  "personalAccountWritesExecuted": false,
+  "isolatedUpgradeAvdRemoved": true,
+  "notes": [
+    "An initial debug DevFS connection on the 1 GiB signing AVD was lost while the device became offline; debug validation moved to the established main AVD with no real-account operations."
+  ]
+}

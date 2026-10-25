@@ -18,6 +18,26 @@ class LocalSettingsRepository implements SettingsRepository {
         AppSettings(
           reducedMotion: values['reducedMotion'] as bool? ?? false,
           resumePlayback: values['resumePlayback'] as bool? ?? true,
+          defaultRate:
+              values['defaultRate'] is num &&
+                  (values['defaultRate']! as num) >= .5 &&
+                  (values['defaultRate']! as num) <= 2
+              ? (values['defaultRate']! as num).toDouble()
+              : 1,
+          defaultQuality:
+              const [
+                0,
+                16,
+                32,
+                64,
+                80,
+                112,
+                116,
+              ].contains(values['defaultQuality'])
+              ? values['defaultQuality']! as int
+              : 0,
+          autoNext: values['autoNext'] as bool? ?? false,
+          syncHistory: values['syncHistory'] as bool? ?? false,
         ),
       );
     } catch (_) {
@@ -36,6 +56,10 @@ class LocalSettingsRepository implements SettingsRepository {
         jsonEncode({
           'reducedMotion': settings.reducedMotion,
           'resumePlayback': settings.resumePlayback,
+          'defaultRate': settings.defaultRate,
+          'defaultQuality': settings.defaultQuality,
+          'autoNext': settings.autoNext,
+          'syncHistory': settings.syncHistory,
         }),
       );
       return const Success(null);

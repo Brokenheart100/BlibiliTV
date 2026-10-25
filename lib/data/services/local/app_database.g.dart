@@ -684,12 +684,484 @@ class SearchEntriesCompanion extends UpdateCompanion<SearchEntry> {
   }
 }
 
+class $HistoryVideosTable extends HistoryVideos
+    with TableInfo<$HistoryVideosTable, HistoryVideo> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $HistoryVideosTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _ownerKeyMeta = const VerificationMeta(
+    'ownerKey',
+  );
+  @override
+  late final GeneratedColumn<String> ownerKey = GeneratedColumn<String>(
+    'owner_key',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _videoIdMeta = const VerificationMeta(
+    'videoId',
+  );
+  @override
+  late final GeneratedColumn<String> videoId = GeneratedColumn<String>(
+    'video_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _titleMeta = const VerificationMeta('title');
+  @override
+  late final GeneratedColumn<String> title = GeneratedColumn<String>(
+    'title',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _creatorMeta = const VerificationMeta(
+    'creator',
+  );
+  @override
+  late final GeneratedColumn<String> creator = GeneratedColumn<String>(
+    'creator',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _coverUrlMeta = const VerificationMeta(
+    'coverUrl',
+  );
+  @override
+  late final GeneratedColumn<String> coverUrl = GeneratedColumn<String>(
+    'cover_url',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _durationSecondsMeta = const VerificationMeta(
+    'durationSeconds',
+  );
+  @override
+  late final GeneratedColumn<int> durationSeconds = GeneratedColumn<int>(
+    'duration_seconds',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _viewCountMeta = const VerificationMeta(
+    'viewCount',
+  );
+  @override
+  late final GeneratedColumn<int> viewCount = GeneratedColumn<int>(
+    'view_count',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    ownerKey,
+    videoId,
+    title,
+    creator,
+    coverUrl,
+    durationSeconds,
+    viewCount,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'history_videos';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<HistoryVideo> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('owner_key')) {
+      context.handle(
+        _ownerKeyMeta,
+        ownerKey.isAcceptableOrUnknown(data['owner_key']!, _ownerKeyMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_ownerKeyMeta);
+    }
+    if (data.containsKey('video_id')) {
+      context.handle(
+        _videoIdMeta,
+        videoId.isAcceptableOrUnknown(data['video_id']!, _videoIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_videoIdMeta);
+    }
+    if (data.containsKey('title')) {
+      context.handle(
+        _titleMeta,
+        title.isAcceptableOrUnknown(data['title']!, _titleMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_titleMeta);
+    }
+    if (data.containsKey('creator')) {
+      context.handle(
+        _creatorMeta,
+        creator.isAcceptableOrUnknown(data['creator']!, _creatorMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_creatorMeta);
+    }
+    if (data.containsKey('cover_url')) {
+      context.handle(
+        _coverUrlMeta,
+        coverUrl.isAcceptableOrUnknown(data['cover_url']!, _coverUrlMeta),
+      );
+    }
+    if (data.containsKey('duration_seconds')) {
+      context.handle(
+        _durationSecondsMeta,
+        durationSeconds.isAcceptableOrUnknown(
+          data['duration_seconds']!,
+          _durationSecondsMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_durationSecondsMeta);
+    }
+    if (data.containsKey('view_count')) {
+      context.handle(
+        _viewCountMeta,
+        viewCount.isAcceptableOrUnknown(data['view_count']!, _viewCountMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {ownerKey, videoId};
+  @override
+  HistoryVideo map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return HistoryVideo(
+      ownerKey: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}owner_key'],
+      )!,
+      videoId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}video_id'],
+      )!,
+      title: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}title'],
+      )!,
+      creator: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}creator'],
+      )!,
+      coverUrl: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}cover_url'],
+      ),
+      durationSeconds: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}duration_seconds'],
+      )!,
+      viewCount: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}view_count'],
+      )!,
+    );
+  }
+
+  @override
+  $HistoryVideosTable createAlias(String alias) {
+    return $HistoryVideosTable(attachedDatabase, alias);
+  }
+}
+
+class HistoryVideo extends DataClass implements Insertable<HistoryVideo> {
+  final String ownerKey;
+  final String videoId;
+  final String title;
+  final String creator;
+  final String? coverUrl;
+  final int durationSeconds;
+  final int viewCount;
+  const HistoryVideo({
+    required this.ownerKey,
+    required this.videoId,
+    required this.title,
+    required this.creator,
+    this.coverUrl,
+    required this.durationSeconds,
+    required this.viewCount,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['owner_key'] = Variable<String>(ownerKey);
+    map['video_id'] = Variable<String>(videoId);
+    map['title'] = Variable<String>(title);
+    map['creator'] = Variable<String>(creator);
+    if (!nullToAbsent || coverUrl != null) {
+      map['cover_url'] = Variable<String>(coverUrl);
+    }
+    map['duration_seconds'] = Variable<int>(durationSeconds);
+    map['view_count'] = Variable<int>(viewCount);
+    return map;
+  }
+
+  HistoryVideosCompanion toCompanion(bool nullToAbsent) {
+    return HistoryVideosCompanion(
+      ownerKey: Value(ownerKey),
+      videoId: Value(videoId),
+      title: Value(title),
+      creator: Value(creator),
+      coverUrl: coverUrl == null && nullToAbsent
+          ? const Value.absent()
+          : Value(coverUrl),
+      durationSeconds: Value(durationSeconds),
+      viewCount: Value(viewCount),
+    );
+  }
+
+  factory HistoryVideo.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return HistoryVideo(
+      ownerKey: serializer.fromJson<String>(json['ownerKey']),
+      videoId: serializer.fromJson<String>(json['videoId']),
+      title: serializer.fromJson<String>(json['title']),
+      creator: serializer.fromJson<String>(json['creator']),
+      coverUrl: serializer.fromJson<String?>(json['coverUrl']),
+      durationSeconds: serializer.fromJson<int>(json['durationSeconds']),
+      viewCount: serializer.fromJson<int>(json['viewCount']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'ownerKey': serializer.toJson<String>(ownerKey),
+      'videoId': serializer.toJson<String>(videoId),
+      'title': serializer.toJson<String>(title),
+      'creator': serializer.toJson<String>(creator),
+      'coverUrl': serializer.toJson<String?>(coverUrl),
+      'durationSeconds': serializer.toJson<int>(durationSeconds),
+      'viewCount': serializer.toJson<int>(viewCount),
+    };
+  }
+
+  HistoryVideo copyWith({
+    String? ownerKey,
+    String? videoId,
+    String? title,
+    String? creator,
+    Value<String?> coverUrl = const Value.absent(),
+    int? durationSeconds,
+    int? viewCount,
+  }) => HistoryVideo(
+    ownerKey: ownerKey ?? this.ownerKey,
+    videoId: videoId ?? this.videoId,
+    title: title ?? this.title,
+    creator: creator ?? this.creator,
+    coverUrl: coverUrl.present ? coverUrl.value : this.coverUrl,
+    durationSeconds: durationSeconds ?? this.durationSeconds,
+    viewCount: viewCount ?? this.viewCount,
+  );
+  HistoryVideo copyWithCompanion(HistoryVideosCompanion data) {
+    return HistoryVideo(
+      ownerKey: data.ownerKey.present ? data.ownerKey.value : this.ownerKey,
+      videoId: data.videoId.present ? data.videoId.value : this.videoId,
+      title: data.title.present ? data.title.value : this.title,
+      creator: data.creator.present ? data.creator.value : this.creator,
+      coverUrl: data.coverUrl.present ? data.coverUrl.value : this.coverUrl,
+      durationSeconds: data.durationSeconds.present
+          ? data.durationSeconds.value
+          : this.durationSeconds,
+      viewCount: data.viewCount.present ? data.viewCount.value : this.viewCount,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('HistoryVideo(')
+          ..write('ownerKey: $ownerKey, ')
+          ..write('videoId: $videoId, ')
+          ..write('title: $title, ')
+          ..write('creator: $creator, ')
+          ..write('coverUrl: $coverUrl, ')
+          ..write('durationSeconds: $durationSeconds, ')
+          ..write('viewCount: $viewCount')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    ownerKey,
+    videoId,
+    title,
+    creator,
+    coverUrl,
+    durationSeconds,
+    viewCount,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is HistoryVideo &&
+          other.ownerKey == this.ownerKey &&
+          other.videoId == this.videoId &&
+          other.title == this.title &&
+          other.creator == this.creator &&
+          other.coverUrl == this.coverUrl &&
+          other.durationSeconds == this.durationSeconds &&
+          other.viewCount == this.viewCount);
+}
+
+class HistoryVideosCompanion extends UpdateCompanion<HistoryVideo> {
+  final Value<String> ownerKey;
+  final Value<String> videoId;
+  final Value<String> title;
+  final Value<String> creator;
+  final Value<String?> coverUrl;
+  final Value<int> durationSeconds;
+  final Value<int> viewCount;
+  final Value<int> rowid;
+  const HistoryVideosCompanion({
+    this.ownerKey = const Value.absent(),
+    this.videoId = const Value.absent(),
+    this.title = const Value.absent(),
+    this.creator = const Value.absent(),
+    this.coverUrl = const Value.absent(),
+    this.durationSeconds = const Value.absent(),
+    this.viewCount = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  HistoryVideosCompanion.insert({
+    required String ownerKey,
+    required String videoId,
+    required String title,
+    required String creator,
+    this.coverUrl = const Value.absent(),
+    required int durationSeconds,
+    this.viewCount = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : ownerKey = Value(ownerKey),
+       videoId = Value(videoId),
+       title = Value(title),
+       creator = Value(creator),
+       durationSeconds = Value(durationSeconds);
+  static Insertable<HistoryVideo> custom({
+    Expression<String>? ownerKey,
+    Expression<String>? videoId,
+    Expression<String>? title,
+    Expression<String>? creator,
+    Expression<String>? coverUrl,
+    Expression<int>? durationSeconds,
+    Expression<int>? viewCount,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (ownerKey != null) 'owner_key': ownerKey,
+      if (videoId != null) 'video_id': videoId,
+      if (title != null) 'title': title,
+      if (creator != null) 'creator': creator,
+      if (coverUrl != null) 'cover_url': coverUrl,
+      if (durationSeconds != null) 'duration_seconds': durationSeconds,
+      if (viewCount != null) 'view_count': viewCount,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  HistoryVideosCompanion copyWith({
+    Value<String>? ownerKey,
+    Value<String>? videoId,
+    Value<String>? title,
+    Value<String>? creator,
+    Value<String?>? coverUrl,
+    Value<int>? durationSeconds,
+    Value<int>? viewCount,
+    Value<int>? rowid,
+  }) {
+    return HistoryVideosCompanion(
+      ownerKey: ownerKey ?? this.ownerKey,
+      videoId: videoId ?? this.videoId,
+      title: title ?? this.title,
+      creator: creator ?? this.creator,
+      coverUrl: coverUrl ?? this.coverUrl,
+      durationSeconds: durationSeconds ?? this.durationSeconds,
+      viewCount: viewCount ?? this.viewCount,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (ownerKey.present) {
+      map['owner_key'] = Variable<String>(ownerKey.value);
+    }
+    if (videoId.present) {
+      map['video_id'] = Variable<String>(videoId.value);
+    }
+    if (title.present) {
+      map['title'] = Variable<String>(title.value);
+    }
+    if (creator.present) {
+      map['creator'] = Variable<String>(creator.value);
+    }
+    if (coverUrl.present) {
+      map['cover_url'] = Variable<String>(coverUrl.value);
+    }
+    if (durationSeconds.present) {
+      map['duration_seconds'] = Variable<int>(durationSeconds.value);
+    }
+    if (viewCount.present) {
+      map['view_count'] = Variable<int>(viewCount.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('HistoryVideosCompanion(')
+          ..write('ownerKey: $ownerKey, ')
+          ..write('videoId: $videoId, ')
+          ..write('title: $title, ')
+          ..write('creator: $creator, ')
+          ..write('coverUrl: $coverUrl, ')
+          ..write('durationSeconds: $durationSeconds, ')
+          ..write('viewCount: $viewCount, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
   late final $WatchProgressRowsTable watchProgressRows =
       $WatchProgressRowsTable(this);
   late final $SearchEntriesTable searchEntries = $SearchEntriesTable(this);
+  late final $HistoryVideosTable historyVideos = $HistoryVideosTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -697,6 +1169,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   List<DatabaseSchemaEntity> get allSchemaEntities => [
     watchProgressRows,
     searchEntries,
+    historyVideos,
   ];
 }
 
@@ -1116,6 +1589,255 @@ typedef $$SearchEntriesTableProcessedTableManager =
       SearchEntry,
       PrefetchHooks Function()
     >;
+typedef $$HistoryVideosTableCreateCompanionBuilder =
+    HistoryVideosCompanion Function({
+      required String ownerKey,
+      required String videoId,
+      required String title,
+      required String creator,
+      Value<String?> coverUrl,
+      required int durationSeconds,
+      Value<int> viewCount,
+      Value<int> rowid,
+    });
+typedef $$HistoryVideosTableUpdateCompanionBuilder =
+    HistoryVideosCompanion Function({
+      Value<String> ownerKey,
+      Value<String> videoId,
+      Value<String> title,
+      Value<String> creator,
+      Value<String?> coverUrl,
+      Value<int> durationSeconds,
+      Value<int> viewCount,
+      Value<int> rowid,
+    });
+
+class $$HistoryVideosTableFilterComposer
+    extends Composer<_$AppDatabase, $HistoryVideosTable> {
+  $$HistoryVideosTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get ownerKey => $composableBuilder(
+    column: $table.ownerKey,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get videoId => $composableBuilder(
+    column: $table.videoId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get title => $composableBuilder(
+    column: $table.title,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get creator => $composableBuilder(
+    column: $table.creator,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get coverUrl => $composableBuilder(
+    column: $table.coverUrl,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get durationSeconds => $composableBuilder(
+    column: $table.durationSeconds,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get viewCount => $composableBuilder(
+    column: $table.viewCount,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$HistoryVideosTableOrderingComposer
+    extends Composer<_$AppDatabase, $HistoryVideosTable> {
+  $$HistoryVideosTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get ownerKey => $composableBuilder(
+    column: $table.ownerKey,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get videoId => $composableBuilder(
+    column: $table.videoId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get title => $composableBuilder(
+    column: $table.title,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get creator => $composableBuilder(
+    column: $table.creator,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get coverUrl => $composableBuilder(
+    column: $table.coverUrl,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get durationSeconds => $composableBuilder(
+    column: $table.durationSeconds,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get viewCount => $composableBuilder(
+    column: $table.viewCount,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$HistoryVideosTableAnnotationComposer
+    extends Composer<_$AppDatabase, $HistoryVideosTable> {
+  $$HistoryVideosTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get ownerKey =>
+      $composableBuilder(column: $table.ownerKey, builder: (column) => column);
+
+  GeneratedColumn<String> get videoId =>
+      $composableBuilder(column: $table.videoId, builder: (column) => column);
+
+  GeneratedColumn<String> get title =>
+      $composableBuilder(column: $table.title, builder: (column) => column);
+
+  GeneratedColumn<String> get creator =>
+      $composableBuilder(column: $table.creator, builder: (column) => column);
+
+  GeneratedColumn<String> get coverUrl =>
+      $composableBuilder(column: $table.coverUrl, builder: (column) => column);
+
+  GeneratedColumn<int> get durationSeconds => $composableBuilder(
+    column: $table.durationSeconds,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get viewCount =>
+      $composableBuilder(column: $table.viewCount, builder: (column) => column);
+}
+
+class $$HistoryVideosTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $HistoryVideosTable,
+          HistoryVideo,
+          $$HistoryVideosTableFilterComposer,
+          $$HistoryVideosTableOrderingComposer,
+          $$HistoryVideosTableAnnotationComposer,
+          $$HistoryVideosTableCreateCompanionBuilder,
+          $$HistoryVideosTableUpdateCompanionBuilder,
+          (
+            HistoryVideo,
+            BaseReferences<_$AppDatabase, $HistoryVideosTable, HistoryVideo>,
+          ),
+          HistoryVideo,
+          PrefetchHooks Function()
+        > {
+  $$HistoryVideosTableTableManager(_$AppDatabase db, $HistoryVideosTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$HistoryVideosTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$HistoryVideosTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$HistoryVideosTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> ownerKey = const Value.absent(),
+                Value<String> videoId = const Value.absent(),
+                Value<String> title = const Value.absent(),
+                Value<String> creator = const Value.absent(),
+                Value<String?> coverUrl = const Value.absent(),
+                Value<int> durationSeconds = const Value.absent(),
+                Value<int> viewCount = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => HistoryVideosCompanion(
+                ownerKey: ownerKey,
+                videoId: videoId,
+                title: title,
+                creator: creator,
+                coverUrl: coverUrl,
+                durationSeconds: durationSeconds,
+                viewCount: viewCount,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String ownerKey,
+                required String videoId,
+                required String title,
+                required String creator,
+                Value<String?> coverUrl = const Value.absent(),
+                required int durationSeconds,
+                Value<int> viewCount = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => HistoryVideosCompanion.insert(
+                ownerKey: ownerKey,
+                videoId: videoId,
+                title: title,
+                creator: creator,
+                coverUrl: coverUrl,
+                durationSeconds: durationSeconds,
+                viewCount: viewCount,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$HistoryVideosTable, HistoryVideo>(table),
+                  BaseReferences<
+                    _$AppDatabase,
+                    $HistoryVideosTable,
+                    HistoryVideo
+                  >(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$HistoryVideosTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $HistoryVideosTable,
+      HistoryVideo,
+      $$HistoryVideosTableFilterComposer,
+      $$HistoryVideosTableOrderingComposer,
+      $$HistoryVideosTableAnnotationComposer,
+      $$HistoryVideosTableCreateCompanionBuilder,
+      $$HistoryVideosTableUpdateCompanionBuilder,
+      (
+        HistoryVideo,
+        BaseReferences<_$AppDatabase, $HistoryVideosTable, HistoryVideo>,
+      ),
+      HistoryVideo,
+      PrefetchHooks Function()
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -1124,4 +1846,6 @@ class $AppDatabaseManager {
       $$WatchProgressRowsTableTableManager(_db, _db.watchProgressRows);
   $$SearchEntriesTableTableManager get searchEntries =>
       $$SearchEntriesTableTableManager(_db, _db.searchEntries);
+  $$HistoryVideosTableTableManager get historyVideos =>
+      $$HistoryVideosTableTableManager(_db, _db.historyVideos);
 }

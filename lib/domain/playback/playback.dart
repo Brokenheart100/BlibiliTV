@@ -142,6 +142,7 @@ final class WatchProgress {
 }
 
 abstract interface class ProgressRepository {
+  Future<Result<void>> rememberVideo(String ownerKey, VideoSummary video);
   Future<Result<WatchProgress?>> latestForVideo(
     String ownerKey,
     String videoId,
@@ -164,10 +165,17 @@ final class PlaybackPlan {
     required this.startAt,
     required this.rememberProgress,
     this.parts = const [],
+    this.initialRate = 1,
+    this.autoNext = false,
+    this.syncHistory = false,
+    this.preferenceNotice,
   });
   final PlaybackSource source;
   final String videoId, partId, title, partTitle;
   final Duration startAt;
   final bool rememberProgress;
   final List<VideoPart> parts;
+  final double initialRate;
+  final bool autoNext, syncHistory;
+  final String? preferenceNotice;
 }

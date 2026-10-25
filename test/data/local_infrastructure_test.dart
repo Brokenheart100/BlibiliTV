@@ -47,12 +47,12 @@ void main() {
     },
   );
 
-  test('v1 schema matches the exported baseline', () async {
+  test('v1 schema upgrades to the exported v2 schema', () async {
     final verifier = SchemaVerifier(GeneratedHelper());
     final connection = await verifier.startAt(1);
     final database = AppDatabase(connection);
     addTearDown(database.close);
-    await verifier.migrateAndValidate(database, 1);
+    await verifier.migrateAndValidate(database, 2);
   });
 
   test('watch progress is keyed by owner, video and part', () async {

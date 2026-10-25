@@ -1,0 +1,30 @@
+{
+  "recordedAtUtc": "2026-10-25T07:14:04.267765Z",
+  "authenticated": true,
+  "readOnly": true,
+  "remoteWriteCommandsExecuted": 0,
+  "privateIdentityAndContentsOmitted": true,
+  "checks": {
+    "remote": {
+      "status": "passed",
+      "paginationAvailable": true
+    },
+    "remoteNextPage": {
+      "status": "passed"
+    },
+    "folders": {
+      "status": "passed",
+      "paginationAvailable": false
+    },
+    "folderContents": {
+      "status": "passed"
+    },
+    "watchLater": {
+      "status": "passed",
+      "paginationAvailable": false
+    },
+    "membershipReads": {
+      "status": "passed"
+    }
+  }
+}

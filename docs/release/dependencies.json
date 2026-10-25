@@ -1,0 +1,1630 @@
+{
+  "pubspecLockSha256": "e95482cca98e4b0a3b20199a0608283c39efb698306bea1f8a4141481d72929c",
+  "lockCanonicalSha256": "e95482cca98e4b0a3b20199a0608283c39efb698306bea1f8a4141481d72929c",
+  "nativeNoticesSha256": "4d093e31ff53f2d334369ccc80645fc8fbe63685476396534219f4fc29895542",
+  "runtimePackageCount": 137,
+  "allDependencyCount": 180,
+  "packages": [
+    {
+      "package": "_fe_analyzer_shared",
+      "version": "110.0.0",
+      "kind": "transitive",
+      "runtimeGraph": false,
+      "source": "https://github.com/dart-lang/sdk/tree/main/pkg/_fe_analyzer_shared",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "efa31b5ac790016736fa9761642b0af16d37cd4fb483de2905adb5258cb89722"
+    },
+    {
+      "package": "analyzer",
+      "version": "14.6.0",
+      "kind": "transitive",
+      "runtimeGraph": false,
+      "source": "https://github.com/dart-lang/sdk/tree/main/pkg/analyzer",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "7e124af6a556f045cb3a20cafbdaa31602ac2c82cbcb3c3b15faaaf514b06028"
+    },
+    {
+      "package": "analyzer_buffer",
+      "version": "0.3.4",
+      "kind": "transitive",
+      "runtimeGraph": false,
+      "source": "https://github.com/rrousselGit/analyzer_buffer",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "dd7fb6cf35c0eb61c8bb8d20c4806d635be6be0df9fc9ff8d66cb09fe7251bdc"
+    },
+    {
+      "package": "ansicolor",
+      "version": "2.0.3",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/google/ansicolor-dart",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+    },
+    {
+      "package": "archive",
+      "version": "4.5.2",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/brendan-duncan/archive",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "32f97d332eae7453ec4079858e6f1d74be85beeb6d3881068b47d02a379cccea"
+    },
+    {
+      "package": "args",
+      "version": "2.7.0",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/dart-lang/core/tree/main/pkgs/args",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "dfb09c74e29386cd3e2719f32d4995d59526179753931d31840757c77fbf2791"
+    },
+    {
+      "package": "async",
+      "version": "2.13.1",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/dart-lang/core/tree/main/pkgs/async",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "ff15faa32a2e638107b7789592b14426162a75ba620044ee2340a20ec6ce5e73"
+    },
+    {
+      "package": "audio_session",
+      "version": "0.2.4",
+      "kind": "direct",
+      "runtimeGraph": true,
+      "source": "https://github.com/ryanheise/audio_session",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "2568490c678ba27cc8a405238637c4ba76adc632232f05dc1c36cbf59381dba4"
+    },
+    {
+      "package": "boolean_selector",
+      "version": "2.1.2",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/dart-lang/tools/tree/main/pkgs/boolean_selector",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "b71519245009a3b8f126196a5408ec031e216e8e0d985085958c6543f82a8a2a"
+    },
+    {
+      "package": "build",
+      "version": "4.0.11",
+      "kind": "transitive",
+      "runtimeGraph": false,
+      "source": "https://github.com/dart-lang/build/tree/master/build",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "a4b5d7d31626e90b77e8696f1c47643aa31f52e17c1907c1ab60b068110e6e10"
+    },
+    {
+      "package": "build_config",
+      "version": "1.3.3",
+      "kind": "transitive",
+      "runtimeGraph": false,
+      "source": "https://github.com/dart-lang/build/tree/master/build_config",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "ea97a7558a7bd7cee4e2355f7529e3cbebb0dcbb546ddb9a90f10c9eb6b08da5"
+    },
+    {
+      "package": "build_daemon",
+      "version": "4.1.7",
+      "kind": "transitive",
+      "runtimeGraph": false,
+      "source": "https://github.com/dart-lang/build/tree/master/build_daemon",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "0371d1da6a57fb791db29d29b95333429205f51f3cb2eb3a0c12d91838a38744"
+    },
+    {
+      "package": "build_runner",
+      "version": "2.16.2",
+      "kind": "dev",
+      "runtimeGraph": false,
+      "source": "https://github.com/dart-lang/build/tree/master/build_runner",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "a4b5d7d31626e90b77e8696f1c47643aa31f52e17c1907c1ab60b068110e6e10"
+    },
+    {
+      "package": "built_collection",
+      "version": "5.1.2",
+      "kind": "transitive",
+      "runtimeGraph": false,
+      "source": "https://github.com/dart-lang/build/tree/master/built_types/built_collection",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "4f1b0f444c862e8dc586122c00592538fb0e9dd6d81a5214882b25b8054f7dfa"
+    },
+    {
+      "package": "built_value",
+      "version": "8.13.0",
+      "kind": "transitive",
+      "runtimeGraph": false,
+      "source": "https://github.com/google/built_value.dart/tree/master/built_value",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "4f1b0f444c862e8dc586122c00592538fb0e9dd6d81a5214882b25b8054f7dfa"
+    },
+    {
+      "package": "cached_network_image",
+      "version": "4.0.5",
+      "kind": "direct",
+      "runtimeGraph": true,
+      "source": "https://github.com/Baseflow/flutter_cached_network_image",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "31b6d676e72277911cfee3688ca9411387eb5ce7a2f722cef30bbea0bcbee60e"
+    },
+    {
+      "package": "cached_network_image_platform_interface",
+      "version": "5.0.3",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/Baseflow/flutter_cached_network_image",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "31b6d676e72277911cfee3688ca9411387eb5ce7a2f722cef30bbea0bcbee60e"
+    },
+    {
+      "package": "cached_network_image_web",
+      "version": "2.0.3",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/Baseflow/flutter_cached_network_image",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "31b6d676e72277911cfee3688ca9411387eb5ce7a2f722cef30bbea0bcbee60e"
+    },
+    {
+      "package": "characters",
+      "version": "1.4.1",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/dart-lang/core/tree/main/pkgs/characters",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "0371d1da6a57fb791db29d29b95333429205f51f3cb2eb3a0c12d91838a38744"
+    },
+    {
+      "package": "charcode",
+      "version": "1.4.0",
+      "kind": "transitive",
+      "runtimeGraph": false,
+      "source": "https://github.com/lrhn/charcode",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "8a4dbe6d3ddcf937b18d1768d13f9ba718b45bcb43bc00a3b63eb160d264acf7"
+    },
+    {
+      "package": "checked_yaml",
+      "version": "2.0.4",
+      "kind": "transitive",
+      "runtimeGraph": false,
+      "source": "https://github.com/google/json_serializable.dart/tree/master/checked_yaml",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "4771d808721f4d5f02318ab857c92f5a5dce87b14ae1c3770fe21ca7fd4a9280"
+    },
+    {
+      "package": "cli_util",
+      "version": "0.6.0",
+      "kind": "transitive",
+      "runtimeGraph": false,
+      "source": "https://github.com/dart-lang/tools/tree/main/pkgs/cli_util",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "ff15faa32a2e638107b7789592b14426162a75ba620044ee2340a20ec6ce5e73"
+    },
+    {
+      "package": "clock",
+      "version": "1.1.3",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/dart-lang/tools/tree/main/pkgs/clock",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "58d1e17ffe5109a7ae296caafcadfdbe6a7d176f0bc4ab01e12a689b0499d8bd"
+    },
+    {
+      "package": "code_assets",
+      "version": "2.1.0",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/dart-lang/native/tree/main/pkgs/code_assets",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "21ae23b0b9ff67a2dc75ab085d1e8db8ac548c5faf370af17f28dd2ef3b52b7b"
+    },
+    {
+      "package": "code_builder",
+      "version": "4.13.0",
+      "kind": "transitive",
+      "runtimeGraph": false,
+      "source": "https://github.com/dart-lang/tools/tree/main/pkgs/code_builder",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "a4b5d7d31626e90b77e8696f1c47643aa31f52e17c1907c1ab60b068110e6e10"
+    },
+    {
+      "package": "collection",
+      "version": "1.19.1",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/dart-lang/core/tree/main/pkgs/collection",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "ff15faa32a2e638107b7789592b14426162a75ba620044ee2340a20ec6ce5e73"
+    },
+    {
+      "package": "convert",
+      "version": "3.1.2",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/dart-lang/core/tree/main/pkgs/convert",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "ad6a71997da90924b2cfb1fb47ec46537f70faf469efe016168794ae45ed6888"
+    },
+    {
+      "package": "crypto",
+      "version": "3.0.7",
+      "kind": "direct",
+      "runtimeGraph": true,
+      "source": "https://github.com/dart-lang/core/tree/main/pkgs/crypto",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "ad6a71997da90924b2cfb1fb47ec46537f70faf469efe016168794ae45ed6888"
+    },
+    {
+      "package": "cupertino_icons",
+      "version": "1.0.9",
+      "kind": "direct",
+      "runtimeGraph": true,
+      "source": "https://github.com/flutter/packages/tree/main/third_party/packages/cupertino_icons",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "310d6ab6483280280c9db122bded0a63c09558bc5743720f61dbcbb494db370a"
+    },
+    {
+      "package": "cupertino_ui",
+      "version": "1.1.4",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/flutter/packages/tree/main/packages/cupertino_ui",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "420f7739f169097f0aad1242045169cd643c8f1d94e62866fad265ae4c369b7d"
+    },
+    {
+      "package": "dart_style",
+      "version": "3.1.14",
+      "kind": "transitive",
+      "runtimeGraph": false,
+      "source": "https://github.com/dart-lang/dart_style",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "3c32b53167c7dae9190c38dab5dd9fe1789c53623ebc7d1babcb29914c5b3f16"
+    },
+    {
+      "package": "dbus",
+      "version": "0.8.0",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/canonical/dbus.dart",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "1f256ecad192880510e84ad60474eab7589218784b9a50bc7ceee34c2b91f1d5"
+    },
+    {
+      "package": "dio",
+      "version": "5.11.1",
+      "kind": "direct",
+      "runtimeGraph": true,
+      "source": "https://github.com/cfug/dio",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "0b4d36faa9f74d67c3b7e082fc860c643b41f5bb14b4d262fe9c3559c88992b7"
+    },
+    {
+      "package": "dio_cache_interceptor",
+      "version": "4.0.7",
+      "kind": "direct",
+      "runtimeGraph": true,
+      "source": "https://github.com/llfbandit/dart_http_cache",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+    },
+    {
+      "package": "dio_web_adapter",
+      "version": "2.2.2",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/cfug/dio",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "0b4d36faa9f74d67c3b7e082fc860c643b41f5bb14b4d262fe9c3559c88992b7"
+    },
+    {
+      "package": "drift",
+      "version": "2.35.3",
+      "kind": "direct",
+      "runtimeGraph": true,
+      "source": "https://github.com/simolus3/drift",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "31f84e4edff98f0238a5bef1c2ce754e401fbab149782f0ff4dc9b68fd086f75"
+    },
+    {
+      "package": "drift_dev",
+      "version": "2.35.2",
+      "kind": "dev",
+      "runtimeGraph": false,
+      "source": "https://github.com/simolus3/drift",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "31f84e4edff98f0238a5bef1c2ce754e401fbab149782f0ff4dc9b68fd086f75"
+    },
+    {
+      "package": "drift_flutter",
+      "version": "0.3.1",
+      "kind": "direct",
+      "runtimeGraph": true,
+      "source": "https://github.com/simolus3/drift",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "7cf86321e740e4ff631ab6d00962c2d65fa85e4163bdd89334f1d22354ab0306"
+    },
+    {
+      "package": "fake_async",
+      "version": "1.3.3",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/dart-lang/test/tree/master/pkgs/fake_async",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "58d1e17ffe5109a7ae296caafcadfdbe6a7d176f0bc4ab01e12a689b0499d8bd"
+    },
+    {
+      "package": "ffi",
+      "version": "2.2.0",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/dart-lang/native/tree/main/pkgs/ffi",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "0371d1da6a57fb791db29d29b95333429205f51f3cb2eb3a0c12d91838a38744"
+    },
+    {
+      "package": "ffi_leak_tracker",
+      "version": "0.1.2",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/halildurmus/win32/tree/main/packages/ffi_leak_tracker",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "332f290333e64ed007b4f59aeeebd8fd3ceaadfbfa226a6cf2a3ab1583281624"
+    },
+    {
+      "package": "file",
+      "version": "7.0.1",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/dart-lang/tools/tree/main/pkgs/file",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "f6df86b1412172537273e8e80ee2fb8a66aa7307ce0b39ea5ddab47ca41b8c49"
+    },
+    {
+      "package": "fixnum",
+      "version": "1.1.1",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/dart-lang/core/tree/main/pkgs/fixnum",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "ff0b91d4f3c32b25cb6ec84985e8da89b0ba2a2b2f7eef353cda5e5423a20390"
+    },
+    {
+      "package": "flutter",
+      "version": "0.0.0",
+      "kind": "direct",
+      "runtimeGraph": true,
+      "source": "https://flutter.dev",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "a3a9fd82f800a47377f7d3f60c60a5c91cae0495be8f329031e1448ce0f5dab9"
+    },
+    {
+      "package": "flutter_cache_manager",
+      "version": "3.4.5",
+      "kind": "direct",
+      "runtimeGraph": true,
+      "source": "https://github.com/Baseflow/flutter_cache_manager",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "c18c2b23af83fdb3dc1c857b1df7561f7807fc3667a01d9475878733258d840e"
+    },
+    {
+      "package": "flutter_driver",
+      "version": "0.0.0",
+      "kind": "dev",
+      "runtimeGraph": false,
+      "source": "https://flutter.dev",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "a3a9fd82f800a47377f7d3f60c60a5c91cae0495be8f329031e1448ce0f5dab9"
+    },
+    {
+      "package": "flutter_lints",
+      "version": "6.0.0",
+      "kind": "dev",
+      "runtimeGraph": false,
+      "source": "https://github.com/flutter/packages/tree/main/packages/flutter_lints",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "89519eca6f7b9529b35bdddd623a58c3af06a88c458dbd6531ddb4675acf75a9"
+    },
+    {
+      "package": "flutter_localizations",
+      "version": "0.0.0",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "sdk",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "a3a9fd82f800a47377f7d3f60c60a5c91cae0495be8f329031e1448ce0f5dab9"
+    },
+    {
+      "package": "flutter_riverpod",
+      "version": "3.4.3",
+      "kind": "direct",
+      "runtimeGraph": true,
+      "source": "https://riverpod.dev",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "757d9c09a9a2a701144328c0fd596234ea287ff62952b39cd22f9ad4caed1171"
+    },
+    {
+      "package": "flutter_secure_storage",
+      "version": "11.2.0",
+      "kind": "direct",
+      "runtimeGraph": true,
+      "source": "https://github.com/mogol/flutter_secure_storage/tree/develop/flutter_secure_storage",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "55dafb084270616f95b9bea53654adda8bdcad95c022a83c4cf8769073f829fa"
+    },
+    {
+      "package": "flutter_secure_storage_darwin",
+      "version": "0.4.3",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/juliansteenbakker/flutter_secure_storage",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "3754c516086c62307896512b68024837bee5d2bea42a55cfd03f7448b92b06c8"
+    },
+    {
+      "package": "flutter_secure_storage_linux",
+      "version": "3.0.3",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/mogol/flutter_secure_storage",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "55dafb084270616f95b9bea53654adda8bdcad95c022a83c4cf8769073f829fa"
+    },
+    {
+      "package": "flutter_secure_storage_platform_interface",
+      "version": "2.1.1",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/mogol/flutter_secure_storage",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "55dafb084270616f95b9bea53654adda8bdcad95c022a83c4cf8769073f829fa"
+    },
+    {
+      "package": "flutter_secure_storage_web",
+      "version": "2.1.1",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/mogol/flutter_secure_storage",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "55dafb084270616f95b9bea53654adda8bdcad95c022a83c4cf8769073f829fa"
+    },
+    {
+      "package": "flutter_secure_storage_windows",
+      "version": "4.2.2",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/mogol/flutter_secure_storage",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "55dafb084270616f95b9bea53654adda8bdcad95c022a83c4cf8769073f829fa"
+    },
+    {
+      "package": "flutter_test",
+      "version": "0.0.0",
+      "kind": "dev",
+      "runtimeGraph": true,
+      "source": "sdk",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "a3a9fd82f800a47377f7d3f60c60a5c91cae0495be8f329031e1448ce0f5dab9"
+    },
+    {
+      "package": "flutter_web_plugins",
+      "version": "0.0.0",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://flutter.dev",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "a3a9fd82f800a47377f7d3f60c60a5c91cae0495be8f329031e1448ce0f5dab9"
+    },
+    {
+      "package": "freezed",
+      "version": "4.0.3",
+      "kind": "dev",
+      "runtimeGraph": false,
+      "source": "https://github.com/rrousselGit/freezed",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "757d9c09a9a2a701144328c0fd596234ea287ff62952b39cd22f9ad4caed1171"
+    },
+    {
+      "package": "freezed_annotation",
+      "version": "3.1.0",
+      "kind": "direct",
+      "runtimeGraph": true,
+      "source": "https://github.com/rrousselGit/freezed",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "757d9c09a9a2a701144328c0fd596234ea287ff62952b39cd22f9ad4caed1171"
+    },
+    {
+      "package": "fuchsia_remote_debug_protocol",
+      "version": "0.0.0",
+      "kind": "transitive",
+      "runtimeGraph": false,
+      "source": "https://flutter.dev",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "a3a9fd82f800a47377f7d3f60c60a5c91cae0495be8f329031e1448ce0f5dab9"
+    },
+    {
+      "package": "glob",
+      "version": "2.2.0",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/dart-lang/tools/tree/main/pkgs/glob",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "3c32b53167c7dae9190c38dab5dd9fe1789c53623ebc7d1babcb29914c5b3f16"
+    },
+    {
+      "package": "go_router",
+      "version": "18.1.1",
+      "kind": "direct",
+      "runtimeGraph": true,
+      "source": "https://github.com/flutter/packages/tree/main/packages/go_router",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "420f7739f169097f0aad1242045169cd643c8f1d94e62866fad265ae4c369b7d"
+    },
+    {
+      "package": "graphs",
+      "version": "2.3.2",
+      "kind": "transitive",
+      "runtimeGraph": false,
+      "source": "https://github.com/dart-lang/tools/tree/main/pkgs/graphs",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "ea97a7558a7bd7cee4e2355f7529e3cbebb0dcbb546ddb9a90f10c9eb6b08da5"
+    },
+    {
+      "package": "hooks",
+      "version": "2.2.0",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/dart-lang/native/tree/main/pkgs/hooks",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "21ae23b0b9ff67a2dc75ab085d1e8db8ac548c5faf370af17f28dd2ef3b52b7b"
+    },
+    {
+      "package": "http",
+      "version": "1.6.0",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/dart-lang/http/tree/master/pkgs/http",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "3c32b53167c7dae9190c38dab5dd9fe1789c53623ebc7d1babcb29914c5b3f16"
+    },
+    {
+      "package": "http_cache_core",
+      "version": "1.1.4",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/llfbandit/dart_http_cache/tree/master/http_cache_core",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "1eb85fc97224598dad1852b5d6483bbcf0aa8608790dcc657a5a2a761ae9c8c6"
+    },
+    {
+      "package": "http_multi_server",
+      "version": "3.2.3",
+      "kind": "transitive",
+      "runtimeGraph": false,
+      "source": "https://github.com/dart-lang/http/tree/master/pkgs/http_multi_server",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "ff0b91d4f3c32b25cb6ec84985e8da89b0ba2a2b2f7eef353cda5e5423a20390"
+    },
+    {
+      "package": "http_parser",
+      "version": "4.1.2",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/dart-lang/http/tree/master/pkgs/http_parser",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "3c32b53167c7dae9190c38dab5dd9fe1789c53623ebc7d1babcb29914c5b3f16"
+    },
+    {
+      "package": "image",
+      "version": "4.12.0",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/brendan-duncan/image",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "f3c17da84e0780e1c334325c73098257c32221d62498ed55ef3c1361904925aa"
+    },
+    {
+      "package": "integration_test",
+      "version": "0.0.0",
+      "kind": "dev",
+      "runtimeGraph": false,
+      "source": "sdk",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "a3a9fd82f800a47377f7d3f60c60a5c91cae0495be8f329031e1448ce0f5dab9"
+    },
+    {
+      "package": "intl",
+      "version": "0.20.3",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/dart-lang/i18n/tree/main/pkgs/intl",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "7e124af6a556f045cb3a20cafbdaa31602ac2c82cbcb3c3b15faaaf514b06028"
+    },
+    {
+      "package": "io",
+      "version": "1.1.0",
+      "kind": "transitive",
+      "runtimeGraph": false,
+      "source": "https://github.com/dart-lang/tools/tree/main/pkgs/io",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "ea97a7558a7bd7cee4e2355f7529e3cbebb0dcbb546ddb9a90f10c9eb6b08da5"
+    },
+    {
+      "package": "jni",
+      "version": "1.1.0",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/dart-lang/native/tree/main/pkgs/jni",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "08a004aa8956c3cf3b24f7f69c966247233953e18e6afaa61191ea47b7eb70f6"
+    },
+    {
+      "package": "jni_flutter",
+      "version": "1.0.4+1",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/dart-lang/native/tree/main/pkgs/jni_flutter",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "b1fcb475d67817411f335ac92872507011e574c4cb29cfdaaf7707b75641932c"
+    },
+    {
+      "package": "jni_util",
+      "version": "1.0.0",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/dart-lang/native/tree/main/pkgs/jni_util",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "b1fcb475d67817411f335ac92872507011e574c4cb29cfdaaf7707b75641932c"
+    },
+    {
+      "package": "json_annotation",
+      "version": "4.12.0",
+      "kind": "direct",
+      "runtimeGraph": true,
+      "source": "https://github.com/google/json_serializable.dart/tree/master/json_annotation",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "143839f62c9b7f88143ea9f688361c27050888acde7696b34e04414bd254fafc"
+    },
+    {
+      "package": "json_serializable",
+      "version": "6.15.2",
+      "kind": "dev",
+      "runtimeGraph": false,
+      "source": "https://github.com/google/json_serializable.dart/tree/master/json_serializable",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "143839f62c9b7f88143ea9f688361c27050888acde7696b34e04414bd254fafc"
+    },
+    {
+      "package": "leak_tracker",
+      "version": "11.0.2",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/dart-lang/leak_tracker/tree/main/pkgs/leak_tracker",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "08a004aa8956c3cf3b24f7f69c966247233953e18e6afaa61191ea47b7eb70f6"
+    },
+    {
+      "package": "leak_tracker_flutter_testing",
+      "version": "3.0.10",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/dart-lang/leak_tracker/tree/main/pkgs/leak_tracker_flutter_testing",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "08a004aa8956c3cf3b24f7f69c966247233953e18e6afaa61191ea47b7eb70f6"
+    },
+    {
+      "package": "leak_tracker_testing",
+      "version": "3.0.2",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/dart-lang/leak_tracker/tree/main/pkgs/leak_tracker_testing",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "08a004aa8956c3cf3b24f7f69c966247233953e18e6afaa61191ea47b7eb70f6"
+    },
+    {
+      "package": "lints",
+      "version": "6.1.0",
+      "kind": "transitive",
+      "runtimeGraph": false,
+      "source": "https://github.com/dart-lang/core/tree/main/pkgs/lints",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "421fe78c3b5df297f8b4ab2c74f2450a274ee6d245a113091f6b9f90570af193"
+    },
+    {
+      "package": "listen",
+      "version": "1.0.1",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/flutter/core-packages/tree/main/packages/listen",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "420f7739f169097f0aad1242045169cd643c8f1d94e62866fad265ae4c369b7d"
+    },
+    {
+      "package": "logging",
+      "version": "1.3.0",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/dart-lang/core/tree/main/pkgs/logging",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "dfb09c74e29386cd3e2719f32d4995d59526179753931d31840757c77fbf2791"
+    },
+    {
+      "package": "matcher",
+      "version": "0.12.20",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/dart-lang/test/tree/master/pkgs/matcher",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "3c32b53167c7dae9190c38dab5dd9fe1789c53623ebc7d1babcb29914c5b3f16"
+    },
+    {
+      "package": "material_color_utilities",
+      "version": "0.13.0",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/material-foundation/material-color-utilities/tree/main/dart",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "d103f246ef4c18dab8af0c1dcf6a8af884e5cff554da7261a48ac43c17d98f2e"
+    },
+    {
+      "package": "material_ui",
+      "version": "1.8.0",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/flutter/packages/tree/main/packages/material_ui",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "420f7739f169097f0aad1242045169cd643c8f1d94e62866fad265ae4c369b7d"
+    },
+    {
+      "package": "media_kit",
+      "version": "1.2.6",
+      "kind": "direct",
+      "runtimeGraph": true,
+      "source": "https://github.com/media-kit/media-kit",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "2e3000f38718f050869d57540c288c661a446f64df1ba4ea4764df552b04a331"
+    },
+    {
+      "package": "media_kit_libs_android_video",
+      "version": "1.3.8",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/media-kit/media-kit.git",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "2e3000f38718f050869d57540c288c661a446f64df1ba4ea4764df552b04a331"
+    },
+    {
+      "package": "media_kit_libs_ios_video",
+      "version": "1.1.4",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/media-kit/media-kit.git",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "a78baa721ad6f5c0b2d8fb0c6cfff835ad8ed90393cac0087a90e8813490f2bd"
+    },
+    {
+      "package": "media_kit_libs_linux",
+      "version": "1.2.1",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/media-kit/media-kit.git",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "2e3000f38718f050869d57540c288c661a446f64df1ba4ea4764df552b04a331"
+    },
+    {
+      "package": "media_kit_libs_macos_video",
+      "version": "1.1.4",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/media-kit/media-kit.git",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "a78baa721ad6f5c0b2d8fb0c6cfff835ad8ed90393cac0087a90e8813490f2bd"
+    },
+    {
+      "package": "media_kit_libs_video",
+      "version": "1.0.7",
+      "kind": "direct",
+      "runtimeGraph": true,
+      "source": "https://github.com/media-kit/media-kit.git",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "2e3000f38718f050869d57540c288c661a446f64df1ba4ea4764df552b04a331"
+    },
+    {
+      "package": "media_kit_libs_windows_video",
+      "version": "1.0.11",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/media-kit/media-kit.git",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "2e3000f38718f050869d57540c288c661a446f64df1ba4ea4764df552b04a331"
+    },
+    {
+      "package": "media_kit_video",
+      "version": "2.0.1",
+      "kind": "direct",
+      "runtimeGraph": true,
+      "source": "https://github.com/media-kit/media-kit",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "2e3000f38718f050869d57540c288c661a446f64df1ba4ea4764df552b04a331"
+    },
+    {
+      "package": "meta",
+      "version": "1.19.0",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/dart-lang/sdk/tree/main/pkg/meta",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "b71519245009a3b8f126196a5408ec031e216e8e0d985085958c6543f82a8a2a"
+    },
+    {
+      "package": "mime",
+      "version": "2.1.0",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/dart-lang/tools/tree/main/pkgs/mime",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "ff15faa32a2e638107b7789592b14426162a75ba620044ee2340a20ec6ce5e73"
+    },
+    {
+      "package": "mockito",
+      "version": "5.8.1",
+      "kind": "transitive",
+      "runtimeGraph": false,
+      "source": "https://github.com/dart-lang/build/tree/master/builder_pkgs/mockito",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+    },
+    {
+      "package": "native_toolchain_c",
+      "version": "0.19.5",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/dart-lang/native/tree/main/pkgs/native_toolchain_c",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "aa81abb1ac43e40d2f5a606385edd37e974a5858d4109f7f439dd43d964487a7"
+    },
+    {
+      "package": "objective_c",
+      "version": "9.6.2",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/dart-lang/native/tree/main/pkgs/objective_c",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "1cda25a8de6880c5338de0b4a06ee89e8537c213eb1379c16a4c035bfd198b5c"
+    },
+    {
+      "package": "octo_image",
+      "version": "2.1.2",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/Baseflow/octo_image",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "9a64f4b486cd12af348a9716640d121dfca9b5ac2d8c3a24a9444b65e8560f9b"
+    },
+    {
+      "package": "package_config",
+      "version": "3.0.0",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/dart-lang/tools/tree/main/pkgs/package_config",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "0371d1da6a57fb791db29d29b95333429205f51f3cb2eb3a0c12d91838a38744"
+    },
+    {
+      "package": "package_info_plus",
+      "version": "10.2.2",
+      "kind": "direct",
+      "runtimeGraph": true,
+      "source": "https://github.com/fluttercommunity/plus_plugins",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "3b38d48befd0af70b892e13d10c9e34679416c24a9277f962629951c64d71f4c"
+    },
+    {
+      "package": "package_info_plus_platform_interface",
+      "version": "4.1.0",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/fluttercommunity/plus_plugins",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "3b38d48befd0af70b892e13d10c9e34679416c24a9277f962629951c64d71f4c"
+    },
+    {
+      "package": "path",
+      "version": "1.9.1",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/dart-lang/core/tree/main/pkgs/path",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "3c32b53167c7dae9190c38dab5dd9fe1789c53623ebc7d1babcb29914c5b3f16"
+    },
+    {
+      "package": "path_provider",
+      "version": "2.1.6",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/flutter/packages/tree/main/packages/path_provider/path_provider",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "420f7739f169097f0aad1242045169cd643c8f1d94e62866fad265ae4c369b7d"
+    },
+    {
+      "package": "path_provider_android",
+      "version": "2.3.1",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/flutter/packages/tree/main/packages/path_provider/path_provider_android",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "420f7739f169097f0aad1242045169cd643c8f1d94e62866fad265ae4c369b7d"
+    },
+    {
+      "package": "path_provider_foundation",
+      "version": "2.6.0",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/flutter/packages/tree/main/packages/path_provider/path_provider_foundation",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "420f7739f169097f0aad1242045169cd643c8f1d94e62866fad265ae4c369b7d"
+    },
+    {
+      "package": "path_provider_linux",
+      "version": "2.2.2",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/flutter/packages/tree/main/packages/path_provider/path_provider_linux",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "420f7739f169097f0aad1242045169cd643c8f1d94e62866fad265ae4c369b7d"
+    },
+    {
+      "package": "path_provider_platform_interface",
+      "version": "2.1.3",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/flutter/packages/tree/main/packages/path_provider/path_provider_platform_interface",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "420f7739f169097f0aad1242045169cd643c8f1d94e62866fad265ae4c369b7d"
+    },
+    {
+      "package": "path_provider_windows",
+      "version": "2.3.0",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/flutter/packages/tree/main/packages/path_provider/path_provider_windows",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "89519eca6f7b9529b35bdddd623a58c3af06a88c458dbd6531ddb4675acf75a9"
+    },
+    {
+      "package": "petitparser",
+      "version": "7.1.0",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://petitparser.github.io",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "0be767174b97278f17da4923a74169e8645631f03ea3d8482ec3523c9b1a0dd3"
+    },
+    {
+      "package": "platform",
+      "version": "3.2.0",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/dart-lang/core/tree/main/pkgs/platform",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "143839f62c9b7f88143ea9f688361c27050888acde7696b34e04414bd254fafc"
+    },
+    {
+      "package": "plugin_platform_interface",
+      "version": "2.1.8",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/flutter/packages/tree/main/packages/plugin_platform_interface",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "89519eca6f7b9529b35bdddd623a58c3af06a88c458dbd6531ddb4675acf75a9"
+    },
+    {
+      "package": "pointycastle",
+      "version": "4.0.0",
+      "kind": "direct",
+      "runtimeGraph": true,
+      "source": "https://github.com/bcgit/pc-dart",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "3a7bb295473da049a1c6edd2f8c41b9e526a4e80f200c0200cc5600b2634df3f"
+    },
+    {
+      "package": "pool",
+      "version": "1.5.3",
+      "kind": "transitive",
+      "runtimeGraph": false,
+      "source": "https://github.com/dart-lang/tools/tree/main/pkgs/pool",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "3c32b53167c7dae9190c38dab5dd9fe1789c53623ebc7d1babcb29914c5b3f16"
+    },
+    {
+      "package": "posix",
+      "version": "6.5.2",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/onepub-dev/dart_posix",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "aaf6271abd048deb3125828613f1797b7556472de6c7acd7103bd43e9cb6a84b"
+    },
+    {
+      "package": "pretty_qr_code",
+      "version": "3.6.0",
+      "kind": "direct",
+      "runtimeGraph": true,
+      "source": "https://github.com/promops/flutter_pretty_qr",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "37371d8c2f3b45383481c08dd2ddccf25dbe67948fc4954feccd391f4a2830a5"
+    },
+    {
+      "package": "process",
+      "version": "5.0.6",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/dart-lang/tools/tree/main/pkgs/process",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "5f018bbc25a55406d7a4e1d3229135439e315210b0050ca56dbb367a4934e85d"
+    },
+    {
+      "package": "pub_semver",
+      "version": "2.2.1",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/dart-lang/tools/tree/main/pkgs/pub_semver",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "3c32b53167c7dae9190c38dab5dd9fe1789c53623ebc7d1babcb29914c5b3f16"
+    },
+    {
+      "package": "pubspec_parse",
+      "version": "1.7.0",
+      "kind": "transitive",
+      "runtimeGraph": false,
+      "source": "https://github.com/dart-lang/tools/tree/main/pkgs/pubspec_parse",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "479bb84361ed3d6b78f55871c9ae5d6c8f15f49c2089e59fc1d6644d8b0ed32b"
+    },
+    {
+      "package": "qr",
+      "version": "3.0.2",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/kevmoo/qr.dart",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "1d6c0bc8208cd835577eeb9195dc646f092728b62803abd60c404d984524abf7"
+    },
+    {
+      "package": "recase",
+      "version": "4.1.0",
+      "kind": "transitive",
+      "runtimeGraph": false,
+      "source": "https://github.com/techniboogie-dart/recase",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "389acee6b73f27ef83bdd997f32acc7dc12970c68fbc505284b7bf39d6d80bde"
+    },
+    {
+      "package": "record_use",
+      "version": "1.1.1",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/dart-lang/native/tree/main/pkgs/record_use",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "1cda25a8de6880c5338de0b4a06ee89e8537c213eb1379c16a4c035bfd198b5c"
+    },
+    {
+      "package": "riverpod",
+      "version": "3.4.3",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://riverpod.dev",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "757d9c09a9a2a701144328c0fd596234ea287ff62952b39cd22f9ad4caed1171"
+    },
+    {
+      "package": "riverpod_analyzer_utils",
+      "version": "1.0.0-dev.12",
+      "kind": "transitive",
+      "runtimeGraph": false,
+      "source": "https://github.com/rrousselGit/river_pod",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "52cb88cd866462fcf9e04dcdf491df9d2eee144ab06683b36cfdab603ed7ffd3"
+    },
+    {
+      "package": "riverpod_annotation",
+      "version": "4.0.7",
+      "kind": "direct",
+      "runtimeGraph": true,
+      "source": "https://github.com/rrousselGit/riverpod",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "757d9c09a9a2a701144328c0fd596234ea287ff62952b39cd22f9ad4caed1171"
+    },
+    {
+      "package": "riverpod_generator",
+      "version": "4.0.9",
+      "kind": "dev",
+      "runtimeGraph": false,
+      "source": "https://github.com/rrousselGit/riverpod",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "757d9c09a9a2a701144328c0fd596234ea287ff62952b39cd22f9ad4caed1171"
+    },
+    {
+      "package": "rxdart",
+      "version": "0.28.0",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/ReactiveX/rxdart",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+    },
+    {
+      "package": "safe_local_storage",
+      "version": "2.0.6",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/alexmercerind/safe_local_storage.git",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "d4cfdb498601b2872c7a09d06c62f92f5c751261bdb6fc4ce436940c7ccac78a"
+    },
+    {
+      "package": "shared_preferences",
+      "version": "2.5.6",
+      "kind": "direct",
+      "runtimeGraph": true,
+      "source": "https://github.com/flutter/packages/tree/main/packages/shared_preferences/shared_preferences",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "420f7739f169097f0aad1242045169cd643c8f1d94e62866fad265ae4c369b7d"
+    },
+    {
+      "package": "shared_preferences_android",
+      "version": "2.5.3",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/flutter/packages/tree/main/packages/shared_preferences/shared_preferences_android",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "420f7739f169097f0aad1242045169cd643c8f1d94e62866fad265ae4c369b7d"
+    },
+    {
+      "package": "shared_preferences_foundation",
+      "version": "2.6.0",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/flutter/packages/tree/main/packages/shared_preferences/shared_preferences_foundation",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "420f7739f169097f0aad1242045169cd643c8f1d94e62866fad265ae4c369b7d"
+    },
+    {
+      "package": "shared_preferences_linux",
+      "version": "2.4.1",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/flutter/packages/tree/main/packages/shared_preferences/shared_preferences_linux",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "89519eca6f7b9529b35bdddd623a58c3af06a88c458dbd6531ddb4675acf75a9"
+    },
+    {
+      "package": "shared_preferences_platform_interface",
+      "version": "2.4.2",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/flutter/packages/tree/main/packages/shared_preferences/shared_preferences_platform_interface",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "420f7739f169097f0aad1242045169cd643c8f1d94e62866fad265ae4c369b7d"
+    },
+    {
+      "package": "shared_preferences_web",
+      "version": "2.4.3",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/flutter/packages/tree/main/packages/shared_preferences/shared_preferences_web",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "89519eca6f7b9529b35bdddd623a58c3af06a88c458dbd6531ddb4675acf75a9"
+    },
+    {
+      "package": "shared_preferences_windows",
+      "version": "2.4.1",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/flutter/packages/tree/main/packages/shared_preferences/shared_preferences_windows",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "89519eca6f7b9529b35bdddd623a58c3af06a88c458dbd6531ddb4675acf75a9"
+    },
+    {
+      "package": "shelf",
+      "version": "1.4.3",
+      "kind": "transitive",
+      "runtimeGraph": false,
+      "source": "https://github.com/dart-lang/shelf/tree/master/pkgs/shelf",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "ff0b91d4f3c32b25cb6ec84985e8da89b0ba2a2b2f7eef353cda5e5423a20390"
+    },
+    {
+      "package": "shelf_web_socket",
+      "version": "3.0.0",
+      "kind": "transitive",
+      "runtimeGraph": false,
+      "source": "https://github.com/dart-lang/shelf/tree/master/pkgs/shelf_web_socket",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "ff0b91d4f3c32b25cb6ec84985e8da89b0ba2a2b2f7eef353cda5e5423a20390"
+    },
+    {
+      "package": "sky_engine",
+      "version": "0.0.0",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "sdk",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "3c0040023a5789bf56d6bf41fd44f08b21758523d41f128fb7dd6beb398d1191"
+    },
+    {
+      "package": "source_gen",
+      "version": "4.3.1",
+      "kind": "transitive",
+      "runtimeGraph": false,
+      "source": "https://github.com/dart-lang/source_gen/tree/master/source_gen",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "ad6a71997da90924b2cfb1fb47ec46537f70faf469efe016168794ae45ed6888"
+    },
+    {
+      "package": "source_helper",
+      "version": "1.4.0",
+      "kind": "transitive",
+      "runtimeGraph": false,
+      "source": "https://github.com/google/source_helper.dart",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+    },
+    {
+      "package": "source_span",
+      "version": "1.10.2",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/dart-lang/tools/tree/main/pkgs/source_span",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "3c32b53167c7dae9190c38dab5dd9fe1789c53623ebc7d1babcb29914c5b3f16"
+    },
+    {
+      "package": "sqflite",
+      "version": "2.4.5",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/tekartik/sqflite/tree/master/sqflite",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "c81f9454cf3107c116bc3c1fd22b7d751523a2b11e17cf90c0db3327d3c9e0da"
+    },
+    {
+      "package": "sqflite_android",
+      "version": "2.4.5",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/tekartik/sqflite/tree/master/sqflite_android",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "c81f9454cf3107c116bc3c1fd22b7d751523a2b11e17cf90c0db3327d3c9e0da"
+    },
+    {
+      "package": "sqflite_common",
+      "version": "2.5.14",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/tekartik/sqflite/tree/master/sqflite_common",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "c81f9454cf3107c116bc3c1fd22b7d751523a2b11e17cf90c0db3327d3c9e0da"
+    },
+    {
+      "package": "sqflite_darwin",
+      "version": "2.4.4+1",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/tekartik/sqflite/tree/master/sqflite_darwin",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "c81f9454cf3107c116bc3c1fd22b7d751523a2b11e17cf90c0db3327d3c9e0da"
+    },
+    {
+      "package": "sqflite_platform_interface",
+      "version": "2.4.3",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/tekartik/sqflite/tree/master/sqflite_platform_interface",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "c81f9454cf3107c116bc3c1fd22b7d751523a2b11e17cf90c0db3327d3c9e0da"
+    },
+    {
+      "package": "sqlcipher_flutter_libs",
+      "version": "0.7.0+eol",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/simolus3/sqlite3.dart/tree/main/legacy/sqlcipher_flutter_libs",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "1052710c769806debc27128a04dd1819fffb0585828acb7816a3a1f485b6998a"
+    },
+    {
+      "package": "sqlite3",
+      "version": "3.8.0",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/simolus3/sqlite3.dart/tree/main/sqlite3",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "67e5d73a3a0c6e41f33d688a672b1161bf7f16e04da9ae48a7a14f1ba7436a4d"
+    },
+    {
+      "package": "sqlite3_flutter_libs",
+      "version": "0.6.0+eol",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/simolus3/sqlite3.dart/tree/main/legacy/sqlite3_flutter_libs",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "67e5d73a3a0c6e41f33d688a672b1161bf7f16e04da9ae48a7a14f1ba7436a4d"
+    },
+    {
+      "package": "sqlparser",
+      "version": "0.45.1",
+      "kind": "transitive",
+      "runtimeGraph": false,
+      "source": "https://github.com/simolus3/drift/tree/develop/sqlparser",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "bec8c7a58f3e043a40123d332260048aeff40ebdcaf33bf8d497a3fea84b8f84"
+    },
+    {
+      "package": "stack_trace",
+      "version": "1.12.2",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/dart-lang/tools/tree/main/pkgs/stack_trace",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "ff0b91d4f3c32b25cb6ec84985e8da89b0ba2a2b2f7eef353cda5e5423a20390"
+    },
+    {
+      "package": "state_notifier",
+      "version": "1.0.0",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/rrousselGit/state_notifier",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "757d9c09a9a2a701144328c0fd596234ea287ff62952b39cd22f9ad4caed1171"
+    },
+    {
+      "package": "stream_channel",
+      "version": "2.1.4",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/dart-lang/tools/tree/main/pkgs/stream_channel",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "ff15faa32a2e638107b7789592b14426162a75ba620044ee2340a20ec6ce5e73"
+    },
+    {
+      "package": "stream_transform",
+      "version": "2.1.2",
+      "kind": "transitive",
+      "runtimeGraph": false,
+      "source": "https://github.com/dart-lang/tools/tree/main/pkgs/stream_transform",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "ea97a7558a7bd7cee4e2355f7529e3cbebb0dcbb546ddb9a90f10c9eb6b08da5"
+    },
+    {
+      "package": "string_scanner",
+      "version": "1.4.1",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/dart-lang/tools/tree/main/pkgs/string_scanner",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "3c32b53167c7dae9190c38dab5dd9fe1789c53623ebc7d1babcb29914c5b3f16"
+    },
+    {
+      "package": "sync_http",
+      "version": "0.3.1",
+      "kind": "transitive",
+      "runtimeGraph": false,
+      "source": "https://github.com/google/sync_http.dart",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "b9b748d4dd6f725387bf69e96df4e4ebff167ae83547954242a731504d037644"
+    },
+    {
+      "package": "synchronized",
+      "version": "3.5.0",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/tekartik/synchronized.dart/tree/master/synchronized",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "6d07c6bb60afb906049d507e19fcc4c6b59e35c0dd0f8a7302e87b3fb0576900"
+    },
+    {
+      "package": "talker",
+      "version": "5.1.21",
+      "kind": "direct",
+      "runtimeGraph": true,
+      "source": "https://github.com/Frezyx/talker",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "3acadeb2974854fcaeb9675f5801a57b158477c1b54f9bd695dd6c112a3e3fae"
+    },
+    {
+      "package": "talker_logger",
+      "version": "5.2.0",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/Frezyx/talker",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "3acadeb2974854fcaeb9675f5801a57b158477c1b54f9bd695dd6c112a3e3fae"
+    },
+    {
+      "package": "term_glyph",
+      "version": "1.2.2",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/dart-lang/tools/tree/main/pkgs/term_glyph",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "ea97a7558a7bd7cee4e2355f7529e3cbebb0dcbb546ddb9a90f10c9eb6b08da5"
+    },
+    {
+      "package": "test_api",
+      "version": "0.7.12",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/dart-lang/test/tree/master/pkgs/test_api",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "ff1b9f0df9036c04be424b1e3ce12789bea880ad5ffc3a48e069ae2d40a087a4"
+    },
+    {
+      "package": "typed_data",
+      "version": "1.4.0",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/dart-lang/core/tree/main/pkgs/typed_data",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "ff15faa32a2e638107b7789592b14426162a75ba620044ee2340a20ec6ce5e73"
+    },
+    {
+      "package": "universal_platform",
+      "version": "1.1.0",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/gskinnerTeam/flutter-universal-platform",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "8a135e09d6288f03171b04f07f00eb5ee04e54f2f5e9c9b952f6adbd1de48c3f"
+    },
+    {
+      "package": "uri_parser",
+      "version": "3.0.2",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/alexmercerind/uri_parser",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "2e3000f38718f050869d57540c288c661a446f64df1ba4ea4764df552b04a331"
+    },
+    {
+      "package": "uuid",
+      "version": "4.6.0",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/Daegalus/dart-uuid",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "ad3e5523e51004e94ba9ce728805b1b4242dbccdb65e62b523800e35a8a7cfdc"
+    },
+    {
+      "package": "vector_math",
+      "version": "2.4.3",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/flutter/core-packages/tree/main/packages/vector_math",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "420f7739f169097f0aad1242045169cd643c8f1d94e62866fad265ae4c369b7d"
+    },
+    {
+      "package": "vm_service",
+      "version": "15.4.0",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/dart-lang/sdk/tree/main/pkg/vm_service",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "ad6a71997da90924b2cfb1fb47ec46537f70faf469efe016168794ae45ed6888"
+    },
+    {
+      "package": "wakelock_plus",
+      "version": "1.8.2",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/fluttercommunity/wakelock_plus/tree/main/wakelock_plus",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "ebff92b2e4105e903605f70bac0030c20b7a1d9d43fd73f8b8aed08ab070fcb9"
+    },
+    {
+      "package": "wakelock_plus_platform_interface",
+      "version": "1.7.0",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": ">-2",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "1a95201dd1f509289fbbf929f72be2a25fd73c799697e30f5e7782a9cabf5102"
+    },
+    {
+      "package": "watcher",
+      "version": "1.2.1",
+      "kind": "transitive",
+      "runtimeGraph": false,
+      "source": "https://github.com/dart-lang/tools/tree/main/pkgs/watcher",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "3c32b53167c7dae9190c38dab5dd9fe1789c53623ebc7d1babcb29914c5b3f16"
+    },
+    {
+      "package": "web",
+      "version": "1.1.2",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/dart-lang/web",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "aa913ff50d7542eb8cc35b9f48a80928ac6819ba9057f85d424655e3e8dc271c"
+    },
+    {
+      "package": "web_socket",
+      "version": "1.0.1",
+      "kind": "transitive",
+      "runtimeGraph": false,
+      "source": "https://github.com/dart-lang/http/tree/master/pkgs/web_socket",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "cbe822ef3446af4366b2b82c48b0979d0b12865edfe74c22b9aa617fc362d6e0"
+    },
+    {
+      "package": "web_socket_channel",
+      "version": "3.0.3",
+      "kind": "transitive",
+      "runtimeGraph": false,
+      "source": "https://github.com/dart-lang/http/tree/master/pkgs/web_socket_channel",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "a4b5d7d31626e90b77e8696f1c47643aa31f52e17c1907c1ab60b068110e6e10"
+    },
+    {
+      "package": "webdriver",
+      "version": "3.2.0",
+      "kind": "transitive",
+      "runtimeGraph": false,
+      "source": "https://github.com/google/webdriver.dart",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "74cb46b123c9fa918ea8e0a0f5be736a1cd661edf145ccc723dc7ce30324ebab"
+    },
+    {
+      "package": "win32",
+      "version": "6.4.0",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://win32.pub",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "87ef8bccdd619f2345ba5b9026cf1d6cccb305e36ab83849a8a3af9293abde7e"
+    },
+    {
+      "package": "xdg_directories",
+      "version": "1.1.0",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/flutter/packages/tree/main/packages/xdg_directories",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "89519eca6f7b9529b35bdddd623a58c3af06a88c458dbd6531ddb4675acf75a9"
+    },
+    {
+      "package": "xml",
+      "version": "7.1.0",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/renggli/dart-xml",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "0be767174b97278f17da4923a74169e8645631f03ea3d8482ec3523c9b1a0dd3"
+    },
+    {
+      "package": "yaml",
+      "version": "3.1.4",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/dart-lang/tools/tree/main/pkgs/yaml",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "d47b93335401b052d79a2f5a3710e4cf7b5aed782faedf84d40fbdd6eb934ec7"
+    },
+    {
+      "package": "yaml_edit",
+      "version": "2.2.4",
+      "kind": "transitive",
+      "runtimeGraph": false,
+      "source": "https://github.com/dart-lang/tools/tree/main/pkgs/yaml_edit",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "021c41b9b081664f6ee181aaf4e03602c51591204dabe9ac8c8d736f0965b851"
+    }
+  ],
+  "scope": "Dart/Flutter package license files; native transitive components require separate review"
+}

@@ -9,6 +9,101 @@ part of 'repository_providers.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
 
+@ProviderFor(localHistoryRepository)
+final localHistoryRepositoryProvider = LocalHistoryRepositoryProvider._();
+
+final class LocalHistoryRepositoryProvider
+    extends
+        $FunctionalProvider<
+          LocalHistoryRepository,
+          LocalHistoryRepository,
+          LocalHistoryRepository
+        >
+    with $Provider<LocalHistoryRepository> {
+  LocalHistoryRepositoryProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'localHistoryRepositoryProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$localHistoryRepositoryHash();
+
+  @$internal
+  @override
+  $ProviderElement<LocalHistoryRepository> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  LocalHistoryRepository create(Ref ref) {
+    return localHistoryRepository(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(LocalHistoryRepository value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<LocalHistoryRepository>(value),
+    );
+  }
+}
+
+String _$localHistoryRepositoryHash() =>
+    r'3c09f9a4aec650e9266c0beb638858a3bb8a1a7e';
+
+@ProviderFor(libraryRepository)
+final libraryRepositoryProvider = LibraryRepositoryProvider._();
+
+final class LibraryRepositoryProvider
+    extends
+        $FunctionalProvider<
+          LibraryRepository,
+          LibraryRepository,
+          LibraryRepository
+        >
+    with $Provider<LibraryRepository> {
+  LibraryRepositoryProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'libraryRepositoryProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$libraryRepositoryHash();
+
+  @$internal
+  @override
+  $ProviderElement<LibraryRepository> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  LibraryRepository create(Ref ref) {
+    return libraryRepository(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(LibraryRepository value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<LibraryRepository>(value),
+    );
+  }
+}
+
+String _$libraryRepositoryHash() => r'8a5379ff4869caf7656153ada72e60af7fc52a5a';
+
 @ProviderFor(searchHistoryRepository)
 final searchHistoryRepositoryProvider = SearchHistoryRepositoryProvider._();
 

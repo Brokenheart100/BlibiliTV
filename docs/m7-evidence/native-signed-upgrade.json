@@ -1,0 +1,20 @@
+{
+  "device": "emulator-5556",
+  "avd": "Mamba_TV_M7_Signing_API36",
+  "releaseApks": true,
+  "testSigningOnly": true,
+  "applicationId": "app.mamba.mambatv",
+  "installReplacePassed": true,
+  "fromVersionCode": 4001,
+  "toVersionCode": 4002,
+  "mode": "native UI preference preservation",
+  "preference": "reducedMotion",
+  "originalValue": false,
+  "committedValue": true,
+  "restoredAfterUpgrade": true,
+  "nativeV1FixtureInjected": false,
+  "nativeV1FixtureUnavailableReason": "This SDK TV image disables root; no private-data bypass was attempted. SQLite v1 migration remains covered by repository tests.",
+  "realAccountUsed": false,
+  "personalDeviceModified": false,
+  "keyAlreadyRemoved": true
+}

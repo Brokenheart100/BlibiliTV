@@ -6,11 +6,13 @@ import '../ui/features/catalog/views/catalog_page.dart';
 import '../ui/features/preview/preview_pages.dart';
 import '../ui/features/search/search_page.dart';
 import '../ui/features/settings/views/settings_page.dart';
+import '../ui/features/settings/views/licenses_page.dart';
 import '../ui/features/shell/tv_shell.dart';
 import '../ui/features/video_detail/video_detail_page.dart';
 import '../ui/features/player/views/player_page.dart';
 import '../ui/features/auth/views/account_page.dart';
 import '../ui/features/auth/views/qr_login_page.dart';
+import '../ui/features/library/views/library_page.dart';
 import 'providers/auth_providers.dart';
 
 part 'router.g.dart';
@@ -67,6 +69,14 @@ GoRouter appRouter(Ref ref) {
         ],
       ),
       GoRoute(
+        path: '/settings/licenses',
+        builder: (context, state) => const LicensesPage(),
+      ),
+      GoRoute(
+        path: '/library/records',
+        builder: (context, state) => const LibraryPage(),
+      ),
+      GoRoute(
         path: '/video/:id',
         builder: (context, state) => VideoDetailPage(
           id: state.pathParameters['id']!,
@@ -85,6 +95,16 @@ GoRouter appRouter(Ref ref) {
         builder: (context, state) => PlayerPage(
           videoId: state.pathParameters['id']!,
           partId: state.uri.queryParameters['part'],
+          remoteResume: state.uri.queryParameters.containsKey('remote_ms')
+              ? Duration(
+                  milliseconds:
+                      (int.tryParse(
+                                state.uri.queryParameters['remote_ms'] ?? '',
+                              ) ??
+                              0)
+                          .clamp(0, 86400000),
+                )
+              : null,
           pageId: state.pageKey.value,
         ),
       ),

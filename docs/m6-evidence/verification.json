@@ -1,0 +1,41 @@
+{
+  "recordedAtUtc": "2026-10-25T10:29:23.388751+00:00",
+  "flutter": "3.47.5",
+  "dart": "3.13.4",
+  "unitAndWidgetTests": {
+    "passed": 176,
+    "failed": 0,
+    "coverageGenerated": true
+  },
+  "pipelineGuardTests": {
+    "passed": 12,
+    "failed": 0
+  },
+  "format": {
+    "dartFiles": 179,
+    "changed": 0
+  },
+  "codeGeneration": {
+    "codeGenerationExitCode": 0,
+    "generatedFileCount": 29,
+    "stable": true
+  },
+  "staticAnalysis": "no diagnostics via Flutter MCP",
+  "migration": "v1 to v2 with original progress and search preserved",
+  "nativeIntegration": "passed on API36 x86_64 in isolated validation package",
+  "realAccountScope": "read-only, no personal-library or heartbeat POST sent",
+  "realAccountEvidence": "real-readonly.json",
+  "realAccountMutationsAccepted": false,
+  "productDebugAbis": [
+    "armeabi-v7a",
+    "arm64-v8a",
+    "x86_64"
+  ],
+  "physicalTvAccepted": false,
+  "m6GitHubCiRun": false,
+  "baseCommit": "de71da9f6b134e16ed412e72c7d8142c2bbc9f63",
+  "workingTreeDirty": true,
+  "automationNotes": [
+    "Driver wait for a lazily built footer timed out while offscreen; not treated as a product failure. Native assertions and read-only repository probe passed."
+  ]
+}

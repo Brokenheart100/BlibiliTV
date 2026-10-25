@@ -1,0 +1,9 @@
+{
+  "status": "rejected",
+  "lastValidElapsedSeconds": 480,
+  "lastValidCumulativeMediaMs": 479500,
+  "automaticTransitionObserved": true,
+  "failure": "PlayerPhase.failed was observed and the original harness immediately rejected the run before waiting for bounded automatic recovery.",
+  "cause": "not established in that capture; native diagnostics used by the next run contain only safe token categories",
+  "fifteenMinuteThresholdMet": false
+}

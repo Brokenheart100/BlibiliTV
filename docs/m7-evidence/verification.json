@@ -1,0 +1,73 @@
+{
+  "recordedAtUtc": "2026-10-25T15:59:25.920573+00:00",
+  "scope": "M7 local and emulator release preparation; not formal release acceptance",
+  "requestedStabilitySeconds": 900,
+  "userChangedOriginalTwoHourTarget": true,
+  "flutterUnitAndWidgetTests": {
+    "passed": 179,
+    "failed": 0,
+    "coverageGenerated": true
+  },
+  "pipelineGuardTests": {
+    "passed": 12,
+    "failed": 0
+  },
+  "actionlint": "passed",
+  "staticAnalysis": "no diagnostics via Flutter MCP",
+  "format": {
+    "dartFiles": 186,
+    "changed": 0
+  },
+  "codeGeneration": {
+    "exitCode": 0,
+    "generatedFiles": 30,
+    "stable": true
+  },
+  "playbackSourcesUnchangedSinceSoak": true,
+  "stabilityReport": "native-15-minute.json",
+  "stabilitySummary": {
+    "source": "native-15-minute.json",
+    "continuousWindowSeconds": 900,
+    "reportElapsedIncludesCleanupSeconds": 902,
+    "cumulativeMediaAtEndMs": 899333,
+    "naturalTransitions": 1,
+    "resourceCycles": 20,
+    "maximumEngines": 1,
+    "created": 22,
+    "released": 22,
+    "liveAfterReturn": 0,
+    "lastFiveClosedCycleRssMinBytes": 344899584,
+    "lastFiveClosedCycleRssMaxBytes": 351662080,
+    "lastFiveClosedCycleRssRangeBytes": 6762496,
+    "maxSampleAbsAvSyncSeconds": 14.300016,
+    "avSyncOutlierSampleSeconds": [
+      540
+    ],
+    "followingSampleRecovered": true,
+    "nativeErrors": [],
+    "buildWindowP95Ms": 1.782,
+    "rasterWindowP95Ms": 6.847,
+    "manualLipSyncVerified": false,
+    "physicalTv": false
+  },
+  "debugAndTestSignedReleaseAbis": 3,
+  "testSignedUpgrade": {
+    "passed": true,
+    "fromVersionCode": 4001,
+    "toVersionCode": 4002,
+    "preferencePreserved": true,
+    "nativeV1FixtureInjected": false
+  },
+  "sqliteV1Migration": "passed in local real-SQLite migration tests; not injected into the unrootable Release AVD",
+  "flutterMcpHotRestart": "succeeded",
+  "runtimeErrorsAfterRestart": 0,
+  "temporaryTestKeysRemaining": 0,
+  "isolatedSigningAvdRemoved": true,
+  "formalSigningAccepted": false,
+  "physicalTvAccepted": false,
+  "manualLipSyncAccepted": false,
+  "realAccountWriteAcceptance": false,
+  "m6AndM7Pushed": false,
+  "m7HostedCiRun": false,
+  "publicReleaseCreated": false
+}

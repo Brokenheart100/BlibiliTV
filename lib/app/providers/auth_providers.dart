@@ -25,7 +25,13 @@ String safeLoginReturn(String? raw) {
       uri.hasQuery) {
     return '/library';
   }
-  if (const ['/home', '/search', '/library', '/settings'].contains(uri.path)) {
+  if (const [
+    '/home',
+    '/search',
+    '/library',
+    '/library/records',
+    '/settings',
+  ].contains(uri.path)) {
     return uri.path;
   }
   if (RegExp(r'^/video/BV[a-zA-Z0-9]+$').hasMatch(uri.path)) return uri.path;

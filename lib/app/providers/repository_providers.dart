@@ -14,9 +14,20 @@ import '../../data/services/auth/request_identity.dart';
 import '../../domain/auth/auth.dart';
 import '../../domain/entities/app_models.dart';
 import '../../domain/repositories/repositories.dart';
+import '../../domain/library/library.dart';
+import '../../data/repositories/drift_history_repository.dart';
+import '../../data/repositories/bilibili_library_repository.dart';
 import 'infrastructure_providers.dart';
 
 part 'repository_providers.g.dart';
+
+@Riverpod(keepAlive: true)
+LocalHistoryRepository localHistoryRepository(Ref ref) =>
+    DriftHistoryRepository(ref.watch(appDatabaseProvider));
+
+@Riverpod(keepAlive: true)
+LibraryRepository libraryRepository(Ref ref) =>
+    BilibiliLibraryRepository(ref.watch(bilibiliApiProvider));
 
 @Riverpod(keepAlive: true)
 SearchHistoryRepository searchHistoryRepository(Ref ref) =>

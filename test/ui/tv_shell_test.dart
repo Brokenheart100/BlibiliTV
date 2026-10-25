@@ -149,10 +149,11 @@ void main() {
     }
     await press(tester, LogicalKeyboardKey.select);
     await press(tester, LogicalKeyboardKey.arrowRight);
-    await press(tester, LogicalKeyboardKey.arrowDown);
-    await press(tester, LogicalKeyboardKey.arrowDown);
+    for (var i = 0; i < 8; i++) {
+      await press(tester, LogicalKeyboardKey.arrowDown);
+    }
     final trigger = FocusManager.instance.primaryFocus;
-    expect(trigger?.debugLabel, 'setting-2');
+    expect(trigger?.debugLabel, 'setting-8');
     await press(tester, LogicalKeyboardKey.select);
     expect(find.byType(AlertDialog), findsOneWidget);
     for (var i = 0; i < 5; i++) {

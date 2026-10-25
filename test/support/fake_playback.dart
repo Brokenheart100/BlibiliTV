@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:mambatv/app/providers/playback_providers.dart';
 import 'package:mambatv/core/result.dart';
 import 'package:mambatv/domain/playback/playback.dart';
+import 'package:mambatv/domain/entities/app_models.dart';
 
 const syntheticSource = PlaybackSource(
   videoUrl: 'https://example.invalid/video',
@@ -74,6 +75,11 @@ class FakePlaybackRepository implements PlaybackRepository {
 }
 
 class MemoryProgressRepository implements ProgressRepository {
+  @override
+  Future<Result<void>> rememberVideo(
+    String ownerKey,
+    VideoSummary video,
+  ) async => const Success(null);
   @override
   Future<Result<WatchProgress?>> latestForVideo(
     String ownerKey,

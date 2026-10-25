@@ -51,6 +51,7 @@ final class BilibiliCacheScope {
   }
 
   Future<void> close() => _store.close();
+  Future<void> clear() => _store.clean();
 }
 
 // Retain the package's bounded LRU storage; only add fixed TTL and lifecycle

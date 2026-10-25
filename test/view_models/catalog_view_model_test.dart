@@ -9,9 +9,10 @@ import 'package:mambatv/domain/entities/app_models.dart';
 import 'package:mambatv/ui/features/catalog/view_models/catalog_view_model.dart';
 
 class PendingPage {
-  PendingPage(this.owner, this.signal, this.cursor);
+  PendingPage(this.owner, this.signal, this.cursor, this.forceRefresh);
   final String owner;
   final String? cursor;
+  final bool forceRefresh;
   final CancellationSignal signal;
   final completer = Completer<Result<PageSlice<VideoSummary>>>();
 }
@@ -26,9 +27,10 @@ class ControlledCatalog extends FakeCatalogRepository {
     String query = '',
     String? cursor,
     int limit = 12,
+    bool forceRefresh = false,
     required CancellationSignal cancellation,
   }) {
-    final request = PendingPage(ownerKey, cancellation, cursor);
+    final request = PendingPage(ownerKey, cancellation, cursor, forceRefresh);
     requests.add(request);
     return request.completer.future;
   }
@@ -104,6 +106,11 @@ void main() {
       final vm = container.read(provider.notifier);
       final more = vm.loadMore();
       final refresh = vm.refresh();
+      expect(repository.requests.map((r) => r.forceRefresh), [
+        false,
+        false,
+        true,
+      ]);
       expect(repository.requests[1].signal.isCancelled, isTrue);
       repository.requests[2].completer.complete(
         Success(PageSlice(items: [FakeCatalogRepository.videos[8]])),

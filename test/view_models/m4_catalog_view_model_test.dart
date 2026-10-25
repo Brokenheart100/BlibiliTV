@@ -22,6 +22,7 @@ class PagedCatalog extends FakeCatalogRepository {
     String query = '',
     String? cursor,
     int limit = 12,
+    bool forceRefresh = false,
     required CancellationSignal cancellation,
   }) async {
     requests++;

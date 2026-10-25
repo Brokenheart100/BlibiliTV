@@ -1,0 +1,39 @@
+{
+  "date": "2026-10-25",
+  "package": "dio_cache_interceptor 4.0.7",
+  "transitive": "http_cache_core 1.1.4",
+  "unitAndWidget": {
+    "passed": 113,
+    "failed": 0,
+    "newCacheTests": 24
+  },
+  "analysis": {
+    "flutter": "No issues found",
+    "dartMcp": "No errors"
+  },
+  "flutterMcp": {
+    "hotRestart": "succeeded",
+    "runtimeErrorsAtFinalCheck": []
+  },
+  "tvEmulator": {
+    "device": "emulator-5554",
+    "platform": "Android TV API 36 x86_64",
+    "popularSwitchAndRefresh": true,
+    "detailOpenedAndReturned": true,
+    "chineseSearchRendered": true,
+    "searchInputMethod": "Flutter Driver text input"
+  },
+  "guestNetworkProbe": "guest-network-probe.json",
+  "apk": {
+    "entrypoint": "lib/main.dart",
+    "build": "debug",
+    "installedWithReplace": true,
+    "leanbackColdLaunch": true,
+    "path": "build/app/outputs/flutter-apk/app-debug.apk",
+    "bytes": 235282185,
+    "sha256": "f59aa2b2ef6a9ca53e4e89dfe1e0fa59d0e2c8adee8229f69a56c2cf5d24c7cb",
+    "releaseValidated": false
+  },
+  "physicalTvValidated": false,
+  "realAccountRevalidated": false
+}

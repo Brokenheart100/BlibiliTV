@@ -8,6 +8,7 @@ abstract interface class CatalogRepository {
     String query = '',
     String? cursor,
     int limit = 12,
+    bool forceRefresh = false,
     required CancellationSignal cancellation,
   });
   Future<Result<VideoDetail>> getVideo(

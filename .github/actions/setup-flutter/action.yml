@@ -1,0 +1,45 @@
+name: Set up pinned Flutter
+description: Install the SDK from the project toolchain manifest and enforce its revision.
+inputs:
+  android:
+    description: Install Android build tools and enable the Gradle cache.
+    default: 'false'
+runs:
+  using: composite
+  steps:
+    - name: Read toolchain
+      id: versions
+      shell: bash
+      run: python3 tool/ci/pipeline.py toolchain
+    - name: Set up Java
+      if: inputs.android == 'true'
+      uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5
+      with:
+        distribution: temurin
+        java-version: ${{ steps.versions.outputs.java }}
+    - name: Set up Flutter
+      uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2
+      with:
+        channel: stable
+        flutter-version: ${{ steps.versions.outputs.flutter }}
+        cache: true
+        pub-cache-key: pub-${{ runner.os }}-${{ hashFiles('pubspec.lock') }}
+    - name: Verify SDK identity
+      shell: bash
+      run: python3 tool/ci/pipeline.py verify-toolchain
+    - name: Set up Gradle cache and validate existing wrapper jars
+      if: inputs.android == 'true'
+      uses: gradle/actions/setup-gradle@0723195856401067f7a2779048b490ace7a47d7c # v5
+      with:
+        cache-read-only: ${{ github.ref != 'refs/heads/master' }}
+    - name: Install Android packages
+      if: inputs.android == 'true'
+      shell: bash
+      env:
+        ANDROID_PLATFORM: ${{ steps.versions.outputs.android_platform }}
+        ANDROID_BUILD_TOOLS: ${{ steps.versions.outputs.android_build_tools }}
+        ANDROID_NDK: ${{ steps.versions.outputs.android_ndk }}
+      run: |
+        sdkmanager="$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
+        (yes || true) | "$sdkmanager" --licenses > /dev/null
+        "$sdkmanager" "platforms;android-$ANDROID_PLATFORM" "build-tools;$ANDROID_BUILD_TOOLS" "ndk;$ANDROID_NDK"

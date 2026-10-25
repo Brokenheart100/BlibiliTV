@@ -5,6 +5,7 @@ import 'dart:async';
 import '../../../core/result.dart';
 import '../../../domain/entities/app_models.dart';
 import '../auth/request_identity.dart';
+import '../network/bilibili_http_cache.dart';
 import 'bilibili_dto.dart';
 import 'wbi_signer.dart';
 
@@ -19,12 +20,20 @@ class BilibiliApi {
     this.client, {
     RequestIdentity? identity,
     this.onAuthenticationFailure,
-  }) : identity = identity ?? const RequestIdentity(Session());
+  }) : identity = identity ?? const RequestIdentity(Session()),
+       _cache = BilibiliCacheScope(
+         (identity?.session ?? const Session()).scopeKey,
+       );
   final Dio client;
   final RequestIdentity identity;
   final Future<void> Function(int generation)? onAuthenticationFailure;
   final _scope = CancellationSignal();
-  void close() => _scope.cancel();
+  final BilibiliCacheScope _cache;
+  void close() {
+    _scope.cancel();
+    unawaited(_cache.close());
+  }
+
   void checkOwner(String ownerKey) {
     if (_scope.isCancelled || ownerKey != identity.session.ownerKey) {
       throw const AppFailure(FailureKind.cancelled, '账号状态已变化，请重新打开页面');
@@ -46,6 +55,7 @@ class BilibiliApi {
     Map<String, Object> query = const {},
     bool signed = false,
     bool allowGuest = false,
+    bool forceRefresh = false,
   }) async => jsonObject(
     await _get(
       path,
@@ -53,6 +63,7 @@ class BilibiliApi {
       query: query,
       signed: signed,
       allowGuest: allowGuest,
+      forceRefresh: forceRefresh,
     ),
   );
 
@@ -60,7 +71,10 @@ class BilibiliApi {
     String path,
     CancellationSignal cancellation, {
     Map<String, Object> query = const {},
-  }) async => jsonList(await _get(path, cancellation, query: query));
+    bool forceRefresh = false,
+  }) async => jsonList(
+    await _get(path, cancellation, query: query, forceRefresh: forceRefresh),
+  );
 
   Future<Object?> _get(
     String path,
@@ -68,6 +82,7 @@ class BilibiliApi {
     Map<String, Object> query = const {},
     bool signed = false,
     bool allowGuest = false,
+    bool forceRefresh = false,
   }) async {
     if (cancellation.isCancelled || _scope.isCancelled) {
       throw const AppFailure(FailureKind.cancelled, '请求已取消');
@@ -104,6 +119,7 @@ class BilibiliApi {
         queryParameters: parameters,
         cancelToken: token,
         options: Options(
+          extra: _cache.requestExtra(path, refresh: forceRefresh),
           followRedirects: false,
           headers: {
             ...bilibiliMediaHeaders,

@@ -1,0 +1,121 @@
+name: Release Android
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing tag matching pubspec.yaml, for example v1.0.0.
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.event.inputs.tag || github.ref_name }}
+  cancel-in-progress: false
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  preflight:
+    name: Validate release tag
+    if: github.event_name == 'push' || github.ref == 'refs/heads/master'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    outputs:
+      sha: ${{ steps.version.outputs.sha }}
+      tag: ${{ steps.version.outputs.tag }}
+      prerelease: ${{ steps.version.outputs.prerelease }}
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Resolve and validate the existing tag
+        id: version
+        env:
+          RELEASE_TAG: ${{ github.event.inputs.tag || github.ref_name }}
+        run: python3 tool/ci/pipeline.py release-preflight
+
+  checks:
+    name: Re-run CI for the release commit
+    needs: preflight
+    uses: ./.github/workflows/ci.yml
+    with:
+      checkout_ref: ${{ needs.preflight.outputs.sha }}
+
+  build:
+    name: Build and verify signed release APKs
+    needs: [preflight, checks]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          ref: ${{ needs.preflight.outputs.sha }}
+          persist-credentials: false
+      - uses: ./.github/actions/setup-flutter
+        with:
+          android: 'true'
+      - run: flutter pub get --enforce-lockfile
+      - name: Restore signing material to runner temporary storage
+        id: signing
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          MAMBA_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          MAMBA_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          MAMBA_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: python3 tool/ci/pipeline.py restore-signing
+      - name: Build with the release key
+        env:
+          MAMBA_KEYSTORE_PATH: ${{ steps.signing.outputs.keystore }}
+          MAMBA_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          MAMBA_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          MAMBA_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: flutter build apk --release --split-per-abi --target lib/main.dart
+      - name: Verify package identity, certificates and checksums
+        env:
+          RELEASE_TAG: ${{ needs.preflight.outputs.tag }}
+        run: python3 tool/ci/pipeline.py package --mode release --out build/ci-release
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: signed-android-${{ needs.preflight.outputs.tag }}
+          path: build/ci-release/
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 30
+      - name: Delete temporary keystore
+        if: always()
+        run: python3 tool/ci/pipeline.py cleanup-signing
+
+  publish:
+    name: Publish verified assets
+    needs: [preflight, build]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5
+        with:
+          name: signed-android-${{ needs.preflight.outputs.tag }}
+          path: dist
+      - name: Verify downloaded checksums
+        working-directory: dist
+        run: sha256sum --check SHA256SUMS
+      - name: Create draft, upload all assets, then publish
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          RELEASE_TAG: ${{ needs.preflight.outputs.tag }}
+          PRERELEASE: ${{ needs.preflight.outputs.prerelease }}
+        run: |
+          args=(--verify-tag --draft --title "MambaTV $RELEASE_TAG" --notes-file dist/release-notes.md)
+          if [[ "$PRERELEASE" == 'true' ]]; then args+=(--prerelease); fi
+          gh release create "$RELEASE_TAG" dist/* "${args[@]}"
+          gh release edit "$RELEASE_TAG" --draft=false

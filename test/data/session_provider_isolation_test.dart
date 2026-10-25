@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mambatv/app/providers/infrastructure_providers.dart';
@@ -7,6 +8,7 @@ import 'package:mambatv/core/result.dart';
 import 'package:mambatv/data/repositories/persistent_session_repository.dart';
 import 'package:mambatv/data/repositories/web_auth_repository.dart';
 import 'package:mambatv/domain/auth/auth.dart';
+import 'package:mambatv/data/services/network/bilibili_http_cache.dart';
 
 import '../support/fake_auth.dart';
 import '../support/memory_preferences.dart';
@@ -19,7 +21,7 @@ void main() {
       MemoryCredentialStore(),
       MemoryPreferencesStore(),
     );
-    final dio = Dio();
+    final dio = Dio()..interceptors.add(BilibiliCacheInterceptor());
     final container = ProviderContainer.test(
       retry: (_, _) => null,
       overrides: [
@@ -48,6 +50,29 @@ void main() {
     final accountA = container.read(bilibiliApiProvider);
     expect(accountA.identity.session.ownerKey, 'user:101');
     expect(accountA.identity.cookie, contains('SESSDATA=synthetic-A'));
+    RequestOptions? accountRequest;
+    dio.interceptors.add(
+      InterceptorsWrapper(
+        onRequest: (request, handler) {
+          accountRequest = request;
+          handler.resolve(
+            Response<Object?>(
+              requestOptions: request,
+              statusCode: 200,
+              data: {
+                'code': 0,
+                'data': {'synthetic': true},
+              },
+            ),
+            true,
+          );
+        },
+      ),
+    );
+    await accountA.get('/x/web-interface/popular', CancellationSignal());
+    final cachedOptions = accountRequest!.getCacheOptions()!;
+    final cacheKey = cachedOptions.keyBuilder(url: accountRequest!.uri);
+    expect(await cachedOptions.store!.exists(cacheKey), isTrue);
     expect(() => guestApi.checkOwner('guest'), throwsA(isA<AppFailure>()));
     final oldGeneration = accountA.identity.session.generation;
     await sessions.logout();
@@ -60,6 +85,12 @@ void main() {
     final accountB = container.read(bilibiliApiProvider);
     expect(accountB.identity.session.ownerKey, 'user:202');
     expect(accountB.identity.cookie, contains('SESSDATA=synthetic-B'));
+    expect(
+      await cachedOptions.store!.exists(cacheKey),
+      isFalse,
+      reason:
+          'The actual Riverpod session replacement must clear the old store',
+    );
     expect(() => accountA.checkOwner('user:101'), throwsA(isA<AppFailure>()));
     expect(() => accountB.checkOwner('user:101'), throwsA(isA<AppFailure>()));
     final verifies = gateway.verifies;

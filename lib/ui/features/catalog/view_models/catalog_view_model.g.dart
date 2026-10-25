@@ -51,7 +51,7 @@ final class CatalogViewModelProvider
   }
 }
 
-String _$catalogViewModelHash() => r'6f13c4783a9f238559dc302fb9171394118a7c54';
+String _$catalogViewModelHash() => r'2d5b9e2d25f672f9d2114176dd8463f19ebe79e8';
 
 final class CatalogViewModelFamily extends $Family
     with

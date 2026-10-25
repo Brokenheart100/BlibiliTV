@@ -11,9 +11,23 @@ const syntheticSource = PlaybackSource(
   duration: Duration(seconds: 120),
   quality: 32,
   codec: 'avc1.test',
+  qualities: [
+    PlaybackOption(16, '360P'),
+    PlaybackOption(32, '480P'),
+    PlaybackOption(80, '1080P', reason: '当前账号不可用'),
+  ],
+  audioTracks: [
+    PlaybackOption(30216, 'AAC 64kbps'),
+    PlaybackOption(30280, 'AAC 192kbps'),
+  ],
+  audioId: 30216,
+  videoBackups: ['https://backup.invalid/video'],
+  audioBackups: ['https://backup.invalid/audio'],
 );
 
 class FakePlaybackRepository implements PlaybackRepository {
+  final requests =
+      <({String videoId, String partId, int? quality, int? audioId})>[];
   int calls = 0;
   AppFailure? failure;
   Completer<void>? gate;
@@ -23,8 +37,16 @@ class FakePlaybackRepository implements PlaybackRepository {
     required String videoId,
     required String partId,
     required CancellationSignal cancellation,
+    int? quality,
+    int? audioId,
   }) async {
     calls++;
+    requests.add((
+      videoId: videoId,
+      partId: partId,
+      quality: quality,
+      audioId: audioId,
+    ));
     signal = cancellation;
     await gate?.future;
     if (cancellation.isCancelled) {
@@ -33,7 +55,20 @@ class FakePlaybackRepository implements PlaybackRepository {
       );
     }
     return failure == null
-        ? const Success(syntheticSource)
+        ? Success(
+            PlaybackSource(
+              videoUrl: syntheticSource.videoUrl,
+              audioUrl: syntheticSource.audioUrl,
+              duration: syntheticSource.duration,
+              quality: quality ?? syntheticSource.quality,
+              codec: syntheticSource.codec,
+              qualities: syntheticSource.qualities,
+              audioTracks: syntheticSource.audioTracks,
+              audioId: audioId ?? syntheticSource.audioId,
+              videoBackups: syntheticSource.videoBackups,
+              audioBackups: syntheticSource.audioBackups,
+            ),
+          )
         : ResultFailure(failure!);
   }
 }
@@ -71,10 +106,13 @@ class MemoryProgressRepository implements ProgressRepository {
 }
 
 class FakeEngineFactory {
+  PlaybackFocus focus = const PassivePlaybackFocus();
+  final openFailures = <AppFailure>[];
   final engines = <FakePlaybackEngine>[];
   int active = 0, maxActive = 0;
   Completer<void>? openGate;
   PlaybackAdapter get adapter => PlaybackAdapter(
+    focus: focus,
     create: create,
     surface: (engine) =>
         ColoredBox(key: ObjectKey(engine), color: const Color(0xFF102030)),
@@ -96,6 +134,7 @@ class FakePlaybackEngine implements PlaybackEngine {
   bool disposed = false;
   int opens = 0;
   Duration? openedAt;
+  PlaybackSource? source;
   EngineSnapshot value = const EngineSnapshot(duration: Duration(seconds: 120));
   @override
   EngineSnapshot get snapshot => value;
@@ -107,14 +146,20 @@ class FakePlaybackEngine implements PlaybackEngine {
   }
 
   @override
-  Future<void> open(PlaybackSource source, {required Duration startAt}) async {
+  Future<void> open(
+    PlaybackSource source, {
+    required Duration startAt,
+    bool play = true,
+  }) async {
     opens++;
+    this.source = source;
     openedAt = startAt;
     await openGate?.future;
+    if (factory.openFailures.isNotEmpty) throw factory.openFailures.removeAt(0);
     if (!disposed) {
       emit(
         value.copyWith(
-          playing: true,
+          playing: play,
           position: startAt,
           width: 640,
           height: 360,
@@ -131,6 +176,11 @@ class FakePlaybackEngine implements PlaybackEngine {
   @override
   Future<void> seek(Duration position) async =>
       emit(value.copyWith(position: position));
+  @override
+  Future<void> setRate(double rate) async => emit(value.copyWith(rate: rate));
+  @override
+  Future<void> setVolume(double volume) async =>
+      emit(value.copyWith(volume: volume));
   @override
   Future<void> dispose() async {
     if (disposed) return;

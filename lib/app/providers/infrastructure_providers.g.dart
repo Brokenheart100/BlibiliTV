@@ -88,7 +88,7 @@ final class ApiClientProvider extends $FunctionalProvider<Dio, Dio, Dio>
   }
 }
 
-String _$apiClientHash() => r'9e59923b23c4c5553bbdd90a1cbee366d4b76461';
+String _$apiClientHash() => r'3e9907e6873892f7a77406a00909dde4267367a6';
 
 @ProviderFor(appDatabase)
 final appDatabaseProvider = AppDatabaseProvider._();

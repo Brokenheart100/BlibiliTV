@@ -1,0 +1,101 @@
+{
+  "date": "2026-10-25",
+  "recordedAtHostUtc": "2026-10-25T09:12:58.5558557Z",
+  "scope": "CI/CD configuration and Windows local verification, not a hosted Actions run",
+  "repository": "Brokenheart100/mambatv",
+  "defaultBranch": "master",
+  "status": "implemented_locally_verified_not_pushed",
+  "workflowLint": {
+    "localPyflakes": false,
+    "version": "1.7.12",
+    "note": "Windows binary syntax/expression validation; hosted Ubuntu lint has its own runtime checks",
+    "passed": true,
+    "localShellcheck": false,
+    "tool": "actionlint"
+  },
+  "pipelineGuardTests": {
+    "failed": 0,
+    "passed": 12
+  },
+  "flutter": {
+    "formattedFiles": 156,
+    "frameworkRevision": "6a19cca56475dbfba1478ee68d7bd0c2ef891da1",
+    "lockedPubGet": "passed",
+    "generatedFiles": 26,
+    "repeatedGenerationUnchanged": true,
+    "analyze": "No issues found",
+    "formatChanges": 0,
+    "version": "3.47.5",
+    "coverageCollected": true,
+    "unitAndWidgetPassed": 152,
+    "dart": "3.13.4",
+    "dartMcpAnalyze": "No errors"
+  },
+  "localBuildHost": {
+    "os": "Windows",
+    "java": "25.0.3"
+  },
+  "intendedHostedRunner": {
+    "java": "Temurin 21",
+    "os": "ubuntu-24.04",
+    "verifiedHosted": false
+  },
+  "negativeSigningChecks": {
+    "missingReleaseCredentials": "preReleaseBuild failed as required",
+    "validationApplicationRelease": "preReleaseBuild failed as required"
+  },
+  "debugBuild": {
+    "mode": "debug",
+    "splitAbis": [
+      "armeabi-v7a",
+      "arm64-v8a",
+      "x86_64"
+    ],
+    "packageIdentityAndSignaturesVerified": true,
+    "checksumsVerified": true
+  },
+  "releaseSmoke": {
+    "artifacts": [
+      {
+        "file": "mambatv-1.0.0+1-armeabi-v7a-release.apk",
+        "abi": "armeabi-v7a",
+        "versionCode": 1001,
+        "certificateSha256": "45a0e811fdfdf01e1acc86239dfeb21e9e391b1a1c463437975c3304671ab4e7"
+      },
+      {
+        "file": "mambatv-1.0.0+1-arm64-v8a-release.apk",
+        "abi": "arm64-v8a",
+        "versionCode": 2001,
+        "certificateSha256": "45a0e811fdfdf01e1acc86239dfeb21e9e391b1a1c463437975c3304671ab4e7"
+      },
+      {
+        "file": "mambatv-1.0.0+1-x86_64-release.apk",
+        "abi": "x86_64",
+        "versionCode": 4001,
+        "certificateSha256": "45a0e811fdfdf01e1acc86239dfeb21e9e391b1a1c463437975c3304671ab4e7"
+      }
+    ],
+    "published": false,
+    "productSigningKey": false,
+    "mode": "release",
+    "signing": "Temporary local CI smoke key; both source and restored key deleted",
+    "checksumsVerified": true,
+    "privateKeyFilesRemaining": 0
+  },
+  "pubspecLockSha256": "81a36b2794c508958d2b1f1e109889e452b074d41ad1fb9e1edb48ae55afa437",
+  "workingTree": "Existing M5 and HTTP cache changes preserved; no commit made",
+  "remoteState": {
+    "pushed": false,
+    "workflowCountAtInspection": 0,
+    "releaseCreated": false,
+    "tagCreated": false,
+    "signingSecretsAtInspection": 0,
+    "repositorySettingsChanged": false
+  },
+  "remaining": [
+    "Commit/push the reviewed application and workflow changes, then confirm the first hosted Linux run",
+    "Configure the four production signing Secrets using an owner-controlled key",
+    "Run the first real tag release after its CI passes",
+    "Physical-device, speaker/lip-sync, upgrade and M7 release acceptance remain separate"
+  ]
+}

@@ -7,7 +7,6 @@ import '../services/bilibili/bilibili_dto.dart';
 class BilibiliCatalogRepository implements CatalogRepository {
   BilibiliCatalogRepository(this.api);
   final BilibiliApi api;
-  final _details = <String, ({DateTime at, VideoDetail detail})>{};
   VideoSummary mapVideo(BiliVideoDto dto) => VideoSummary(
     id: dto.bvid,
     title: plainTitle(dto.title),
@@ -44,6 +43,7 @@ class BilibiliCatalogRepository implements CatalogRepository {
     String query = '',
     String? cursor,
     int limit = 12,
+    bool forceRefresh = false,
     required CancellationSignal cancellation,
   }) async {
     try {
@@ -102,6 +102,7 @@ class BilibiliCatalogRepository implements CatalogRepository {
             : '/x/web-interface/popular',
         cancellation,
         signed: search,
+        forceRefresh: forceRefresh,
         query: search
             ? {'search_type': 'video', 'keyword': query.trim(), 'page': page}
             : {'pn': page, 'ps': limit},
@@ -135,13 +136,7 @@ class BilibiliCatalogRepository implements CatalogRepository {
       if (cancellation.isCancelled) {
         throw const AppFailure(FailureKind.cancelled, '请求已取消');
       }
-      final cacheKey = '$ownerKey:$id';
       api.checkOwner(ownerKey);
-      final cached = _details[cacheKey];
-      if (cached != null &&
-          DateTime.now().difference(cached.at) < const Duration(minutes: 3)) {
-        return Success(cached.detail);
-      }
       final data = await api.get(
         '/x/web-interface/wbi/view',
         cancellation,
@@ -170,8 +165,6 @@ class BilibiliCatalogRepository implements CatalogRepository {
             : null,
       );
       api.checkOwner(ownerKey);
-      if (_details.length >= 24) _details.remove(_details.keys.first);
-      _details[cacheKey] = (at: DateTime.now(), detail: detail);
       return Success(detail);
     } catch (error) {
       return ResultFailure(safeApiFailure(error));

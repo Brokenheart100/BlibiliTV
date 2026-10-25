@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$PlayerState {
 
- PlayerPhase get phase; EngineSnapshot get snapshot; String get title; String get partTitle; int get quality; int get surfaceGeneration; Duration get resumedFrom; AppFailure? get failure; String? get notice;
+ PlayerPhase get phase; EngineSnapshot get snapshot; String get title; String get partTitle; String get partId; List<VideoPart> get parts; List<PlaybackOption> get qualities; List<PlaybackOption> get audioTracks; int get quality; int get audioId; double get rate; double get volume; bool get autoNext; int get recoveryAttempts; int get surfaceGeneration; Duration get resumedFrom; AppFailure? get failure; String? get notice;
 /// Create a copy of PlayerState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -27,20 +27,20 @@ $PlayerStateCopyWith<PlayerState> get copyWith => _$PlayerStateCopyWithImpl<Play
 @override
 bool operator ==(Object other) {
   final _this = this as PlayerState;
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is PlayerState&&(identical(other.phase, _this.phase) || other.phase == _this.phase)&&(identical(other.snapshot, _this.snapshot) || other.snapshot == _this.snapshot)&&(identical(other.title, _this.title) || other.title == _this.title)&&(identical(other.partTitle, _this.partTitle) || other.partTitle == _this.partTitle)&&(identical(other.quality, _this.quality) || other.quality == _this.quality)&&(identical(other.surfaceGeneration, _this.surfaceGeneration) || other.surfaceGeneration == _this.surfaceGeneration)&&(identical(other.resumedFrom, _this.resumedFrom) || other.resumedFrom == _this.resumedFrom)&&(identical(other.failure, _this.failure) || other.failure == _this.failure)&&(identical(other.notice, _this.notice) || other.notice == _this.notice));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PlayerState&&(identical(other.phase, _this.phase) || other.phase == _this.phase)&&(identical(other.snapshot, _this.snapshot) || other.snapshot == _this.snapshot)&&(identical(other.title, _this.title) || other.title == _this.title)&&(identical(other.partTitle, _this.partTitle) || other.partTitle == _this.partTitle)&&(identical(other.partId, _this.partId) || other.partId == _this.partId)&&const DeepCollectionEquality().equals(other.parts, _this.parts)&&const DeepCollectionEquality().equals(other.qualities, _this.qualities)&&const DeepCollectionEquality().equals(other.audioTracks, _this.audioTracks)&&(identical(other.quality, _this.quality) || other.quality == _this.quality)&&(identical(other.audioId, _this.audioId) || other.audioId == _this.audioId)&&(identical(other.rate, _this.rate) || other.rate == _this.rate)&&(identical(other.volume, _this.volume) || other.volume == _this.volume)&&(identical(other.autoNext, _this.autoNext) || other.autoNext == _this.autoNext)&&(identical(other.recoveryAttempts, _this.recoveryAttempts) || other.recoveryAttempts == _this.recoveryAttempts)&&(identical(other.surfaceGeneration, _this.surfaceGeneration) || other.surfaceGeneration == _this.surfaceGeneration)&&(identical(other.resumedFrom, _this.resumedFrom) || other.resumedFrom == _this.resumedFrom)&&(identical(other.failure, _this.failure) || other.failure == _this.failure)&&(identical(other.notice, _this.notice) || other.notice == _this.notice));
 }
 
 
 @override
 int get hashCode {
   final _this = this as PlayerState;
-  return Object.hash(runtimeType,_this.phase,_this.snapshot,_this.title,_this.partTitle,_this.quality,_this.surfaceGeneration,_this.resumedFrom,_this.failure,_this.notice);
+  return Object.hash(runtimeType,_this.phase,_this.snapshot,_this.title,_this.partTitle,_this.partId,const DeepCollectionEquality().hash(_this.parts),const DeepCollectionEquality().hash(_this.qualities),const DeepCollectionEquality().hash(_this.audioTracks),_this.quality,_this.audioId,_this.rate,_this.volume,_this.autoNext,_this.recoveryAttempts,_this.surfaceGeneration,_this.resumedFrom,_this.failure,_this.notice);
 }
 
 @override
 String toString() {
   final _this = this as PlayerState;
-  return 'PlayerState(phase: ${_this.phase}, snapshot: ${_this.snapshot}, title: ${_this.title}, partTitle: ${_this.partTitle}, quality: ${_this.quality}, surfaceGeneration: ${_this.surfaceGeneration}, resumedFrom: ${_this.resumedFrom}, failure: ${_this.failure}, notice: ${_this.notice})';
+  return 'PlayerState(phase: ${_this.phase}, snapshot: ${_this.snapshot}, title: ${_this.title}, partTitle: ${_this.partTitle}, partId: ${_this.partId}, parts: ${_this.parts}, qualities: ${_this.qualities}, audioTracks: ${_this.audioTracks}, quality: ${_this.quality}, audioId: ${_this.audioId}, rate: ${_this.rate}, volume: ${_this.volume}, autoNext: ${_this.autoNext}, recoveryAttempts: ${_this.recoveryAttempts}, surfaceGeneration: ${_this.surfaceGeneration}, resumedFrom: ${_this.resumedFrom}, failure: ${_this.failure}, notice: ${_this.notice})';
 }
 
 
@@ -51,7 +51,7 @@ abstract mixin class $PlayerStateCopyWith<$Res>  {
   factory $PlayerStateCopyWith(PlayerState value, $Res Function(PlayerState) _then) = _$PlayerStateCopyWithImpl;
 @useResult
 $Res call({
- PlayerPhase phase, EngineSnapshot snapshot, String title, String partTitle, int quality, int surfaceGeneration, Duration resumedFrom, AppFailure? failure, String? notice
+ PlayerPhase phase, EngineSnapshot snapshot, String title, String partTitle, String partId, List<VideoPart> parts, List<PlaybackOption> qualities, List<PlaybackOption> audioTracks, int quality, int audioId, double rate, double volume, bool autoNext, int recoveryAttempts, int surfaceGeneration, Duration resumedFrom, AppFailure? failure, String? notice
 });
 
 
@@ -68,13 +68,22 @@ class _$PlayerStateCopyWithImpl<$Res>
 
 /// Create a copy of PlayerState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? phase = null,Object? snapshot = null,Object? title = null,Object? partTitle = null,Object? quality = null,Object? surfaceGeneration = null,Object? resumedFrom = null,Object? failure = freezed,Object? notice = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? phase = null,Object? snapshot = null,Object? title = null,Object? partTitle = null,Object? partId = null,Object? parts = null,Object? qualities = null,Object? audioTracks = null,Object? quality = null,Object? audioId = null,Object? rate = null,Object? volume = null,Object? autoNext = null,Object? recoveryAttempts = null,Object? surfaceGeneration = null,Object? resumedFrom = null,Object? failure = freezed,Object? notice = freezed,}) {
   return _then(PlayerState(
 phase: null == phase ? _self.phase : phase // ignore: cast_nullable_to_non_nullable
 as PlayerPhase,snapshot: null == snapshot ? _self.snapshot : snapshot // ignore: cast_nullable_to_non_nullable
 as EngineSnapshot,title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
 as String,partTitle: null == partTitle ? _self.partTitle : partTitle // ignore: cast_nullable_to_non_nullable
-as String,quality: null == quality ? _self.quality : quality // ignore: cast_nullable_to_non_nullable
+as String,partId: null == partId ? _self.partId : partId // ignore: cast_nullable_to_non_nullable
+as String,parts: null == parts ? _self.parts : parts // ignore: cast_nullable_to_non_nullable
+as List<VideoPart>,qualities: null == qualities ? _self.qualities : qualities // ignore: cast_nullable_to_non_nullable
+as List<PlaybackOption>,audioTracks: null == audioTracks ? _self.audioTracks : audioTracks // ignore: cast_nullable_to_non_nullable
+as List<PlaybackOption>,quality: null == quality ? _self.quality : quality // ignore: cast_nullable_to_non_nullable
+as int,audioId: null == audioId ? _self.audioId : audioId // ignore: cast_nullable_to_non_nullable
+as int,rate: null == rate ? _self.rate : rate // ignore: cast_nullable_to_non_nullable
+as double,volume: null == volume ? _self.volume : volume // ignore: cast_nullable_to_non_nullable
+as double,autoNext: null == autoNext ? _self.autoNext : autoNext // ignore: cast_nullable_to_non_nullable
+as bool,recoveryAttempts: null == recoveryAttempts ? _self.recoveryAttempts : recoveryAttempts // ignore: cast_nullable_to_non_nullable
 as int,surfaceGeneration: null == surfaceGeneration ? _self.surfaceGeneration : surfaceGeneration // ignore: cast_nullable_to_non_nullable
 as int,resumedFrom: null == resumedFrom ? _self.resumedFrom : resumedFrom // ignore: cast_nullable_to_non_nullable
 as Duration,failure: freezed == failure ? _self.failure : failure // ignore: cast_nullable_to_non_nullable
@@ -173,10 +182,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( PlayerPhase phase,  EngineSnapshot snapshot,  String title,  String partTitle,  int quality,  int surfaceGeneration,  Duration resumedFrom,  AppFailure? failure,  String? notice)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( PlayerPhase phase,  EngineSnapshot snapshot,  String title,  String partTitle,  String partId,  List<VideoPart> parts,  List<PlaybackOption> qualities,  List<PlaybackOption> audioTracks,  int quality,  int audioId,  double rate,  double volume,  bool autoNext,  int recoveryAttempts,  int surfaceGeneration,  Duration resumedFrom,  AppFailure? failure,  String? notice)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _PlayerState() when $default != null:
-return $default(_that.phase,_that.snapshot,_that.title,_that.partTitle,_that.quality,_that.surfaceGeneration,_that.resumedFrom,_that.failure,_that.notice);case _:
+return $default(_that.phase,_that.snapshot,_that.title,_that.partTitle,_that.partId,_that.parts,_that.qualities,_that.audioTracks,_that.quality,_that.audioId,_that.rate,_that.volume,_that.autoNext,_that.recoveryAttempts,_that.surfaceGeneration,_that.resumedFrom,_that.failure,_that.notice);case _:
   return orElse();
 
 }
@@ -194,10 +203,10 @@ return $default(_that.phase,_that.snapshot,_that.title,_that.partTitle,_that.qua
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( PlayerPhase phase,  EngineSnapshot snapshot,  String title,  String partTitle,  int quality,  int surfaceGeneration,  Duration resumedFrom,  AppFailure? failure,  String? notice)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( PlayerPhase phase,  EngineSnapshot snapshot,  String title,  String partTitle,  String partId,  List<VideoPart> parts,  List<PlaybackOption> qualities,  List<PlaybackOption> audioTracks,  int quality,  int audioId,  double rate,  double volume,  bool autoNext,  int recoveryAttempts,  int surfaceGeneration,  Duration resumedFrom,  AppFailure? failure,  String? notice)  $default,) {final _that = this;
 switch (_that) {
 case _PlayerState():
-return $default(_that.phase,_that.snapshot,_that.title,_that.partTitle,_that.quality,_that.surfaceGeneration,_that.resumedFrom,_that.failure,_that.notice);case _:
+return $default(_that.phase,_that.snapshot,_that.title,_that.partTitle,_that.partId,_that.parts,_that.qualities,_that.audioTracks,_that.quality,_that.audioId,_that.rate,_that.volume,_that.autoNext,_that.recoveryAttempts,_that.surfaceGeneration,_that.resumedFrom,_that.failure,_that.notice);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -214,10 +223,10 @@ return $default(_that.phase,_that.snapshot,_that.title,_that.partTitle,_that.qua
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( PlayerPhase phase,  EngineSnapshot snapshot,  String title,  String partTitle,  int quality,  int surfaceGeneration,  Duration resumedFrom,  AppFailure? failure,  String? notice)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( PlayerPhase phase,  EngineSnapshot snapshot,  String title,  String partTitle,  String partId,  List<VideoPart> parts,  List<PlaybackOption> qualities,  List<PlaybackOption> audioTracks,  int quality,  int audioId,  double rate,  double volume,  bool autoNext,  int recoveryAttempts,  int surfaceGeneration,  Duration resumedFrom,  AppFailure? failure,  String? notice)?  $default,) {final _that = this;
 switch (_that) {
 case _PlayerState() when $default != null:
-return $default(_that.phase,_that.snapshot,_that.title,_that.partTitle,_that.quality,_that.surfaceGeneration,_that.resumedFrom,_that.failure,_that.notice);case _:
+return $default(_that.phase,_that.snapshot,_that.title,_that.partTitle,_that.partId,_that.parts,_that.qualities,_that.audioTracks,_that.quality,_that.audioId,_that.rate,_that.volume,_that.autoNext,_that.recoveryAttempts,_that.surfaceGeneration,_that.resumedFrom,_that.failure,_that.notice);case _:
   return null;
 
 }
@@ -229,14 +238,41 @@ return $default(_that.phase,_that.snapshot,_that.title,_that.partTitle,_that.qua
 
 
 class _PlayerState implements PlayerState {
-  const _PlayerState({this.phase = PlayerPhase.idle, this.snapshot = const EngineSnapshot(), this.title = '', this.partTitle = '', this.quality = 0, this.surfaceGeneration = 0, this.resumedFrom = Duration.zero, this.failure, this.notice});
+  const _PlayerState({this.phase = PlayerPhase.idle, this.snapshot = const EngineSnapshot(), this.title = '', this.partTitle = '', this.partId = '',  List<VideoPart> parts = const <VideoPart>[],  List<PlaybackOption> qualities = const <PlaybackOption>[],  List<PlaybackOption> audioTracks = const <PlaybackOption>[], this.quality = 0, this.audioId = 0, this.rate = 1.0, this.volume = 100.0, this.autoNext = false, this.recoveryAttempts = 0, this.surfaceGeneration = 0, this.resumedFrom = Duration.zero, this.failure, this.notice}): _parts = parts,_qualities = qualities,_audioTracks = audioTracks;
   
 
 @override@JsonKey() final  PlayerPhase phase;
 @override@JsonKey() final  EngineSnapshot snapshot;
 @override@JsonKey() final  String title;
 @override@JsonKey() final  String partTitle;
+@override@JsonKey() final  String partId;
+ final  List<VideoPart> _parts;
+@override@JsonKey() List<VideoPart> get parts {
+  if (_parts is EqualUnmodifiableListView) return _parts;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_parts);
+}
+
+ final  List<PlaybackOption> _qualities;
+@override@JsonKey() List<PlaybackOption> get qualities {
+  if (_qualities is EqualUnmodifiableListView) return _qualities;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_qualities);
+}
+
+ final  List<PlaybackOption> _audioTracks;
+@override@JsonKey() List<PlaybackOption> get audioTracks {
+  if (_audioTracks is EqualUnmodifiableListView) return _audioTracks;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_audioTracks);
+}
+
 @override@JsonKey() final  int quality;
+@override@JsonKey() final  int audioId;
+@override@JsonKey() final  double rate;
+@override@JsonKey() final  double volume;
+@override@JsonKey() final  bool autoNext;
+@override@JsonKey() final  int recoveryAttempts;
 @override@JsonKey() final  int surfaceGeneration;
 @override@JsonKey() final  Duration resumedFrom;
 @override final  AppFailure? failure;
@@ -252,18 +288,18 @@ _$PlayerStateCopyWith<_PlayerState> get copyWith => __$PlayerStateCopyWithImpl<_
 
 @override
 bool operator ==(Object other) {
-    return identical(this, other) || (other.runtimeType == runtimeType&&other is _PlayerState&&(identical(other.phase, phase) || other.phase == phase)&&(identical(other.snapshot, snapshot) || other.snapshot == snapshot)&&(identical(other.title, title) || other.title == title)&&(identical(other.partTitle, partTitle) || other.partTitle == partTitle)&&(identical(other.quality, quality) || other.quality == quality)&&(identical(other.surfaceGeneration, surfaceGeneration) || other.surfaceGeneration == surfaceGeneration)&&(identical(other.resumedFrom, resumedFrom) || other.resumedFrom == resumedFrom)&&(identical(other.failure, failure) || other.failure == failure)&&(identical(other.notice, notice) || other.notice == notice));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _PlayerState&&(identical(other.phase, phase) || other.phase == phase)&&(identical(other.snapshot, snapshot) || other.snapshot == snapshot)&&(identical(other.title, title) || other.title == title)&&(identical(other.partTitle, partTitle) || other.partTitle == partTitle)&&(identical(other.partId, partId) || other.partId == partId)&&const DeepCollectionEquality().equals(other.parts, _parts)&&const DeepCollectionEquality().equals(other.qualities, _qualities)&&const DeepCollectionEquality().equals(other.audioTracks, _audioTracks)&&(identical(other.quality, quality) || other.quality == quality)&&(identical(other.audioId, audioId) || other.audioId == audioId)&&(identical(other.rate, rate) || other.rate == rate)&&(identical(other.volume, volume) || other.volume == volume)&&(identical(other.autoNext, autoNext) || other.autoNext == autoNext)&&(identical(other.recoveryAttempts, recoveryAttempts) || other.recoveryAttempts == recoveryAttempts)&&(identical(other.surfaceGeneration, surfaceGeneration) || other.surfaceGeneration == surfaceGeneration)&&(identical(other.resumedFrom, resumedFrom) || other.resumedFrom == resumedFrom)&&(identical(other.failure, failure) || other.failure == failure)&&(identical(other.notice, notice) || other.notice == notice));
 }
 
 
 @override
 int get hashCode {
-    return Object.hash(runtimeType,phase,snapshot,title,partTitle,quality,surfaceGeneration,resumedFrom,failure,notice);
+    return Object.hash(runtimeType,phase,snapshot,title,partTitle,partId,const DeepCollectionEquality().hash(_parts),const DeepCollectionEquality().hash(_qualities),const DeepCollectionEquality().hash(_audioTracks),quality,audioId,rate,volume,autoNext,recoveryAttempts,surfaceGeneration,resumedFrom,failure,notice);
 }
 
 @override
 String toString() {
-    return 'PlayerState(phase: $phase, snapshot: $snapshot, title: $title, partTitle: $partTitle, quality: $quality, surfaceGeneration: $surfaceGeneration, resumedFrom: $resumedFrom, failure: $failure, notice: $notice)';
+    return 'PlayerState(phase: $phase, snapshot: $snapshot, title: $title, partTitle: $partTitle, partId: $partId, parts: $parts, qualities: $qualities, audioTracks: $audioTracks, quality: $quality, audioId: $audioId, rate: $rate, volume: $volume, autoNext: $autoNext, recoveryAttempts: $recoveryAttempts, surfaceGeneration: $surfaceGeneration, resumedFrom: $resumedFrom, failure: $failure, notice: $notice)';
 }
 
 
@@ -274,7 +310,7 @@ abstract mixin class _$PlayerStateCopyWith<$Res> implements $PlayerStateCopyWith
   factory _$PlayerStateCopyWith(_PlayerState value, $Res Function(_PlayerState) _then) = __$PlayerStateCopyWithImpl;
 @override @useResult
 $Res call({
- PlayerPhase phase, EngineSnapshot snapshot, String title, String partTitle, int quality, int surfaceGeneration, Duration resumedFrom, AppFailure? failure, String? notice
+ PlayerPhase phase, EngineSnapshot snapshot, String title, String partTitle, String partId, List<VideoPart> parts, List<PlaybackOption> qualities, List<PlaybackOption> audioTracks, int quality, int audioId, double rate, double volume, bool autoNext, int recoveryAttempts, int surfaceGeneration, Duration resumedFrom, AppFailure? failure, String? notice
 });
 
 
@@ -291,13 +327,22 @@ class __$PlayerStateCopyWithImpl<$Res>
 
 /// Create a copy of PlayerState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? phase = null,Object? snapshot = null,Object? title = null,Object? partTitle = null,Object? quality = null,Object? surfaceGeneration = null,Object? resumedFrom = null,Object? failure = freezed,Object? notice = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? phase = null,Object? snapshot = null,Object? title = null,Object? partTitle = null,Object? partId = null,Object? parts = null,Object? qualities = null,Object? audioTracks = null,Object? quality = null,Object? audioId = null,Object? rate = null,Object? volume = null,Object? autoNext = null,Object? recoveryAttempts = null,Object? surfaceGeneration = null,Object? resumedFrom = null,Object? failure = freezed,Object? notice = freezed,}) {
   return _then(_PlayerState(
 phase: null == phase ? _self.phase : phase // ignore: cast_nullable_to_non_nullable
 as PlayerPhase,snapshot: null == snapshot ? _self.snapshot : snapshot // ignore: cast_nullable_to_non_nullable
 as EngineSnapshot,title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
 as String,partTitle: null == partTitle ? _self.partTitle : partTitle // ignore: cast_nullable_to_non_nullable
-as String,quality: null == quality ? _self.quality : quality // ignore: cast_nullable_to_non_nullable
+as String,partId: null == partId ? _self.partId : partId // ignore: cast_nullable_to_non_nullable
+as String,parts: null == parts ? _self._parts : parts // ignore: cast_nullable_to_non_nullable
+as List<VideoPart>,qualities: null == qualities ? _self._qualities : qualities // ignore: cast_nullable_to_non_nullable
+as List<PlaybackOption>,audioTracks: null == audioTracks ? _self._audioTracks : audioTracks // ignore: cast_nullable_to_non_nullable
+as List<PlaybackOption>,quality: null == quality ? _self.quality : quality // ignore: cast_nullable_to_non_nullable
+as int,audioId: null == audioId ? _self.audioId : audioId // ignore: cast_nullable_to_non_nullable
+as int,rate: null == rate ? _self.rate : rate // ignore: cast_nullable_to_non_nullable
+as double,volume: null == volume ? _self.volume : volume // ignore: cast_nullable_to_non_nullable
+as double,autoNext: null == autoNext ? _self.autoNext : autoNext // ignore: cast_nullable_to_non_nullable
+as bool,recoveryAttempts: null == recoveryAttempts ? _self.recoveryAttempts : recoveryAttempts // ignore: cast_nullable_to_non_nullable
 as int,surfaceGeneration: null == surfaceGeneration ? _self.surfaceGeneration : surfaceGeneration // ignore: cast_nullable_to_non_nullable
 as int,resumedFrom: null == resumedFrom ? _self.resumedFrom : resumedFrom // ignore: cast_nullable_to_non_nullable
 as Duration,failure: freezed == failure ? _self.failure : failure // ignore: cast_nullable_to_non_nullable

@@ -1,0 +1,75 @@
+{
+  "date": "2026-10-25",
+  "milestone": "M5",
+  "status": "implemented_and_local_tv_emulator_automation_passed",
+  "baseRevision": "af4ed10cb281e26e8724cda06b33537c057763ae",
+  "workingTree": "M5 and earlier HTTP cache changes are uncommitted",
+  "scope": "Windows unit/widget and static analysis; API36 x86_64 Android TV emulator-5554 native playback",
+  "unitAndWidget": {
+    "addedForM5": 39,
+    "passed": 152,
+    "previousCacheBaseline": 113,
+    "failed": 0
+  },
+  "staticAnalysis": {
+    "dartMcpAnalyze": "No errors",
+    "gitDiffCheck": "passed",
+    "flutterAnalyze": "No issues found"
+  },
+  "flutterMcp": {
+    "nativeDpadPausedQualitySwitch": "360P to 480P, remained paused, position 00:41",
+    "productSearchAndPlayback": "passed",
+    "earlyDriverReadinessErrors": "extension registration / timeout and guard conflict; repeated after readiness",
+    "screenshots": [
+      "player-controls.png",
+      "quality-menu.png"
+    ],
+    "hotRestart": "succeeded on Android",
+    "finalRuntimeErrors": []
+  },
+  "nativeProfile": {
+    "released": 27,
+    "soakSeconds": 1800,
+    "created": 27,
+    "sleepCycles": 10,
+    "liveAfterReturn": 0,
+    "flutterRuntimeExceptions": 0,
+    "report": "native-profile.json",
+    "buildP95Ms": 0.851,
+    "maximumLifecycleResumeErrorMs": 40.0,
+    "scopeOfFrameTimings": "Flutter UI frames, not native video FPS",
+    "mediaAdvanceMs": 1799040,
+    "maximumEngines": 1,
+    "rasterP95Ms": 7.086,
+    "homeCycles": 10
+  },
+  "recovery": {
+    "clockDiagnostic": "native-audio-clock-diagnostic.json, rejected; rebooted emulator and reran with upper-bound checks",
+    "naturalCdnExpiry": "not tested",
+    "expiredResource": "test-local real HTTP403, one fresh parse",
+    "cdnBackup": "test-local HTTP503, actual paired service backups, one attempt",
+    "backupReport": "native-short-profile.json"
+  },
+  "forceKill": {
+    "lossUpperBoundMs": 2415,
+    "withinTarget": true,
+    "report": "force-kill.json",
+    "storedPositionMs": 41760
+  },
+  "coldResume": "cold-resume.json",
+  "defaultProductEntrypoint": {
+    "installedWithReplace": true,
+    "debugBuild": "passed",
+    "apkMetadata": "debug-apk.json",
+    "leanbackColdLaunch": "passed",
+    "entrypoint": "lib/main.dart"
+  },
+  "windowsRuntime": "environment blocked by Roaming AppData access; windows-debug.json",
+  "notValidated": [
+    "manual lip sync and listening: deferred by user",
+    "physical TV / ARM / remote unplug",
+    "Windows native playback",
+    "natural CDN expiry",
+    "M7 two-hour stability, formal signing and release"
+  ]
+}

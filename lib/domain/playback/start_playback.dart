@@ -15,6 +15,9 @@ class StartPlayback {
     String? partId,
     required String ownerKey,
     required CancellationSignal cancellation,
+    int? quality,
+    int? audioId,
+    Duration? position,
   }) async {
     final detail = (await catalog.getVideo(
       videoId,
@@ -33,6 +36,8 @@ class StartPlayback {
       videoId: videoId,
       partId: part.id,
       cancellation: cancellation,
+      quality: quality,
+      audioId: audioId,
     )).valueOrThrow;
     _check(cancellation);
     final preferences = (await settings.load()).valueOrThrow;
@@ -40,10 +45,16 @@ class StartPlayback {
         ? (await progress.load(ownerKey, videoId, part.id)).valueOrThrow
         : null;
     _check(cancellation);
-    final start =
-        saved != null &&
-            saved.isValid &&
-            saved.position < source.duration - const Duration(seconds: 10)
+    final start = position != null
+        ? Duration(
+            milliseconds: position.inMilliseconds.clamp(
+              0,
+              (source.duration.inMilliseconds - 1000).clamp(0, 1 << 53),
+            ),
+          )
+        : saved != null &&
+              saved.isValid &&
+              saved.position < source.duration - const Duration(seconds: 10)
         ? saved.position
         : Duration.zero;
     return PlaybackPlan(
@@ -54,6 +65,7 @@ class StartPlayback {
       partTitle: part.title,
       startAt: start,
       rememberProgress: preferences.resumePlayback,
+      parts: detail.parts,
     );
   }
 

@@ -10,6 +10,8 @@ enum FailureKind {
   unsupported,
   contract,
   authentication,
+  resourceExpired,
+  cdn,
 }
 
 final class AppFailure implements Exception {

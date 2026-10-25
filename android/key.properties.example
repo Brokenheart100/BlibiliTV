@@ -1,0 +1,6 @@
+# Copy to android/key.properties only for local release builds. Never commit real credentials.
+# Use forward slashes for Windows paths; paths are relative to android/ unless absolute.
+storeFile=C:/private-keys/mambatv-release.jks
+storePassword=REPLACE_WITH_STORE_PASSWORD
+keyAlias=mambatv
+keyPassword=REPLACE_WITH_KEY_PASSWORD

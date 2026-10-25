@@ -31,6 +31,7 @@ class SearchRaceCatalog extends FakeCatalogRepository {
     String query = '',
     String? cursor,
     int limit = 12,
+    bool forceRefresh = false,
     required CancellationSignal cancellation,
   }) {
     if (section != 'search' || query.isEmpty) {

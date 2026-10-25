@@ -103,9 +103,9 @@ void main() {
     await press(tester, LogicalKeyboardKey.arrowRight);
     await press(tester, LogicalKeyboardKey.select);
     await press(tester, LogicalKeyboardKey.select);
-    expect(find.text('检查网络后重试'), findsOneWidget);
+    expect(find.text('自动恢复未成功，请检查网络后手动重试'), findsOneWidget);
     expect(FocusManager.instance.primaryFocus?.debugLabel, 'player-control-4');
-    expect(resolver.calls, 1);
+    expect(resolver.calls, 2);
     resolver.failure = null;
     await press(tester, LogicalKeyboardKey.select);
     expect(find.text('正在播放'), findsOneWidget);

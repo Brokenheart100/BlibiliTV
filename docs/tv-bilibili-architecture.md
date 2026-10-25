@@ -1,8 +1,12 @@
 # MambaTV：TV 端 B 站客户端设计原则与架构
 
-日期：2026-10-24。状态：M4 内容发现、搜索历史与完整详情已实施，见 [M4 验收记录](m4-validation.md) 和 [ADR 0004](adr/0004-m4-discovery-and-search.md)。账号和游客播放证据继续保留于 [M3](m3-validation.md) 与 [M2](m2-validation.md)。
+日期：2026-10-25。状态：M5 播放控制、换源恢复、焦点与本地续播已实施并通过本机／TV 模拟器自动验收，见 [M5 记录](m5-validation.md) 和 [ADR 0006](adr/0006-playback-controls-and-recovery.md)。人工音画与物理设备仍待补验；内容、账号和游客播放历史证据保留于 [M4](m4-validation.md)、[M3](m3-validation.md) 与 [M2](m2-validation.md)。
 
 配套执行文档：[详细开发计划](development-plan.md)。
+
+M5（2026-10-25）已实现播放器控制、串行切换与限次恢复。新增 PlaybackFocus 抽象、按调用方持有的焦点所有权和实际资源能力菜单；见 [ADR 0006](adr/0006-playback-controls-and-recovery.md) 与 [M5 验证](m5-validation.md)，验收尚未完成的内容单列。
+
+2026-10-25 补充：已按 [ADR 0005](adr/0005-scoped-http-cache.md) 接入限定端点、账号／会话代次隔离的 HTTP 内存缓存，替代详情仓储 Map；ViewModel 通过 forceRefresh 表达主动刷新，不依赖缓存库。见 [缓存验收](http-cache-validation.md)。
 
 ## 1. 目标与当前基础
 
@@ -362,6 +366,8 @@ M2 已落地最小游客实现：StartPlayback + 端口/仓储 + 全局引擎协
 - 集成测试覆盖游客找片、扫码后的账号流程、播放返回与续播；真账号测试为受控人工／本机流程，不能依赖公开 CI 保存 Cookie。
 - TV 模拟器用于界面和按键，至少一台真实目标设备用于硬解、音视频同步、休眠恢复和长时间播放。
 - `flutter analyze`、必要代码生成、自动测试、release APK 构建、真机验收分别记录；前一项通过不能替代后一项。
+
+CI/CD 基础已提前实施，见 [流水线与签名说明](ci-cd.md)。PR／master 只读执行锁定依赖、生成一致性、格式、分析、测试和拆分 Debug APK；发布标签必须匹配版本并指向 master 历史，按确切提交完整重跑 CI 后使用正式密钥签名。包名、版本、ABI、Debug 标志、TV 入口、证书和 SHA256 都在发布前校验；CI 构建意外修改来源文件时拒绝产物。发布权限仅赋予上传步骤，实际 TV 与账号人工验收继续独立记录。
 
 M0 隔离验证入口已实现真实游客接口、扫码申请和模拟器音视频流程；正式 Repository、产品页面及上述完整业务仍按后续阶段实施。当前证据与限制见 M0 验收记录，后续任务与验收见开发计划。
 

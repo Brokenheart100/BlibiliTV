@@ -12,7 +12,7 @@
 - SearchHistoryRepository 使用已有 Drift v1 SearchEntries 表，不升级 schema。历史按 ownerKey 隔离、去空白和精确去重，最多 12 条；清空只作用于当前 owner。命令串行化，重复关键词先在事务内删除再插入，以 updatedAt＋rowid 确保同一秒内仍按最近提交排序。
 - ProgressRepository 新增 latestForVideo，查询当前 owner 的最近分 P；有效、未临近结尾且启用续播时，详情显示继续播放。进度写入改为同一事务中的删除／插入，并以 updatedAt＋rowid 排序，避免同秒内切回旧 P 后误选另一分集；零／无效进度仍不覆盖有效记录。
 - VideoDetailViewModel 替换旧详情 FutureProvider，提供详情与续播快照；UP 信息和简介来自同一详情响应。相关视频以独立 Provider 加载、单独重试，失败不隐藏详情。个人列表入口明确显示尚未开放；远端收藏／稍后再看读写仍属于 M6，不自动发起写操作。
-- BilibiliApi 增加列表响应适配，复用既有账号代次、Cookie 范围、WBI、取消与 Talker 脱敏规则。详情缓存仍按 ownerKey／视频区分，容量 24、有效期三分钟；相关视频最多显示 20 项。
+- BilibiliApi 增加列表响应适配，复用既有账号代次、Cookie 范围、WBI、取消与 Talker 脱敏规则。M4 当时的详情 Map 缓存（24 项、三分钟）于 2026-10-25 被 [ADR 0005](0005-scoped-http-cache.md) 的按会话隔离 HTTP 缓存替代；相关视频仍最多显示 20 项。
 
 ## TV 与图片约束
 

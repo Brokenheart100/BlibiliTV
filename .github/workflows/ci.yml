@@ -1,0 +1,98 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [master]
+  workflow_dispatch:
+  workflow_call:
+    inputs:
+      checkout_ref:
+        description: Exact revision selected by the release preflight.
+        type: string
+        required: false
+        default: ''
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.event_name }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  workflows:
+    name: Workflow validation
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          ref: ${{ inputs.checkout_ref || github.sha }}
+          persist-credentials: false
+      - name: Lint GitHub Actions workflows
+        run: go run github.com/rhysd/actionlint/cmd/actionlint@v1.7.12 -color
+
+  quality:
+    name: Quality checks
+    needs: workflows
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          ref: ${{ inputs.checkout_ref || github.sha }}
+          persist-credentials: false
+      - uses: ./.github/actions/setup-flutter
+      - name: Test pipeline guards
+        run: python3 -m unittest discover -s tool/ci -p 'test_*.py' -v
+      - name: Restore locked dependencies
+        run: flutter pub get --enforce-lockfile
+      - name: Generate Riverpod, Freezed, JSON and Drift code
+        run: dart run build_runner build --delete-conflicting-outputs
+      - name: Check generated sources are committed
+        run: python3 tool/ci/pipeline.py check-generated
+      - name: Check formatting
+        run: dart format --output=none --set-exit-if-changed lib test integration_test test_driver tool
+      - name: Static analysis
+        run: flutter analyze --fatal-infos
+      - name: Unit and widget tests
+        run: flutter test --coverage --reporter expanded
+      - name: Upload coverage
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: coverage-${{ inputs.checkout_ref || github.sha }}
+          path: coverage/lcov.info
+          if-no-files-found: ignore
+          retention-days: 14
+
+  android:
+    name: Android debug APKs
+    needs: quality
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          ref: ${{ inputs.checkout_ref || github.sha }}
+          persist-credentials: false
+      - uses: ./.github/actions/setup-flutter
+        with:
+          android: 'true'
+      - run: flutter pub get --enforce-lockfile
+      - name: Build product debug APKs
+        run: flutter build apk --debug --split-per-abi --target lib/main.dart
+      - name: Verify and package APKs
+        run: python3 tool/ci/pipeline.py package --mode debug --out build/ci-debug
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: android-debug-${{ inputs.checkout_ref || github.sha }}
+          path: build/ci-debug/
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 14

@@ -53,6 +53,8 @@ dependencies:
   pointycastle: 4.0.0
   talker: 5.1.21
   flutter_cache_manager: 3.4.5
+  dio_cache_interceptor: 4.0.7
+  audio_session: 0.2.4
 
 dev_dependencies:
   flutter_test:

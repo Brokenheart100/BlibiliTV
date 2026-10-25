@@ -1,0 +1,10 @@
+{
+  "date": "2026-10-25",
+  "scope": "additional Windows debug run, separate from Android TV acceptance",
+  "hotRestartViaDartMcp": "succeeded",
+  "applicationRuntime": "environment_blocked",
+  "reason": "Windows denied creation of the product subdirectory in Roaming AppData",
+  "filesystemAclChanged": false,
+  "temporaryDirectoryOverride": "process-local ignored workspace directory only",
+  "windowsPlaybackValidated": false
+}

@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../core/result.dart';
+import '../entities/app_models.dart';
 
 part 'playback.freezed.dart';
 
@@ -12,13 +13,73 @@ final class PlaybackSource {
     required this.duration,
     required this.quality,
     required this.codec,
+    this.qualities = const [],
+    this.audioTracks = const [],
+    this.audioId = 0,
+    this.videoBackups = const [],
+    this.audioBackups = const [],
   });
   final String videoUrl, audioUrl, codec;
   final Duration duration;
   final int quality;
+  final int audioId;
+  final List<PlaybackOption> qualities, audioTracks;
+  final List<String> videoBackups, audioBackups;
+  PlaybackSource? get alternate => videoBackups.isEmpty || audioBackups.isEmpty
+      ? null
+      : PlaybackSource(
+          videoUrl: videoBackups.first,
+          audioUrl: audioBackups.first,
+          duration: duration,
+          quality: quality,
+          codec: codec,
+          qualities: qualities,
+          audioTracks: audioTracks,
+          audioId: audioId,
+        );
   @override
   String toString() =>
       'PlaybackSource(quality: $quality, codec: $codec, urls: redacted)';
+}
+
+final class PlaybackOption {
+  const PlaybackOption(this.id, this.label, {this.reason});
+  final int id;
+  final String label;
+  final String? reason;
+  bool get available => reason == null;
+}
+
+String qualityLabel(int quality) => switch (quality) {
+  6 => '240P',
+  16 => '360P',
+  32 => '480P',
+  64 => '720P',
+  74 => '720P60',
+  80 => '1080P',
+  112 => '1080P+',
+  116 => '1080P60',
+  120 => '4K',
+  125 => 'HDR',
+  126 => '杜比视界',
+  127 => '8K',
+  _ => '$quality',
+};
+
+abstract interface class PlaybackFocus {
+  Stream<void> get interruptions;
+  Future<bool> acquire(Object owner);
+  Future<void> release(Object owner);
+}
+
+class PassivePlaybackFocus implements PlaybackFocus {
+  const PassivePlaybackFocus();
+  @override
+  Stream<void> get interruptions => const Stream.empty();
+  @override
+  Future<bool> acquire(Object owner) async => true;
+  @override
+  Future<void> release(Object owner) async {}
 }
 
 @freezed
@@ -32,6 +93,8 @@ abstract class EngineSnapshot with _$EngineSnapshot {
     @Default(0) int width,
     @Default(0) int height,
     @Default(0) int audioSampleRate,
+    @Default(1.0) double rate,
+    @Default(100.0) double volume,
     AppFailure? failure,
   }) = _EngineSnapshot;
 }
@@ -39,10 +102,16 @@ abstract class EngineSnapshot with _$EngineSnapshot {
 abstract interface class PlaybackEngine {
   EngineSnapshot get snapshot;
   Stream<EngineSnapshot> get snapshots;
-  Future<void> open(PlaybackSource source, {required Duration startAt});
+  Future<void> open(
+    PlaybackSource source, {
+    required Duration startAt,
+    bool play = true,
+  });
   Future<void> play();
   Future<void> pause();
   Future<void> seek(Duration position);
+  Future<void> setRate(double rate);
+  Future<void> setVolume(double volume);
   Future<void> dispose();
 }
 
@@ -51,6 +120,8 @@ abstract interface class PlaybackRepository {
     required String videoId,
     required String partId,
     required CancellationSignal cancellation,
+    int? quality,
+    int? audioId,
   });
 }
 
@@ -92,9 +163,11 @@ final class PlaybackPlan {
     required this.partTitle,
     required this.startAt,
     required this.rememberProgress,
+    this.parts = const [],
   });
   final PlaybackSource source;
   final String videoId, partId, title, partTitle;
   final Duration startAt;
   final bool rememberProgress;
+  final List<VideoPart> parts;
 }

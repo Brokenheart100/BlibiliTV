@@ -1,0 +1,19 @@
+{
+  "recordedAtHostUtc": "2026-10-25T06:16:24.8236198Z",
+  "applicationId": "app.mamba.mambatv",
+  "launch": "COLD via am start",
+  "videoId": "BV1hQHW63EMc",
+  "partId": "42481486830",
+  "storedPositionMs": 41760,
+  "stablePausedUiClock": "00:41",
+  "displayIntervalMs": [
+    41000,
+    42000
+  ],
+  "maximumErrorFromRoundedPausedDisplayMs": 760,
+  "targetMs": 2000,
+  "searchHistoryRecovered": true,
+  "flutterMcpHotRestart": "succeeded before kill",
+  "runtimeErrorsAfterColdResume": [],
+  "measurement": "Pause immediately after ready; repeated stable UI clock, rounded to whole seconds. Native integration separately checks millisecond snapshots."
+}

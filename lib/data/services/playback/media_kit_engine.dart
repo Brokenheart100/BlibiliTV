@@ -13,7 +13,7 @@ import '../../../domain/playback/playback.dart';
 import '../bilibili/bilibili_api.dart';
 
 class MediaKitEngine implements PlaybackEngine {
-  MediaKitEngine() {
+  MediaKitEngine({this.onOpenStage}) {
     player = Player(
       configuration: const PlayerConfiguration(
         title: 'MambaTV',
@@ -54,21 +54,21 @@ class MediaKitEngine implements PlaybackEngine {
       player.stream.audioParams.listen(
         (v) => _emit(_snapshot.copyWith(audioSampleRate: v.sampleRate ?? 0)),
       ),
+      player.stream.rate.listen((v) => _emit(_snapshot.copyWith(rate: v))),
+      player.stream.volume.listen((v) => _emit(_snapshot.copyWith(volume: v))),
       // Native messages may contain signed URLs. Only a safe domain failure escapes.
       player.stream.error.listen(
-        (_) => _emit(
+        (message) => _emit(
           _snapshot.copyWith(
             playing: false,
-            failure: const AppFailure(
-              FailureKind.unsupported,
-              '视频暂时无法播放，请重试或返回选择其他视频',
-            ),
+            failure: classifyNativePlaybackFailure(message),
           ),
         ),
       ),
     ]);
   }
   late final Player player;
+  final void Function(String stage)? onOpenStage;
   late final VideoController controller;
   final _events = StreamController<EngineSnapshot>.broadcast(sync: true);
   final _subscriptions = <StreamSubscription<Object?>>[];
@@ -90,12 +90,17 @@ class MediaKitEngine implements PlaybackEngine {
   }
 
   @override
-  Future<void> open(PlaybackSource source, {required Duration startAt}) async {
+  Future<void> open(
+    PlaybackSource source, {
+    required Duration startAt,
+    bool play = true,
+  }) async {
     _check();
     try {
       // Retain both resources with the fixed CDN headers. The primary file
       // must finish loading before audio-add can use its native stream options.
       _audio = Media(source.audioUrl, httpHeaders: bilibiliMediaHeaders);
+      onOpenStage?.call('video');
       await player.open(
         Media(
           source.videoUrl,
@@ -109,23 +114,44 @@ class MediaKitEngine implements PlaybackEngine {
       // so media_kit's on_load hook has applied its HTTP headers before an
       // external audio-add command uses the current stream options.
       if (player.state.duration <= Duration.zero) {
+        onOpenStage?.call('duration');
         await player.stream.duration
             .firstWhere((value) => value > Duration.zero)
             .timeout(const Duration(seconds: 20));
       }
       _check();
+      onOpenStage?.call('audio');
       await player.setAudioTrack(AudioTrack.uri(_audio!.uri));
       _check();
-      await player.play();
-      await controller.waitUntilFirstFrameRendered.timeout(
-        const Duration(seconds: 45),
-      );
+      if (play) {
+        onOpenStage?.call('frame');
+        await player.play();
+        await controller.waitUntilFirstFrameRendered.timeout(
+          const Duration(seconds: 45),
+        );
+      } else {
+        onOpenStage?.call('pause_position');
+        await player.pause();
+        await player.seek(startAt);
+        // Android mediacodec_embed may defer its first decoded frame until play.
+        // Confirm the paused timeline without ever starting audible playback.
+        if ((player.state.position - startAt).abs() >
+            const Duration(seconds: 2)) {
+          await player.stream.position
+              .firstWhere(
+                (value) =>
+                    (value - startAt).abs() <= const Duration(seconds: 2),
+              )
+              .timeout(const Duration(seconds: 10));
+        }
+      }
       _check();
       if (startAt > Duration.zero &&
           _snapshot.position < startAt - const Duration(seconds: 2)) {
         await player.seek(startAt);
       }
       if (_snapshot.failure case final AppFailure failure) throw failure;
+      onOpenStage?.call('ready');
     } on AppFailure {
       rethrow;
     } catch (_) {
@@ -148,6 +174,28 @@ class MediaKitEngine implements PlaybackEngine {
   Future<void> seek(Duration position) async {
     _check();
     await player.seek(position);
+    // The native command is queued before the position event is delivered.
+    // Confirm it before another relative seek or progress save reads the clock.
+    if ((_snapshot.position - position).abs() > const Duration(seconds: 2)) {
+      await player.stream.position
+          .firstWhere(
+            (value) => (value - position).abs() <= const Duration(seconds: 2),
+          )
+          .timeout(const Duration(seconds: 10));
+    }
+    _check();
+  }
+
+  @override
+  Future<void> setRate(double rate) async {
+    _check();
+    await player.setRate(rate);
+  }
+
+  @override
+  Future<void> setVolume(double volume) async {
+    _check();
+    await player.setVolume(volume);
   }
 
   @override
@@ -170,4 +218,18 @@ class MediaKitEngine implements PlaybackEngine {
     _audio = null;
     await _events.close();
   }
+}
+
+// Native messages are inspected locally and discarded; signed URLs never escape.
+AppFailure classifyNativePlaybackFailure(String message) {
+  final text = message.toLowerCase();
+  if (RegExp(r'\b(403|410)\b').hasMatch(text)) {
+    return const AppFailure(FailureKind.resourceExpired, '播放地址已失效，正在尝试重新获取');
+  }
+  if (RegExp(
+    r'\b(500|502|503|504)\b|timed out|connection|network|failed to open|error opening',
+  ).hasMatch(text)) {
+    return const AppFailure(FailureKind.cdn, '播放线路暂不可用');
+  }
+  return const AppFailure(FailureKind.unsupported, '当前解码器无法播放此内容，请返回选择其他视频');
 }

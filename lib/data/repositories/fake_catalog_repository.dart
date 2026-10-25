@@ -52,6 +52,7 @@ class FakeCatalogRepository implements CatalogRepository {
     String query = '',
     String? cursor,
     int limit = 12,
+    bool forceRefresh = false,
     required CancellationSignal cancellation,
   }) async {
     if (latency > Duration.zero) await Future<void>.delayed(latency);

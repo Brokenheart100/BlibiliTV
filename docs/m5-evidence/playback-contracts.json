@@ -1,0 +1,54 @@
+{
+  "recordedAtUtc": "2026-10-25T04:19:49.544536Z",
+  "identity": "guest",
+  "candidates": [
+    {
+      "videoId": "BV1hQHW63EMc",
+      "partId": "42481486830",
+      "durationSeconds": 2715,
+      "quality": 16,
+      "availableQualities": [
+        32,
+        16
+      ],
+      "audioIds": [
+        30216,
+        30280,
+        30232
+      ],
+      "pairedBackup": true
+    },
+    {
+      "videoId": "BV1k3HS6eEhT",
+      "partId": "42561244077",
+      "durationSeconds": 2711,
+      "quality": 16,
+      "availableQualities": [
+        32,
+        16
+      ],
+      "audioIds": [
+        30216,
+        30232,
+        30280
+      ],
+      "pairedBackup": true
+    },
+    {
+      "videoId": "BV1vinm61EaQ",
+      "partId": "42951380627",
+      "durationSeconds": 2711,
+      "quality": 16,
+      "availableQualities": [
+        32,
+        16
+      ],
+      "audioIds": [
+        30216,
+        30232,
+        30280
+      ],
+      "pairedBackup": true
+    }
+  ]
+}

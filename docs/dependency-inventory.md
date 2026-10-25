@@ -52,3 +52,7 @@ M3 新增 PointyCastle 4.0.0，用于协议要求的 RSA-OAEP SHA-256 公钥加�
 M3 后续日志更新：引入 Talker 5.1.21（同时解析 talker_logger 5.1.21、ansicolor 2.0.3），通过 Riverpod 应用级 Provider 注入。继续使用既有 SafeLoggingInterceptor 的字段白名单；调试模式输出控制台、最多保留 200 条内存历史，profile/release 默认关闭。参见 [日志约定](logging.md) 和 [Talker 包文档](https://pub.dev/packages/talker/versions/5.1.21)。
 
 M4 将已存在的传递依赖 flutter_cache_manager 3.4.5 提升为精确直接依赖，使用实际 ImageCacheManager／Config API 配置封面缩图和文件数上限；没有升级 cached_network_image 4.0.5 或原生播放库。
+
+2026-10-25 HTTP 缓存补充：精确直接依赖 `dio_cache_interceptor 4.0.7`，新增传递依赖 `http_cache_core 1.1.4`，现有锁定包未升级。仅使用有容量限制的内存 Store；没有增加持久化缓存插件。策略与实际源码核对见 [ADR 0005](adr/0005-scoped-http-cache.md)。
+
+M5 新增精确直接依赖 `audio_session 0.2.4`（MIT），使用现有 rxdart 依赖，没有升级原生 media_kit 系列。实际读取源码确认配置、焦点、中断及耳机事件 API；Android 设备回归与边界见 [M5 验收](m5-validation.md)，平台策略见 [ADR 0006](adr/0006-playback-controls-and-recovery.md)。

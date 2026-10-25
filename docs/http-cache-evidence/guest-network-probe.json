@@ -1,0 +1,55 @@
+{
+  "recordedAtUtc": "2026-10-25T03:56:34.344874Z",
+  "identity": "new guest API scope; no stored credentials",
+  "networkRequests": 9,
+  "checks": [
+    {
+      "endpoint": "popular",
+      "secondReadNetworkRequests": 0,
+      "refreshNetworkRequests": 1,
+      "secondRead": {
+        "status": 200,
+        "cacheHit": true,
+        "noStore": false,
+        "hasSetCookie": false
+      },
+      "result": "passed"
+    },
+    {
+      "endpoint": "detail",
+      "secondReadNetworkRequests": 0,
+      "refreshNetworkRequests": 1,
+      "secondRead": {
+        "status": 200,
+        "cacheHit": true,
+        "noStore": false,
+        "hasSetCookie": false
+      },
+      "result": "passed"
+    },
+    {
+      "endpoint": "related",
+      "secondReadNetworkRequests": 0,
+      "refreshNetworkRequests": 1,
+      "secondRead": {
+        "status": 200,
+        "cacheHit": true,
+        "noStore": false,
+        "hasSetCookie": false
+      },
+      "result": "passed"
+    },
+    {
+      "endpoint": "search",
+      "secondReadNetworkRequests": 0,
+      "refreshNetworkRequests": 1,
+      "secondRead": {
+        "status": 200,
+        "cacheHit": true,
+        "noStore": false,
+        "hasSetCookie": false
+      },
+      "result": "passed"
+    }
+  ]
+}

@@ -29,6 +29,7 @@ class FailOnceCatalog extends FakeCatalogRepository {
     String query = '',
     String? cursor,
     int limit = 12,
+    bool forceRefresh = false,
     required CancellationSignal cancellation,
   }) {
     calls++;
@@ -59,6 +60,7 @@ class GatedCatalog extends FakeCatalogRepository {
     String query = '',
     String? cursor,
     int limit = 12,
+    bool forceRefresh = false,
     required CancellationSignal cancellation,
   }) async {
     signals.add(cancellation);

@@ -5,6 +5,7 @@ import 'package:talker/talker.dart';
 import '../../data/services/local/app_database.dart';
 import '../../data/services/local/local_stores.dart';
 import '../../data/services/network/safe_logging_interceptor.dart';
+import '../../data/services/network/bilibili_http_cache.dart';
 import '../logging/app_talker.dart';
 
 part 'infrastructure_providers.g.dart';
@@ -31,6 +32,7 @@ Dio apiClient(Ref ref) {
   client.interceptors.add(
     SafeLoggingInterceptor((entry) => recordHttpMetadata(talker, entry)),
   );
+  client.interceptors.add(BilibiliCacheInterceptor());
   ref.onDispose(() => client.close(force: true));
   return client;
 }

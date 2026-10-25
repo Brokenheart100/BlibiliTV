@@ -88,6 +88,7 @@ class CatalogViewModel extends _$CatalogViewModel {
       ownerKey: ownerKey,
       query: query,
       cursor: refresh ? null : previous.nextCursor,
+      forceRefresh: refresh,
       cancellation: signal,
     );
     if (!ref.mounted || signal.isCancelled || epoch != _epoch) return;

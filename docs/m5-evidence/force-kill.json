@@ -1,0 +1,14 @@
+{
+  "recordedAtHostUtc": "2026-10-25T06:15:12.091446Z",
+  "identity": "guest",
+  "videoId": "BV1hQHW63EMc",
+  "partId": "42481486830",
+  "observedUiClock": "00:42",
+  "readAndKillLatencyMs": 175,
+  "clockRoundingAndRenderingMarginMs": 2000,
+  "storedPositionMs": 41760,
+  "durationMs": 2715040,
+  "lossUpperBoundMs": 2415,
+  "withinFiveSecondsPlusOneSecondSchedulingMargin": true,
+  "scope": "current debug product app; only its selected guest progress row queried"
+}

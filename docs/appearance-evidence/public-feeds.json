@@ -1,0 +1,24 @@
+{
+  "readOnly": true,
+  "authenticated": false,
+  "feeds": [
+    {
+      "section": "weekly",
+      "count": 12,
+      "hasMore": true,
+      "nextCount": 12,
+      "overlap": 0,
+      "status": "passed"
+    },
+    {
+      "section": "ranking",
+      "count": 12,
+      "hasMore": true,
+      "nextCount": 12,
+      "overlap": 0,
+      "status": "passed"
+    }
+  ],
+  "remoteWrites": 0,
+  "recordedAtUtc": "2026-10-27T06:12:49.624528Z"
+}

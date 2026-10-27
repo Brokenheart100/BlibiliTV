@@ -46,6 +46,7 @@ class BilibiliLibraryRepository implements LibraryRepository {
         id: id,
         title: row['title'] as String? ?? '不可用视频',
         creator: (row['author_name'] ?? owner['name'] ?? '') as String,
+        creatorAvatarUrl: avatarUrl(row['author_face'] ?? owner['face']),
         durationSeconds: seconds,
         viewCount: 0,
         coverUrl: _cover(row['cover'] ?? row['pic']),

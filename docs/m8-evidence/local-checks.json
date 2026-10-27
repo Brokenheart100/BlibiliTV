@@ -1,0 +1,51 @@
+{
+  "hostRecordedAtUtc": "2026-10-26T08:27:21.958467+00:00",
+  "checks": [
+    {
+      "check": "build-runner",
+      "exitCode": 0,
+      "seconds": 78.6
+    },
+    {
+      "check": "protobuf",
+      "exitCode": 0,
+      "seconds": 11.93
+    },
+    {
+      "check": "format",
+      "exitCode": 0,
+      "seconds": 1.77
+    },
+    {
+      "check": "analysis",
+      "exitCode": 0,
+      "seconds": 81.95
+    },
+    {
+      "check": "python-guards",
+      "exitCode": 0,
+      "seconds": 0.94
+    },
+    {
+      "check": "vendor",
+      "exitCode": 0,
+      "seconds": 0.11
+    },
+    {
+      "check": "dependencies",
+      "exitCode": 0,
+      "seconds": 0.15
+    },
+    {
+      "check": "actionlint",
+      "exitCode": 0,
+      "seconds": 0.3,
+      "scope": "ci.yml and release-android.yml",
+      "note": "Corrected local helper filename; original invocation referenced nonexistent release.yml"
+    }
+  ],
+  "flutterUnitWidgetTests": 202,
+  "testLog": ".m0/m8-202-tests.log",
+  "remoteCiRun": false,
+  "repeatGenerationUnchanged": true
+}

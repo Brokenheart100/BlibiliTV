@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -29,6 +31,103 @@ Future<void> playerBack(WidgetTester tester) async {
 }
 
 void main() {
+  testWidgets('buffer bar follows engine updates, including cache eviction', (
+    tester,
+  ) async {
+    final engines = FakeEngineFactory();
+    await pumpMamba(tester, engines: engines);
+    await press(tester, LogicalKeyboardKey.arrowRight);
+    await press(tester, LogicalKeyboardKey.select);
+    await press(tester, LogicalKeyboardKey.select);
+    final engine = engines.engines.single;
+    double value(String key) =>
+        tester.widget<LinearProgressIndicator>(find.byKey(Key(key))).value!;
+    expect(value('player-buffer-progress'), 0);
+    engine.emit(
+      engine.snapshot.copyWith(
+        position: const Duration(seconds: 20),
+        bufferedPosition: const Duration(seconds: 80),
+      ),
+    );
+    await tester.pump();
+    expect(value('player-played-progress'), closeTo(20 / 120, .0001));
+    expect(value('player-buffer-progress'), closeTo(80 / 120, .0001));
+    engine.emit(
+      engine.snapshot.copyWith(bufferedPosition: const Duration(seconds: 30)),
+    );
+    await tester.pump();
+    expect(value('player-buffer-progress'), .25);
+    engine.emit(
+      engine.snapshot.copyWith(bufferedPosition: const Duration(seconds: -1)),
+    );
+    await tester.pump();
+    expect(value('player-buffer-progress'), 0);
+    engine.emit(
+      engine.snapshot.copyWith(bufferedPosition: const Duration(seconds: 150)),
+    );
+    await tester.pump();
+    expect(value('player-buffer-progress'), 1);
+    engine.emit(engine.snapshot.copyWith(duration: Duration.zero));
+    await tester.pump();
+    expect(value('player-buffer-progress'), 0);
+    expect(value('player-played-progress'), 0);
+    expect(tester.takeException(), isNull);
+    await playerBack(tester);
+  });
+
+  testWidgets('seek preview hides stale buffer and replacement starts empty', (
+    tester,
+  ) async {
+    final engines = FakeEngineFactory();
+    await pumpMamba(tester, engines: engines);
+    await press(tester, LogicalKeyboardKey.arrowRight);
+    await press(tester, LogicalKeyboardKey.select);
+    await press(tester, LogicalKeyboardKey.select);
+    final engine = engines.engines.single;
+    engine.emit(
+      engine.snapshot.copyWith(bufferedPosition: const Duration(seconds: 100)),
+    );
+    await tester.pump();
+    double buffered() => tester
+        .widget<LinearProgressIndicator>(
+          find.byKey(const Key('player-buffer-progress')),
+        )
+        .value!;
+    expect(buffered(), closeTo(100 / 120, .0001));
+    final gate = engines.seekGate = Completer<void>();
+    // Let controls hide so Left/Right take the TV surface seek path.
+    await tester.pump(const Duration(seconds: 6));
+    await tester.pumpAndSettle();
+    await press(tester, LogicalKeyboardKey.arrowRight);
+    expect(find.text('跳转至 00:10'), findsOneWidget);
+    expect(buffered(), 0);
+    engine.emit(
+      engine.snapshot.copyWith(bufferedPosition: const Duration(seconds: 110)),
+    );
+    await tester.pump();
+    expect(buffered(), 0);
+    gate.complete();
+    await tester.pumpAndSettle();
+    engine.emit(
+      engine.snapshot.copyWith(bufferedPosition: const Duration(seconds: 25)),
+    );
+    await tester.pump();
+    expect(buffered(), closeTo(25 / 120, .0001));
+    await tester.tap(find.byKey(const Key('player-quality')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('360P'));
+    for (var i = 0; i < 15; i++) {
+      await tester.runAsync(() => Future<void>.delayed(Duration.zero));
+      await tester.pump(const Duration(milliseconds: 100));
+    }
+    await tester.pumpAndSettle();
+    expect(engines.engines.length, 2);
+    expect(engines.engines.last.snapshot.bufferedPosition, Duration.zero);
+    expect(buffered(), 0);
+    expect(tester.takeException(), isNull);
+    await playerBack(tester);
+  });
+
   testWidgets(
     'account change closes a hidden player without popping the login route',
     (tester) async {
@@ -112,5 +211,32 @@ void main() {
     await playerBack(tester);
     expect(find.byKey(const Key('detail-play')), findsOneWidget);
     expect(tester.takeException(), isNull);
+  });
+  testWidgets('D-pad seek preview stays visible while the decoder is busy', (
+    tester,
+  ) async {
+    final engines = FakeEngineFactory();
+    await pumpMamba(tester, engines: engines);
+    await press(tester, LogicalKeyboardKey.arrowRight);
+    await press(tester, LogicalKeyboardKey.select);
+    await press(tester, LogicalKeyboardKey.select);
+    await tester.pump(const Duration(seconds: 6));
+    await tester.pumpAndSettle();
+    expect(find.byKey(const Key('player-toggle')), findsNothing);
+    final gate = engines.seekGate = Completer<void>();
+    await press(tester, LogicalKeyboardKey.arrowRight);
+    expect(find.text('跳转至 00:10'), findsOneWidget);
+    await tester.pump(const Duration(seconds: 6));
+    expect(find.text('跳转至 00:10'), findsOneWidget);
+    await press(tester, LogicalKeyboardKey.arrowLeft);
+    expect(find.text('跳转至 00:00'), findsOneWidget);
+    gate.complete();
+    await tester.pumpAndSettle();
+    expect(find.text('跳转至 00:00'), findsNothing);
+    expect(engines.engines.single.seeks, [
+      const Duration(seconds: 10),
+      Duration.zero,
+    ]);
+    await playerBack(tester);
   });
 }

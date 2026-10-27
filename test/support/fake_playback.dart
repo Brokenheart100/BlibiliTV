@@ -117,6 +117,8 @@ class FakeEngineFactory {
   final engines = <FakePlaybackEngine>[];
   int active = 0, maxActive = 0;
   Completer<void>? openGate;
+  Completer<void>? seekGate;
+  AppFailure? seekFailure;
   PlaybackAdapter get adapter => PlaybackAdapter(
     focus: focus,
     create: create,
@@ -141,6 +143,7 @@ class FakePlaybackEngine implements PlaybackEngine {
   int opens = 0;
   Duration? openedAt;
   PlaybackSource? source;
+  final seeks = <Duration>[];
   EngineSnapshot value = const EngineSnapshot(duration: Duration(seconds: 120));
   @override
   EngineSnapshot get snapshot => value;
@@ -180,8 +183,15 @@ class FakePlaybackEngine implements PlaybackEngine {
   @override
   Future<void> pause() async => emit(value.copyWith(playing: false));
   @override
-  Future<void> seek(Duration position) async =>
-      emit(value.copyWith(position: position));
+  Future<void> seek(Duration position) async {
+    seeks.add(position);
+    await factory.seekGate?.future;
+    final failure = factory.seekFailure;
+    factory.seekFailure = null;
+    if (failure != null) throw failure;
+    if (!disposed) emit(value.copyWith(position: position));
+  }
+
   @override
   Future<void> setRate(double rate) async => emit(value.copyWith(rate: rate));
   @override

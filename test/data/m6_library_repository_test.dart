@@ -126,6 +126,7 @@ void main() {
           'title': '合成视频',
           'duration': 90,
           'progress': 20,
+          'author_face': '//example.invalid/history-face.jpg',
           'view_at': 100,
           'history': {
             'bvid': 'BVtest',
@@ -145,6 +146,10 @@ void main() {
     };
     final first = await list(LibrarySection.remote);
     expect(first.items.first.position.inSeconds, 20);
+    expect(
+      first.items.first.video.creatorAvatarUrl,
+      'https://example.invalid/history-face.jpg',
+    );
     expect(first.items.last.unavailableReason, isNotNull);
     final second = await list(LibrarySection.remote, cursor: first.nextCursor);
     expect(calls.last.queryParameters['max'], 8);

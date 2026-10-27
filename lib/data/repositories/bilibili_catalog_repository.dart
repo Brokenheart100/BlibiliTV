@@ -3,6 +3,7 @@ import '../../domain/entities/app_models.dart';
 import '../../domain/repositories/repositories.dart';
 import '../services/bilibili/bilibili_api.dart';
 import '../services/bilibili/bilibili_dto.dart';
+import 'bilibili_discovery_repository.dart';
 
 class BilibiliCatalogRepository implements CatalogRepository {
   BilibiliCatalogRepository(this.api);
@@ -14,6 +15,7 @@ class BilibiliCatalogRepository implements CatalogRepository {
     durationSeconds: dto.duration,
     viewCount: dto.views,
     coverUrl: dto.pic,
+    creatorAvatarUrl: dto.creatorAvatarUrl,
   );
 
   List<VideoSummary> _videos(
@@ -41,6 +43,7 @@ class BilibiliCatalogRepository implements CatalogRepository {
     required String section,
     required String ownerKey,
     String query = '',
+    CatalogOptions options = const CatalogOptions(),
     String? cursor,
     int limit = 12,
     bool forceRefresh = false,
@@ -48,6 +51,36 @@ class BilibiliCatalogRepository implements CatalogRepository {
   }) async {
     try {
       api.checkOwner(ownerKey);
+      if (section == 'weekly' || section == 'ranking') {
+        return await _curatedFeed(
+          section,
+          cursor,
+          limit,
+          forceRefresh,
+          cancellation,
+        );
+      }
+      if (section == 'live') {
+        return const ResultFailure(
+          AppFailure(FailureKind.unsupported, '直播还在准备中'),
+        );
+      }
+      if (section == 'creator') {
+        return await BilibiliDiscoveryRepository(api).creatorVideos(
+          mid: options.creatorId,
+          ownerKey: ownerKey,
+          order: options.order,
+          cursor: cursor,
+          cancellation: cancellation,
+        );
+      }
+      if (section == 'following') {
+        return await BilibiliDiscoveryRepository(api).followingVideos(
+          ownerKey: ownerKey,
+          cursor: cursor,
+          cancellation: cancellation,
+        );
+      }
       if (cancellation.isCancelled) {
         throw const AppFailure(FailureKind.cancelled, '请求已取消');
       }
@@ -104,7 +137,17 @@ class BilibiliCatalogRepository implements CatalogRepository {
         signed: search,
         forceRefresh: forceRefresh,
         query: search
-            ? {'search_type': 'video', 'keyword': query.trim(), 'page': page}
+            ? {
+                'search_type': 'video',
+                'keyword': query.trim(),
+                'page': page,
+                if (options.order != VideoOrder.relevance)
+                  'order': options.order == VideoOrder.newest
+                      ? 'pubdate'
+                      : 'click',
+                if (options.duration > 0 && options.duration <= 4)
+                  'duration': options.duration,
+              }
             : {'pn': page, 'ps': limit},
       );
       final raw = data[search ? 'result' : 'list'];
@@ -124,6 +167,70 @@ class BilibiliCatalogRepository implements CatalogRepository {
     } catch (error) {
       return ResultFailure(safeApiFailure(error));
     }
+  }
+
+  Future<Result<PageSlice<VideoSummary>>> _curatedFeed(
+    String section,
+    String? cursor,
+    int limit,
+    bool refresh,
+    CancellationSignal cancellation,
+  ) async {
+    if (limit < 1 || limit > 30) throw const FormatException('Page size');
+    var number = 0, offset = 0;
+    if (cursor != null) {
+      final parts = cursor.split(':');
+      if (parts.first != section ||
+          parts.length != (section == 'weekly' ? 3 : 2)) {
+        throw const FormatException('Feed cursor');
+      }
+      offset = int.parse(parts.last);
+      if (section == 'weekly') number = int.parse(parts[1]);
+      if (offset < 0 || (section == 'weekly' && number < 1)) {
+        throw const FormatException('Feed cursor');
+      }
+    }
+    if (section == 'weekly' && number == 0) {
+      final series = await api.get(
+        '/x/web-interface/popular/series/list',
+        cancellation,
+        signed: true,
+        forceRefresh: refresh,
+        query: {'web_location': 333.934},
+      );
+      for (final value in jsonList(series['list'])) {
+        final candidate = jsonInteger(jsonObject(value)['number']);
+        if (candidate > number) number = candidate;
+      }
+      if (number == 0) {
+        return Success(PageSlice(items: const [], notice: '每周必看暂未更新'));
+      }
+    }
+    final data = await api.get(
+      section == 'weekly'
+          ? '/x/web-interface/popular/series/one'
+          : '/x/web-interface/ranking/v2',
+      cancellation,
+      signed: true,
+      forceRefresh: refresh,
+      query: section == 'weekly'
+          ? {'number': number, 'web_location': 333.934}
+          : {'rid': 0, 'type': 'all'},
+    );
+    final videos = _videos(jsonList(data['list']));
+    final start = offset.clamp(0, videos.length);
+    final end = (start + limit).clamp(0, videos.length);
+    return Success(
+      PageSlice(
+        items: videos.sublist(start, end),
+        nextCursor: end < videos.length
+            ? section == 'weekly'
+                  ? 'weekly:$number:$end'
+                  : 'ranking:$end'
+            : null,
+        notice: section == 'weekly' ? '第 $number 期 · 每周必看' : '全站排行榜',
+      ),
+    );
   }
 
   @override

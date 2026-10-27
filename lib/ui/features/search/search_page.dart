@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../app/providers/repository_providers.dart';
+import '../../../domain/entities/app_models.dart';
 import '../../core/focus/focus_memory.dart';
 import '../../core/theme/tv_theme.dart';
 import '../../core/widgets/tv_button.dart';
@@ -38,6 +39,8 @@ class _SearchPageState extends ConsumerState<_OwnerSearchPage>
   final results = TvGridController();
   TvShellScope? shell;
   bool keyboardWasVisible = false;
+  CatalogOptions filters = const CatalogOptions();
+  CatalogOptions draftFilters = const CatalogOptions();
   String get owner => widget.ownerKey;
   void _entry() => inputFocus.requestFocus();
   @override
@@ -99,6 +102,7 @@ class _SearchPageState extends ConsumerState<_OwnerSearchPage>
       pageId: 'search',
       ownerKey: owner,
       query: previous,
+      options: filters == const CatalogOptions() ? null : filters,
     );
     if (previous == query) {
       if (ref.read(oldProvider).hasValue) {
@@ -134,11 +138,66 @@ class _SearchPageState extends ConsumerState<_OwnerSearchPage>
         pageId: 'search',
         ownerKey: owner,
         query: query,
+        options: filters == const CatalogOptions() ? null : filters,
       ).select((_) => null),
     );
     final keyboard = MediaQuery.viewInsetsOf(context).bottom > 0;
     return Column(
       children: [
+        if (!keyboard)
+          Padding(
+            padding: const EdgeInsets.fromLTRB(24, 8, 24, 0),
+            child: Row(
+              children: [
+                TvButton(
+                  key: const Key('search-order'),
+                  compact: true,
+                  label:
+                      '排序 · ${switch (draftFilters.order) {
+                        VideoOrder.relevance => "综合",
+                        VideoOrder.newest => "最新发布",
+                        VideoOrder.mostViewed => "最多播放",
+                      }}',
+                  onPressed: () => setState(
+                    () => draftFilters = draftFilters.copyWith(
+                      order:
+                          VideoOrder.values[(draftFilters.order.index + 1) %
+                              VideoOrder.values.length],
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                TvButton(
+                  key: const Key('search-duration'),
+                  compact: true,
+                  label:
+                      '时长 · ${const ["全部", "10 分钟以下", "10–30 分钟", "30–60 分钟", "60 分钟以上"][draftFilters.duration]}',
+                  onPressed: () => setState(
+                    () => draftFilters = draftFilters.copyWith(
+                      duration: (draftFilters.duration + 1) % 5,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                TvButton(
+                  key: const Key('search-filter-apply'),
+                  compact: true,
+                  label: draftFilters == filters ? '已应用' : '应用筛选',
+                  onPressed: () => setState(() => filters = draftFilters),
+                ),
+                const SizedBox(width: 10),
+                TvButton(
+                  key: const Key('search-filter-reset'),
+                  compact: true,
+                  label: '重置筛选',
+                  onPressed: () => setState(() {
+                    filters = const CatalogOptions();
+                    draftFilters = filters;
+                  }),
+                ),
+              ],
+            ),
+          ),
         Padding(
           padding: const EdgeInsets.fromLTRB(24, 18, 24, 0),
           child: Row(
@@ -211,9 +270,12 @@ class _SearchPageState extends ConsumerState<_OwnerSearchPage>
               height: 44,
               child: Row(
                 children: [
-                  const Text(
+                  Text(
                     '最近搜索',
-                    style: TextStyle(color: TvColors.muted, fontSize: 11),
+                    style: TextStyle(
+                      color: context.tvColors.muted,
+                      fontSize: 11,
+                    ),
                   ),
                   const SizedBox(width: 10),
                   Expanded(
@@ -282,10 +344,13 @@ class _SearchPageState extends ConsumerState<_OwnerSearchPage>
             padding: const EdgeInsets.fromLTRB(24, 8, 24, 0),
             child: Row(
               children: [
-                const Expanded(
+                Expanded(
                   child: Text(
                     '搜索历史暂不可用，仍可继续搜索',
-                    style: TextStyle(color: TvColors.muted, fontSize: 11),
+                    style: TextStyle(
+                      color: context.tvColors.muted,
+                      fontSize: 11,
+                    ),
                   ),
                 ),
                 TvButton(
@@ -298,10 +363,10 @@ class _SearchPageState extends ConsumerState<_OwnerSearchPage>
           ),
         Expanded(
           child: keyboard
-              ? const Center(
+              ? Center(
                   child: Text(
                     '确认关键词后，按键盘上的搜索键',
-                    style: TextStyle(color: TvColors.muted),
+                    style: TextStyle(color: context.tvColors.muted),
                   ),
                 )
               : CatalogPage(
@@ -311,6 +376,7 @@ class _SearchPageState extends ConsumerState<_OwnerSearchPage>
                   title: '搜索',
                   subtitle: query.isEmpty ? '输入关键词，发现想看的内容' : '“$query”的搜索结果',
                   query: query,
+                  options: filters,
                   registerEntry: false,
                   controller: results,
                   onTop: submitFocus.requestFocus,

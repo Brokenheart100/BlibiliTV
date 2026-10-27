@@ -131,6 +131,7 @@ void main() {
       await key(LogicalKeyboardKey.arrowUp);
       await key(LogicalKeyboardKey.arrowUp);
       await key(LogicalKeyboardKey.arrowRight);
+      await key(LogicalKeyboardKey.arrowRight);
       expect(FocusManager.instance.primaryFocus?.debugLabel, 'feed-popular');
       await key(LogicalKeyboardKey.select);
       final popular = catalogViewModelProvider(

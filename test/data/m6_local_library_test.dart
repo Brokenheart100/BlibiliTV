@@ -13,6 +13,31 @@ import '../support/memory_preferences.dart';
 import '../support/fake_library.dart';
 
 void main() {
+  test(
+    'v2 metadata and progress survive adding nullable creator avatars',
+    () async {
+      final verifier = SchemaVerifier(GeneratedHelper());
+      final schema = await verifier.schemaAt(2);
+      schema.rawDatabase.execute(
+        "INSERT INTO history_videos (owner_key,video_id,title,creator,duration_seconds,view_count) VALUES ('guest','BVold','保留标题','保留作者',120,1)",
+        [],
+      );
+      schema.rawDatabase.execute(
+        "INSERT INTO watch_progress_rows VALUES ('guest','BVold','11',25000,120000,1700000000)",
+        [],
+      );
+      final db = AppDatabase(schema.newConnection());
+      addTearDown(db.close);
+      await verifier.migrateAndValidate(db, 3);
+      final item = (await DriftHistoryRepository(db).list('guest'))
+          .valueOrThrow
+          .items
+          .single;
+      expect(item.video.title, '保留标题');
+      expect(item.video.creatorAvatarUrl, isNull);
+      expect(item.position.inSeconds, 25);
+    },
+  );
   test('v1 migration preserves resume and search rows and adds metadata without guessing titles', () async {
     final verifier = SchemaVerifier(GeneratedHelper());
     final schema = await verifier.schemaAt(1);
@@ -26,7 +51,7 @@ void main() {
     );
     final db = AppDatabase(schema.newConnection());
     addTearDown(db.close);
-    await verifier.migrateAndValidate(db, 2);
+    await verifier.migrateAndValidate(db, 3);
     final history = (await DriftHistoryRepository(db).list('guest'))
         .valueOrThrow;
     expect(history.items.single.position.inSeconds, 25);
@@ -52,7 +77,11 @@ void main() {
           duration: const Duration(minutes: 2),
         ),
       );
-      await history.rememberVideo(owner, libraryVideo(video));
+      await history.rememberVideo(
+        owner,
+        libraryVideo(video)
+            .copyWith(creatorAvatarUrl: 'https://example.invalid/creator.jpg'),
+      );
     }
 
     for (var i = 0; i < 26; i++) {
@@ -65,6 +94,10 @@ void main() {
     expect(page.items, hasLength(24));
     expect(page.items.first.partId, '1');
     expect(page.items.first.video.title, '合成视频 BV0');
+    expect(
+      page.items.first.video.creatorAvatarUrl,
+      'https://example.invalid/creator.jpg',
+    );
     expect(
       (await history.list('guest', cursor: page.nextCursor)).valueOrThrow.items,
       hasLength(2),

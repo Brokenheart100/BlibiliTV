@@ -1,0 +1,70 @@
+{
+  "status": "failed",
+  "requestedSeconds": 60,
+  "physicalTv": false,
+  "manualLipSyncVerified": false,
+  "comparisonWindows": [
+    {
+      "mode": "off",
+      "elapsedMs": 10014,
+      "frameCount": 555,
+      "buildP95Ms": 0.91,
+      "rasterP95Ms": 15.191,
+      "rasterP99Ms": 17.484,
+      "overBudgetRatio": 0.025225225225225224,
+      "clockSamples": 0,
+      "disabledTransitions": 0,
+      "canvasFps": 60,
+      "density": 40
+    },
+    {
+      "mode": "subtitles",
+      "elapsedMs": 10031,
+      "frameCount": 546,
+      "buildP95Ms": 1.211,
+      "rasterP95Ms": 16.39,
+      "rasterP99Ms": 19.19,
+      "overBudgetRatio": 0.038461538461538464,
+      "clockSamples": 201,
+      "disabledTransitions": 0,
+      "canvasFps": 0,
+      "density": 40
+    },
+    {
+      "mode": "both",
+      "elapsedMs": 10036,
+      "frameCount": 564,
+      "buildP95Ms": 0.825,
+      "rasterP95Ms": 4.537,
+      "rasterP99Ms": 13.643,
+      "overBudgetRatio": 0.0035460992907801418,
+      "clockSamples": 201,
+      "disabledTransitions": 1,
+      "canvasFps": 30,
+      "density": 20
+    }
+  ],
+  "subtitleTimingSamples": [],
+  "overlayMetrics": {
+    "created": 4,
+    "disposed": 4,
+    "active": 0,
+    "maximum": 1,
+    "clockSamples": 908,
+    "captionChanges": 55,
+    "admittedDanmaku": 98,
+    "cleared": 9,
+    "maximumDanmaku": 40,
+    "activeSchedulers": 0,
+    "lowLoadTransitions": 1,
+    "disabledTransitions": 1,
+    "canvasFps": 30,
+    "density": 20,
+    "slowFramePercent": 28,
+    "canvasDrawTickMs": 0,
+    "renderedDanmaku": 0,
+    "maximumRenderedDanmaku": 21
+  },
+  "hostRecordedAtUtc": "2026-10-26T06:54:33.032298Z",
+  "hostDriverElapsedMs": 75092
+}

@@ -1,0 +1,21 @@
+{
+  "recordedAtUtc": "2026-10-27T07:00:38.2774602Z",
+  "flutterTests": 236,
+  "flutterTestsStatus": "passed",
+  "staticAnalysis": "No errors (Flutter MCP)",
+  "formatting": "passed",
+  "device": "API 36 x86_64 emulator-5554",
+  "accountAcceptance": "read-only user-confirmed QR login",
+  "avatarRendering": "passed",
+  "collectionPagination": "passed",
+  "folderNavigation": "passed",
+  "historySidebar": "passed",
+  "restoredLogin": "passed after Flutter hot restart",
+  "hotReload": "succeeded",
+  "applicationRuntimeErrors": 0,
+  "remoteWrites": 0,
+  "pgcPlayback": "not implemented; followed collections and read-only details only",
+  "physicalTv": "not tested",
+  "arm": "not tested",
+  "releasePublished": false
+}

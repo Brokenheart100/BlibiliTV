@@ -128,10 +128,32 @@ class BilibiliPlaybackRepository implements PlaybackRepository {
           qualities: qualityOptions,
           audioTracks: audioOptions.values.toList(),
           audioId: jsonInteger(audio['id']),
+          videoDash: _dashRepresentation(video, 'video/mp4'),
+          audioDash: _dashRepresentation(audio, 'audio/mp4'),
         ),
       );
     } catch (error) {
       return ResultFailure(safeApiFailure(error));
     }
   }
+}
+
+DashRepresentation? _dashRepresentation(
+  Map<String, Object?> track,
+  String mime,
+) {
+  final raw = track['SegmentBase'] ?? track['segment_base'];
+  if (raw == null) return null;
+  final base = jsonObject(raw);
+  return DashRepresentation(
+    codecs: track['codecs']! as String,
+    mimeType: (track['mimeType'] ?? track['mime_type'] ?? mime) as String,
+    bandwidth: jsonInteger(track['bandwidth']),
+    initializationRange:
+        (base['Initialization'] ?? base['initialization'])! as String,
+    indexRange: (base['indexRange'] ?? base['index_range'])! as String,
+    width: jsonInteger(track['width'] ?? 0),
+    height: jsonInteger(track['height'] ?? 0),
+    audioSamplingRate: jsonInteger(track['audioSamplingRate'] ?? 0),
+  );
 }

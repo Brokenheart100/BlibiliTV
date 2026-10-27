@@ -1,0 +1,33 @@
+{
+  "status": "passed",
+  "recordedAtUtc": "2026-10-26T15:24:16.070081+00:00",
+  "platform": "Android TV API 36 x86_64; Mamba_TV_API36; emulator-5556; host GPU; profile",
+  "soakSeconds": 900,
+  "soakSeeks": 44,
+  "ordinarySeeks": 11,
+  "pausedSeeks": 2,
+  "rateSeeks": 4,
+  "seekReturnedMs": {
+    "minimum": 261,
+    "maximum": 580
+  },
+  "maximumPeriodicRecordedAvsyncMs": 0.044,
+  "maximumAllRecordedAvsyncMs": 139.684,
+  "nativeErrorEvents": [],
+  "unitAndWidgetTests": 207,
+  "analysis": "no issues found; fatal-infos",
+  "captureCount": 88,
+  "distinctCenterCrops": 43,
+  "observedAllBlackCaptures": 0,
+  "captureScope": "2 host ADB screenshots per soak seek, 2 seconds apart; central crop; public tutorial includes static slides; not a proof against all frozen frames",
+  "manualLipSyncVerified": false,
+  "physicalTv": false,
+  "workspaceSourcesSha256": {
+    "lib/data/services/playback/media_kit_engine.dart": "744a06dbd2f964b4be24b26edea48868f7f40a572f4df74d074da82c8f1ecc2b",
+    "lib/ui/features/player/view_models/player_view_model.dart": "78999a987784cca7afb8c9164699142b2b63e502a2576099d734c470f9653b91",
+    "lib/ui/features/player/views/player_page.dart": "52dfafe55958c8849073f2ecdc8608b246f0d787fa10a6bb4e22c976ae964d97",
+    "integration_test/playback_seek_sync_test.dart": "5c15e037e9a16bbb4b6b5860218d1e783bfd3a89a0e6a815811807bada6ce231"
+  },
+  "profileApkSha256": "f6ae203ad5d52d17d21e1095ef0646c7482bf6e252375f47a4ee3206008e8241",
+  "rawReport": "seek-validation.json"
+}

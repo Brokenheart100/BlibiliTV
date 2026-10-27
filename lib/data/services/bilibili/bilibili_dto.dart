@@ -41,6 +41,21 @@ Object? readCreator(Map<dynamic, dynamic> json, String _) =>
     json['owner'] is Map<Object?, Object?>
     ? (json['owner']! as Map<Object?, Object?>)['name']
     : json['author'];
+String? avatarUrl(Object? value) {
+  if (value is! String || value.isEmpty) return null;
+  final uri = Uri.tryParse(value.startsWith('//') ? 'https:$value' : value);
+  if (uri == null || uri.host.isEmpty || uri.userInfo.isNotEmpty) return null;
+  return switch (uri.scheme) {
+    'https' => uri.toString(),
+    'http' => uri.replace(scheme: 'https').toString(),
+    _ => null,
+  };
+}
+
+Object? readCreatorAvatar(Map<dynamic, dynamic> json, String _) =>
+    json['owner'] is Map<Object?, Object?>
+    ? (json['owner']! as Map<Object?, Object?>)['face']
+    : json['upic'];
 Object? readViews(Map<dynamic, dynamic> json, String _) =>
     json['stat'] is Map<Object?, Object?>
     ? (json['stat']! as Map<Object?, Object?>)['view']
@@ -57,6 +72,7 @@ class BiliVideoDto {
     required this.creator,
     required this.duration,
     required this.views,
+    this.creatorAvatarUrl,
   });
   factory BiliVideoDto.fromJson(Map<String, Object?> json) =>
       _$BiliVideoDtoFromJson(json);
@@ -65,6 +81,8 @@ class BiliVideoDto {
   final String pic;
   @JsonKey(readValue: readCreator)
   final String creator;
+  @JsonKey(readValue: readCreatorAvatar, fromJson: avatarUrl)
+  final String? creatorAvatarUrl;
   @JsonKey(fromJson: durationSeconds)
   final int duration;
   @JsonKey(readValue: readViews, fromJson: jsonInteger)

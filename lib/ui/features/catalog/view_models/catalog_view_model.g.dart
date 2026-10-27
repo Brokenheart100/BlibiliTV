@@ -16,7 +16,13 @@ final class CatalogViewModelProvider
     extends $AsyncNotifierProvider<CatalogViewModel, CatalogState> {
   CatalogViewModelProvider._({
     required CatalogViewModelFamily super.from,
-    required ({String section, String pageId, String ownerKey, String query})
+    required ({
+      String section,
+      String pageId,
+      String ownerKey,
+      String query,
+      CatalogOptions? options,
+    })
     super.argument,
   }) : super(
          retry: null,
@@ -51,7 +57,7 @@ final class CatalogViewModelProvider
   }
 }
 
-String _$catalogViewModelHash() => r'2d5b9e2d25f672f9d2114176dd8463f19ebe79e8';
+String _$catalogViewModelHash() => r'804315f757421c490cac7a6048ad36e39efd11fb';
 
 final class CatalogViewModelFamily extends $Family
     with
@@ -60,7 +66,13 @@ final class CatalogViewModelFamily extends $Family
           AsyncValue<CatalogState>,
           CatalogState,
           FutureOr<CatalogState>,
-          ({String section, String pageId, String ownerKey, String query})
+          ({
+            String section,
+            String pageId,
+            String ownerKey,
+            String query,
+            CatalogOptions? options,
+          })
         > {
   CatalogViewModelFamily._()
     : super(
@@ -76,12 +88,14 @@ final class CatalogViewModelFamily extends $Family
     required String pageId,
     required String ownerKey,
     String query = '',
+    CatalogOptions? options,
   }) => CatalogViewModelProvider._(
     argument: (
       section: section,
       pageId: pageId,
       ownerKey: ownerKey,
       query: query,
+      options: options,
     ),
     from: this,
   );
@@ -93,17 +107,25 @@ final class CatalogViewModelFamily extends $Family
 abstract class _$CatalogViewModel extends $AsyncNotifier<CatalogState> {
   late final _$args =
       ref.$arg
-          as ({String section, String pageId, String ownerKey, String query});
+          as ({
+            String section,
+            String pageId,
+            String ownerKey,
+            String query,
+            CatalogOptions? options,
+          });
   String get section => _$args.section;
   String get pageId => _$args.pageId;
   String get ownerKey => _$args.ownerKey;
   String get query => _$args.query;
+  CatalogOptions? get options => _$args.options;
 
   FutureOr<CatalogState> build({
     required String section,
     required String pageId,
     required String ownerKey,
     String query = '',
+    CatalogOptions? options,
   });
   @$mustCallSuper
   @override
@@ -124,6 +146,7 @@ abstract class _$CatalogViewModel extends $AsyncNotifier<CatalogState> {
         pageId: _$args.pageId,
         ownerKey: _$args.ownerKey,
         query: _$args.query,
+        options: _$args.options,
       ),
     );
   }

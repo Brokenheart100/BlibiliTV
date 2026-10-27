@@ -13,6 +13,7 @@ import '../../../core/theme/tv_theme.dart';
 import '../../../core/widgets/glass_panel.dart';
 import '../../../core/widgets/tv_button.dart';
 import '../../../core/widgets/tv_dialog.dart';
+import 'personal_home_view.dart';
 
 class AccountPage extends ConsumerStatefulWidget {
   const AccountPage({super.key});
@@ -26,7 +27,15 @@ class _AccountPageState extends ConsumerState<AccountPage> {
   final records = FocusNode(debugLabel: 'account-records');
   TvShellScope? shell;
   bool busy = false;
-  void _entry() => primary.requestFocus();
+  final personal = PersonalHomeController();
+  void _entry() {
+    if (ref.read(sessionProvider).value?.isAuthenticated == true) {
+      personal.focusEntry();
+    } else {
+      primary.requestFocus();
+    }
+  }
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -90,6 +99,18 @@ class _AccountPageState extends ConsumerState<AccountPage> {
     final session =
         state.value ?? const Session(status: SessionStatus.restoring);
     final auth = session.isAuthenticated;
+    if (auth) {
+      return PersonalHomeView(
+        key: ValueKey(session.scopeKey),
+        session: session,
+        controller: personal,
+        logoutNode: primary,
+        busy: busy,
+        onLogout: () {
+          if (!busy) unawaited(_logout());
+        },
+      );
+    }
     final recover =
         session.status == SessionStatus.offline ||
         session.status == SessionStatus.storageFailure;
@@ -109,7 +130,10 @@ class _AccountPageState extends ConsumerState<AccountPage> {
         children: [
           Text('我的', style: Theme.of(context).textTheme.headlineLarge),
           const SizedBox(height: 8),
-          const Text('让喜欢的内容，跟随你的账号', style: TextStyle(color: TvColors.muted)),
+          Text(
+            '让喜欢的内容，跟随你的账号',
+            style: TextStyle(color: context.tvColors.muted),
+          ),
           const SizedBox(height: 28),
           Expanded(
             child: SingleChildScrollView(
@@ -123,7 +147,7 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                           ? CupertinoIcons.person_crop_circle_fill
                           : CupertinoIcons.person_crop_circle,
                       size: 56,
-                      color: TvColors.accent,
+                      color: context.tvColors.accent,
                     ),
                     const SizedBox(height: 20),
                     Text(
@@ -137,7 +161,7 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                           (auth
                               ? '账号已在本机安全保存，观看记录与个人列表按账号分别展示。'
                               : '游客可浏览和播放公开视频。登录后可按账号保存播放位置。'),
-                      style: const TextStyle(color: TvColors.muted),
+                      style: TextStyle(color: context.tvColors.muted),
                     ),
                     const SizedBox(height: 26),
                     TvButton(

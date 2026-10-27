@@ -6,6 +6,7 @@ abstract interface class CatalogRepository {
     required String section,
     required String ownerKey,
     String query = '',
+    CatalogOptions options = const CatalogOptions(),
     String? cursor,
     int limit = 12,
     bool forceRefresh = false,

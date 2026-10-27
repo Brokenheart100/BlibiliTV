@@ -743,6 +743,17 @@ class $HistoryVideosTable extends HistoryVideos
     type: DriftSqlType.string,
     requiredDuringInsert: false,
   );
+  static const VerificationMeta _creatorAvatarUrlMeta = const VerificationMeta(
+    'creatorAvatarUrl',
+  );
+  @override
+  late final GeneratedColumn<String> creatorAvatarUrl = GeneratedColumn<String>(
+    'creator_avatar_url',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
   static const VerificationMeta _durationSecondsMeta = const VerificationMeta(
     'durationSeconds',
   );
@@ -773,6 +784,7 @@ class $HistoryVideosTable extends HistoryVideos
     title,
     creator,
     coverUrl,
+    creatorAvatarUrl,
     durationSeconds,
     viewCount,
   ];
@@ -826,6 +838,15 @@ class $HistoryVideosTable extends HistoryVideos
         coverUrl.isAcceptableOrUnknown(data['cover_url']!, _coverUrlMeta),
       );
     }
+    if (data.containsKey('creator_avatar_url')) {
+      context.handle(
+        _creatorAvatarUrlMeta,
+        creatorAvatarUrl.isAcceptableOrUnknown(
+          data['creator_avatar_url']!,
+          _creatorAvatarUrlMeta,
+        ),
+      );
+    }
     if (data.containsKey('duration_seconds')) {
       context.handle(
         _durationSecondsMeta,
@@ -872,6 +893,10 @@ class $HistoryVideosTable extends HistoryVideos
         DriftSqlType.string,
         data['${effectivePrefix}cover_url'],
       ),
+      creatorAvatarUrl: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}creator_avatar_url'],
+      ),
       durationSeconds: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
         data['${effectivePrefix}duration_seconds'],
@@ -895,6 +920,7 @@ class HistoryVideo extends DataClass implements Insertable<HistoryVideo> {
   final String title;
   final String creator;
   final String? coverUrl;
+  final String? creatorAvatarUrl;
   final int durationSeconds;
   final int viewCount;
   const HistoryVideo({
@@ -903,6 +929,7 @@ class HistoryVideo extends DataClass implements Insertable<HistoryVideo> {
     required this.title,
     required this.creator,
     this.coverUrl,
+    this.creatorAvatarUrl,
     required this.durationSeconds,
     required this.viewCount,
   });
@@ -915,6 +942,9 @@ class HistoryVideo extends DataClass implements Insertable<HistoryVideo> {
     map['creator'] = Variable<String>(creator);
     if (!nullToAbsent || coverUrl != null) {
       map['cover_url'] = Variable<String>(coverUrl);
+    }
+    if (!nullToAbsent || creatorAvatarUrl != null) {
+      map['creator_avatar_url'] = Variable<String>(creatorAvatarUrl);
     }
     map['duration_seconds'] = Variable<int>(durationSeconds);
     map['view_count'] = Variable<int>(viewCount);
@@ -930,6 +960,9 @@ class HistoryVideo extends DataClass implements Insertable<HistoryVideo> {
       coverUrl: coverUrl == null && nullToAbsent
           ? const Value.absent()
           : Value(coverUrl),
+      creatorAvatarUrl: creatorAvatarUrl == null && nullToAbsent
+          ? const Value.absent()
+          : Value(creatorAvatarUrl),
       durationSeconds: Value(durationSeconds),
       viewCount: Value(viewCount),
     );
@@ -946,6 +979,7 @@ class HistoryVideo extends DataClass implements Insertable<HistoryVideo> {
       title: serializer.fromJson<String>(json['title']),
       creator: serializer.fromJson<String>(json['creator']),
       coverUrl: serializer.fromJson<String?>(json['coverUrl']),
+      creatorAvatarUrl: serializer.fromJson<String?>(json['creatorAvatarUrl']),
       durationSeconds: serializer.fromJson<int>(json['durationSeconds']),
       viewCount: serializer.fromJson<int>(json['viewCount']),
     );
@@ -959,6 +993,7 @@ class HistoryVideo extends DataClass implements Insertable<HistoryVideo> {
       'title': serializer.toJson<String>(title),
       'creator': serializer.toJson<String>(creator),
       'coverUrl': serializer.toJson<String?>(coverUrl),
+      'creatorAvatarUrl': serializer.toJson<String?>(creatorAvatarUrl),
       'durationSeconds': serializer.toJson<int>(durationSeconds),
       'viewCount': serializer.toJson<int>(viewCount),
     };
@@ -970,6 +1005,7 @@ class HistoryVideo extends DataClass implements Insertable<HistoryVideo> {
     String? title,
     String? creator,
     Value<String?> coverUrl = const Value.absent(),
+    Value<String?> creatorAvatarUrl = const Value.absent(),
     int? durationSeconds,
     int? viewCount,
   }) => HistoryVideo(
@@ -978,6 +1014,9 @@ class HistoryVideo extends DataClass implements Insertable<HistoryVideo> {
     title: title ?? this.title,
     creator: creator ?? this.creator,
     coverUrl: coverUrl.present ? coverUrl.value : this.coverUrl,
+    creatorAvatarUrl: creatorAvatarUrl.present
+        ? creatorAvatarUrl.value
+        : this.creatorAvatarUrl,
     durationSeconds: durationSeconds ?? this.durationSeconds,
     viewCount: viewCount ?? this.viewCount,
   );
@@ -988,6 +1027,9 @@ class HistoryVideo extends DataClass implements Insertable<HistoryVideo> {
       title: data.title.present ? data.title.value : this.title,
       creator: data.creator.present ? data.creator.value : this.creator,
       coverUrl: data.coverUrl.present ? data.coverUrl.value : this.coverUrl,
+      creatorAvatarUrl: data.creatorAvatarUrl.present
+          ? data.creatorAvatarUrl.value
+          : this.creatorAvatarUrl,
       durationSeconds: data.durationSeconds.present
           ? data.durationSeconds.value
           : this.durationSeconds,
@@ -1003,6 +1045,7 @@ class HistoryVideo extends DataClass implements Insertable<HistoryVideo> {
           ..write('title: $title, ')
           ..write('creator: $creator, ')
           ..write('coverUrl: $coverUrl, ')
+          ..write('creatorAvatarUrl: $creatorAvatarUrl, ')
           ..write('durationSeconds: $durationSeconds, ')
           ..write('viewCount: $viewCount')
           ..write(')'))
@@ -1016,6 +1059,7 @@ class HistoryVideo extends DataClass implements Insertable<HistoryVideo> {
     title,
     creator,
     coverUrl,
+    creatorAvatarUrl,
     durationSeconds,
     viewCount,
   );
@@ -1028,6 +1072,7 @@ class HistoryVideo extends DataClass implements Insertable<HistoryVideo> {
           other.title == this.title &&
           other.creator == this.creator &&
           other.coverUrl == this.coverUrl &&
+          other.creatorAvatarUrl == this.creatorAvatarUrl &&
           other.durationSeconds == this.durationSeconds &&
           other.viewCount == this.viewCount);
 }
@@ -1038,6 +1083,7 @@ class HistoryVideosCompanion extends UpdateCompanion<HistoryVideo> {
   final Value<String> title;
   final Value<String> creator;
   final Value<String?> coverUrl;
+  final Value<String?> creatorAvatarUrl;
   final Value<int> durationSeconds;
   final Value<int> viewCount;
   final Value<int> rowid;
@@ -1047,6 +1093,7 @@ class HistoryVideosCompanion extends UpdateCompanion<HistoryVideo> {
     this.title = const Value.absent(),
     this.creator = const Value.absent(),
     this.coverUrl = const Value.absent(),
+    this.creatorAvatarUrl = const Value.absent(),
     this.durationSeconds = const Value.absent(),
     this.viewCount = const Value.absent(),
     this.rowid = const Value.absent(),
@@ -1057,6 +1104,7 @@ class HistoryVideosCompanion extends UpdateCompanion<HistoryVideo> {
     required String title,
     required String creator,
     this.coverUrl = const Value.absent(),
+    this.creatorAvatarUrl = const Value.absent(),
     required int durationSeconds,
     this.viewCount = const Value.absent(),
     this.rowid = const Value.absent(),
@@ -1071,6 +1119,7 @@ class HistoryVideosCompanion extends UpdateCompanion<HistoryVideo> {
     Expression<String>? title,
     Expression<String>? creator,
     Expression<String>? coverUrl,
+    Expression<String>? creatorAvatarUrl,
     Expression<int>? durationSeconds,
     Expression<int>? viewCount,
     Expression<int>? rowid,
@@ -1081,6 +1130,7 @@ class HistoryVideosCompanion extends UpdateCompanion<HistoryVideo> {
       if (title != null) 'title': title,
       if (creator != null) 'creator': creator,
       if (coverUrl != null) 'cover_url': coverUrl,
+      if (creatorAvatarUrl != null) 'creator_avatar_url': creatorAvatarUrl,
       if (durationSeconds != null) 'duration_seconds': durationSeconds,
       if (viewCount != null) 'view_count': viewCount,
       if (rowid != null) 'rowid': rowid,
@@ -1093,6 +1143,7 @@ class HistoryVideosCompanion extends UpdateCompanion<HistoryVideo> {
     Value<String>? title,
     Value<String>? creator,
     Value<String?>? coverUrl,
+    Value<String?>? creatorAvatarUrl,
     Value<int>? durationSeconds,
     Value<int>? viewCount,
     Value<int>? rowid,
@@ -1103,6 +1154,7 @@ class HistoryVideosCompanion extends UpdateCompanion<HistoryVideo> {
       title: title ?? this.title,
       creator: creator ?? this.creator,
       coverUrl: coverUrl ?? this.coverUrl,
+      creatorAvatarUrl: creatorAvatarUrl ?? this.creatorAvatarUrl,
       durationSeconds: durationSeconds ?? this.durationSeconds,
       viewCount: viewCount ?? this.viewCount,
       rowid: rowid ?? this.rowid,
@@ -1127,6 +1179,9 @@ class HistoryVideosCompanion extends UpdateCompanion<HistoryVideo> {
     if (coverUrl.present) {
       map['cover_url'] = Variable<String>(coverUrl.value);
     }
+    if (creatorAvatarUrl.present) {
+      map['creator_avatar_url'] = Variable<String>(creatorAvatarUrl.value);
+    }
     if (durationSeconds.present) {
       map['duration_seconds'] = Variable<int>(durationSeconds.value);
     }
@@ -1147,6 +1202,7 @@ class HistoryVideosCompanion extends UpdateCompanion<HistoryVideo> {
           ..write('title: $title, ')
           ..write('creator: $creator, ')
           ..write('coverUrl: $coverUrl, ')
+          ..write('creatorAvatarUrl: $creatorAvatarUrl, ')
           ..write('durationSeconds: $durationSeconds, ')
           ..write('viewCount: $viewCount, ')
           ..write('rowid: $rowid')
@@ -1596,6 +1652,7 @@ typedef $$HistoryVideosTableCreateCompanionBuilder =
       required String title,
       required String creator,
       Value<String?> coverUrl,
+      Value<String?> creatorAvatarUrl,
       required int durationSeconds,
       Value<int> viewCount,
       Value<int> rowid,
@@ -1607,6 +1664,7 @@ typedef $$HistoryVideosTableUpdateCompanionBuilder =
       Value<String> title,
       Value<String> creator,
       Value<String?> coverUrl,
+      Value<String?> creatorAvatarUrl,
       Value<int> durationSeconds,
       Value<int> viewCount,
       Value<int> rowid,
@@ -1643,6 +1701,11 @@ class $$HistoryVideosTableFilterComposer
 
   ColumnFilters<String> get coverUrl => $composableBuilder(
     column: $table.coverUrl,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get creatorAvatarUrl => $composableBuilder(
+    column: $table.creatorAvatarUrl,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -1691,6 +1754,11 @@ class $$HistoryVideosTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get creatorAvatarUrl => $composableBuilder(
+    column: $table.creatorAvatarUrl,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<int> get durationSeconds => $composableBuilder(
     column: $table.durationSeconds,
     builder: (column) => ColumnOrderings(column),
@@ -1725,6 +1793,11 @@ class $$HistoryVideosTableAnnotationComposer
 
   GeneratedColumn<String> get coverUrl =>
       $composableBuilder(column: $table.coverUrl, builder: (column) => column);
+
+  GeneratedColumn<String> get creatorAvatarUrl => $composableBuilder(
+    column: $table.creatorAvatarUrl,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<int> get durationSeconds => $composableBuilder(
     column: $table.durationSeconds,
@@ -1771,6 +1844,7 @@ class $$HistoryVideosTableTableManager
                 Value<String> title = const Value.absent(),
                 Value<String> creator = const Value.absent(),
                 Value<String?> coverUrl = const Value.absent(),
+                Value<String?> creatorAvatarUrl = const Value.absent(),
                 Value<int> durationSeconds = const Value.absent(),
                 Value<int> viewCount = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
@@ -1780,6 +1854,7 @@ class $$HistoryVideosTableTableManager
                 title: title,
                 creator: creator,
                 coverUrl: coverUrl,
+                creatorAvatarUrl: creatorAvatarUrl,
                 durationSeconds: durationSeconds,
                 viewCount: viewCount,
                 rowid: rowid,
@@ -1791,6 +1866,7 @@ class $$HistoryVideosTableTableManager
                 required String title,
                 required String creator,
                 Value<String?> coverUrl = const Value.absent(),
+                Value<String?> creatorAvatarUrl = const Value.absent(),
                 required int durationSeconds,
                 Value<int> viewCount = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
@@ -1800,6 +1876,7 @@ class $$HistoryVideosTableTableManager
                 title: title,
                 creator: creator,
                 coverUrl: coverUrl,
+                creatorAvatarUrl: creatorAvatarUrl,
                 durationSeconds: durationSeconds,
                 viewCount: viewCount,
                 rowid: rowid,

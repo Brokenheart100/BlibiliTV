@@ -11,6 +11,7 @@ import 'package:media_kit_video/src/video_controller/android_video_controller/an
 import '../../../core/result.dart';
 import '../../../domain/playback/playback.dart';
 import '../bilibili/bilibili_api.dart';
+import 'native_buffer_ranges.dart';
 
 class MediaKitEngine implements PlaybackEngine {
   MediaKitEngine({this.onOpenStage}) {
@@ -36,11 +37,24 @@ class MediaKitEngine implements PlaybackEngine {
       player.stream.buffering.listen(
         (v) => _emit(_snapshot.copyWith(buffering: v)),
       ),
+      player.stream.buffer.listen((value) {
+        if (player.platform is! NativePlayer && !_changingTimeline) {
+          _emit(_snapshot.copyWith(bufferedPosition: value));
+        }
+      }),
       player.stream.completed.listen(
         (v) => _emit(_snapshot.copyWith(completed: v)),
       ),
       player.stream.position.listen(
-        (v) => _emit(_snapshot.copyWith(position: v)),
+        (v) => _emit(
+          _snapshot.copyWith(
+            position: v,
+            bufferedPosition:
+                player.platform is NativePlayer && !_changingTimeline
+                ? nativeBufferedEndAt(_bufferRanges, v)
+                : _snapshot.bufferedPosition,
+          ),
+        ),
       ),
       player.stream.duration.listen(
         (v) => _emit(_snapshot.copyWith(duration: v)),
@@ -74,7 +88,35 @@ class MediaKitEngine implements PlaybackEngine {
   final _subscriptions = <StreamSubscription<Object?>>[];
   EngineSnapshot _snapshot = const EngineSnapshot();
   bool _disposed = false;
+  bool _changingTimeline = false;
+  int _bufferEpoch = 0;
+  bool _observingBuffer = false;
+  List<NativeBufferRange> _bufferRanges = const [];
   Media? _audio;
+  Future<void>? _configuration;
+  Future<void> _configureNative() => _configuration ??= () async {
+    final native = player.platform;
+    if (native is NativePlayer) {
+      // media_kit disables this by default. During an exact seek the decoder
+      // can discard frames preceding the target instead of spending time
+      // decoding the entire preceding GOP while audio is already at the target.
+      await native.setProperty('hr-seek-framedrop', 'yes');
+      await native.setProperty('initial-audio-sync', 'yes');
+      // demuxer-cache-time can remain at an old packet timestamp for DASH.
+      // Seekable ranges describe data actually available for cached seeking.
+      await native.observeProperty('demuxer-cache-state', (raw) async {
+        if (_disposed) return;
+        _bufferRanges = parseNativeBufferRanges(raw);
+        if (!_changingTimeline) {
+          final end = nativeBufferedEndAt(_bufferRanges, _snapshot.position);
+          if (end != _snapshot.bufferedPosition) {
+            _emit(_snapshot.copyWith(bufferedPosition: end));
+          }
+        }
+      });
+      _observingBuffer = true;
+    }
+  }();
   @override
   EngineSnapshot get snapshot => _snapshot;
   @override
@@ -89,6 +131,36 @@ class MediaKitEngine implements PlaybackEngine {
     if (_disposed) throw const AppFailure(FailureKind.cancelled, '已停止播放');
   }
 
+  int _invalidateBuffer() {
+    _changingTimeline = true;
+    _bufferRanges = const [];
+    _emit(_snapshot.copyWith(bufferedPosition: Duration.zero));
+    return ++_bufferEpoch;
+  }
+
+  Future<void> _resumeBufferUpdates(int epoch) async {
+    var buffered = Duration.zero;
+    List<NativeBufferRange> ranges = const [];
+    final native = player.platform;
+    if (native is NativePlayer) {
+      try {
+        // Read current ranges after the seek, not media_kit's stale endpoint.
+        ranges = parseNativeBufferRanges(
+          await native.getProperty('demuxer-cache-state'),
+        );
+        buffered = nativeBufferedEndAt(ranges, _snapshot.position);
+      } catch (_) {
+        // Unknown cache position must stay empty, not become a fake estimate.
+      }
+    } else {
+      buffered = player.state.buffer;
+    }
+    if (_disposed || epoch != _bufferEpoch) return;
+    _bufferRanges = ranges;
+    _changingTimeline = false;
+    _emit(_snapshot.copyWith(bufferedPosition: buffered));
+  }
+
   @override
   Future<void> open(
     PlaybackSource source, {
@@ -96,7 +168,9 @@ class MediaKitEngine implements PlaybackEngine {
     bool play = true,
   }) async {
     _check();
+    final bufferEpoch = _invalidateBuffer();
     try {
+      await _configureNative();
       // Retain both resources with the fixed CDN headers. The primary file
       // must finish loading before audio-add can use its native stream options.
       _audio = Media(source.audioUrl, httpHeaders: bilibiliMediaHeaders);
@@ -129,6 +203,11 @@ class MediaKitEngine implements PlaybackEngine {
         await controller.waitUntilFirstFrameRendered.timeout(
           const Duration(seconds: 45),
         );
+        await _waitUntilSettled(player.state.position).timeout(
+          const Duration(seconds: 10),
+          onTimeout: () =>
+              throw const AppFailure(FailureKind.timeout, '音画未就绪，正在重新加载'),
+        );
       } else {
         onOpenStage?.call('pause_position');
         await player.pause();
@@ -148,9 +227,14 @@ class MediaKitEngine implements PlaybackEngine {
       _check();
       if (startAt > Duration.zero &&
           _snapshot.position < startAt - const Duration(seconds: 2)) {
-        await player.seek(startAt);
+        if (play) {
+          await seek(startAt);
+        } else {
+          await player.seek(startAt);
+        }
       }
       if (_snapshot.failure case final AppFailure failure) throw failure;
+      await _resumeBufferUpdates(bufferEpoch);
       onOpenStage?.call('ready');
     } on AppFailure {
       rethrow;
@@ -171,19 +255,69 @@ class MediaKitEngine implements PlaybackEngine {
   }
 
   @override
-  Future<void> seek(Duration position) async {
+  Future<void> seek(Duration position) => _seekAndWait(position).timeout(
+    const Duration(seconds: 10),
+    onTimeout: () =>
+        throw const AppFailure(FailureKind.timeout, '跳转后音画未恢复，正在重新加载'),
+  );
+
+  Future<void> _seekAndWait(Duration position) async {
     _check();
+    final bufferEpoch = _invalidateBuffer();
     await player.seek(position);
-    // The native command is queued before the position event is delivered.
-    // Confirm it before another relative seek or progress save reads the clock.
-    if ((_snapshot.position - position).abs() > const Duration(seconds: 2)) {
-      await player.stream.position
-          .firstWhere(
-            (value) => (value - position).abs() <= const Duration(seconds: 2),
-          )
-          .timeout(const Duration(seconds: 10));
+    await _waitUntilSettled(position);
+    await _resumeBufferUpdates(bufferEpoch);
+  }
+
+  Future<void> _waitUntilSettled(Duration position) async {
+    final native = player.platform;
+    final clock = Stopwatch()..start();
+    var settled = 0;
+    while (clock.elapsed < const Duration(seconds: 10)) {
+      _check();
+      if (native is NativePlayer) {
+        // time-pos can jump before a decoded frame/audio reaches the output.
+        // Require the native seek to finish and A/V to settle, not just a Dart
+        // position event. Two observations also avoid accepting stale state
+        // between the command reply and the native seeking notification.
+        final seeking = await native.getProperty('seeking');
+        final buffering = await native.getProperty('paused-for-cache');
+        final playing = player.state.playing;
+        final sync = playing
+            ? double.tryParse(await native.getProperty('avsync'))
+            : 0.0;
+        final at = double.tryParse(await native.getProperty('time-pos'));
+        final audioAt = playing
+            ? double.tryParse(await native.getProperty('audio-pts'))
+            : null;
+        final configured = await native.getProperty('vo-configured');
+        final expected = position.inMilliseconds / 1000;
+        settled =
+            seeking == 'no' &&
+                buffering == 'no' &&
+                configured == 'yes' &&
+                at != null &&
+                at >= expected - 1 &&
+                at <=
+                    expected +
+                        clock.elapsedMilliseconds / 1000 * player.state.rate +
+                        2 &&
+                sync != null &&
+                sync.isFinite &&
+                sync.abs() <= .25 &&
+                (!playing || audioAt != null && (audioAt - at).abs() <= .25)
+            ? settled + 1
+            : 0;
+      } else {
+        settled =
+            (_snapshot.position - position).abs() <= const Duration(seconds: 2)
+            ? settled + 1
+            : 0;
+      }
+      if (settled >= 2) return;
+      await Future<void>.delayed(const Duration(milliseconds: 80));
     }
-    _check();
+    throw const AppFailure(FailureKind.timeout, '跳转后音画未恢复，正在重新加载');
   }
 
   @override
@@ -204,6 +338,11 @@ class MediaKitEngine implements PlaybackEngine {
     _disposed = true;
     for (final subscription in _subscriptions) {
       await subscription.cancel();
+    }
+    final native = player.platform;
+    if (_observingBuffer && native is NativePlayer) {
+      await native.unobserveProperty('demuxer-cache-state');
+      _observingBuffer = false;
     }
     final videoPlatform = await controller.platform.future;
     if (videoPlatform is AndroidVideoController) {

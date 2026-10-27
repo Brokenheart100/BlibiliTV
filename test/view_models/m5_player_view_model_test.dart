@@ -172,6 +172,84 @@ void main() {
     },
   );
   test(
+    'rapid direction changes coalesce while the native decoder is seeking',
+    () async {
+      await vm().start('demo-000');
+      final engine = factory.engines.last;
+      engine.emit(
+        engine.snapshot.copyWith(position: const Duration(seconds: 40)),
+      );
+      final gate = factory.seekGate = Completer<void>();
+      final first = vm().seekBy(const Duration(seconds: 10));
+      await until(() => engine.seeks.isNotEmpty);
+      final rest = [
+        vm().seekBy(const Duration(seconds: 10)),
+        vm().seekBy(const Duration(seconds: 10)),
+        vm().seekBy(const Duration(seconds: -10)),
+      ];
+      gate.complete();
+      await Future.wait([first, ...rest]);
+      expect(engine.seeks, [
+        const Duration(seconds: 50),
+        const Duration(seconds: 60),
+      ]);
+      expect(state().snapshot.position, const Duration(seconds: 60));
+    },
+  );
+  test(
+    'a stalled seek reloads at the requested position and retains pause',
+    () async {
+      await vm().start('demo-000');
+      await vm().togglePause();
+      factory.seekFailure = const AppFailure(
+        FailureKind.timeout,
+        'native seek stalled',
+      );
+      await vm().seekBy(const Duration(seconds: 30));
+      await until(
+        () =>
+            factory.engines.length == 2 && state().phase == PlayerPhase.paused,
+      );
+      expect(factory.engines.last.openedAt, const Duration(seconds: 30));
+      expect(factory.maxActive, 1);
+    },
+  );
+  test(
+    'changing part cancels the pending seek target from the old part',
+    () async {
+      await vm().start('demo-000');
+      final old = factory.engines.last;
+      final gate = factory.seekGate = Completer<void>();
+      final seek = vm().seekBy(const Duration(seconds: 30));
+      await until(() => old.seeks.isNotEmpty);
+      final part = state().parts[1].id;
+      final replacement = vm().selectPart(part);
+      await vm().seekBy(const Duration(seconds: 10));
+      gate.complete();
+      await Future.wait([seek, replacement]);
+      expect(state().partId, part);
+      expect(factory.engines.last.openedAt, Duration.zero);
+      expect(factory.engines.last.seeks, isEmpty);
+      expect(old.seeks, [const Duration(seconds: 30)]);
+      expect(factory.maxActive, 1);
+    },
+  );
+  test(
+    'an unsupported native seek exposes a retry state without automatic reload',
+    () async {
+      await vm().start('demo-000');
+      factory.seekFailure = const AppFailure(
+        FailureKind.unsupported,
+        'native decoder failed',
+      );
+      await vm().seekBy(const Duration(seconds: 30));
+      await until(() => factory.active == 0);
+      expect(state().phase, PlayerPhase.failed);
+      expect(state().failure?.kind, FailureKind.unsupported);
+      expect(factory.engines, hasLength(1));
+    },
+  );
+  test(
     'completion stops by default and last-part autoplay cannot wrap around',
     () async {
       await vm().start('demo-000');

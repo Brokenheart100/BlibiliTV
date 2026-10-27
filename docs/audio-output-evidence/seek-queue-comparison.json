@@ -1,0 +1,189 @@
+{
+  "status": "diagnostic",
+  "variants": [
+    {
+      "variant": "continuous",
+      "steps": [
+        {
+          "target": 55,
+          "seekMs": 278,
+          "avsync": -0.0,
+          "mute": "no",
+          "format": "float",
+          "rate": "44100",
+          "syncHealthy": true
+        },
+        {
+          "target": 35,
+          "seekMs": 283,
+          "avsync": 0.000052,
+          "mute": "no",
+          "format": "float",
+          "rate": "44100",
+          "syncHealthy": true
+        },
+        {
+          "target": 65,
+          "seekMs": 266,
+          "avsync": 0.000009,
+          "mute": "no",
+          "format": "float",
+          "rate": "44100",
+          "syncHealthy": true
+        },
+        {
+          "target": 45,
+          "seekMs": 286,
+          "avsync": 0.000009,
+          "mute": "no",
+          "format": "float",
+          "rate": "44100",
+          "syncHealthy": true
+        },
+        {
+          "target": 75,
+          "seekMs": 268,
+          "avsync": -0.0,
+          "mute": "no",
+          "format": "float",
+          "rate": "44100",
+          "syncHealthy": true
+        },
+        {
+          "target": 35,
+          "seekMs": 277,
+          "avsync": -0.00002,
+          "mute": "no",
+          "format": "float",
+          "rate": "44100",
+          "syncHealthy": true
+        }
+      ],
+      "errors": []
+    },
+    {
+      "variant": "audiotrack-pcm16",
+      "steps": [
+        {
+          "target": 55,
+          "seekMs": 287,
+          "avsync": 0.000009,
+          "mute": "no",
+          "format": "s16",
+          "rate": "48000",
+          "syncHealthy": true
+        },
+        {
+          "target": 35,
+          "seekMs": 283,
+          "avsync": 0.000022,
+          "mute": "no",
+          "format": "s16",
+          "rate": "48000",
+          "syncHealthy": true
+        },
+        {
+          "target": 65,
+          "seekMs": 273,
+          "avsync": 0.000023,
+          "mute": "no",
+          "format": "s16",
+          "rate": "48000",
+          "syncHealthy": true
+        },
+        {
+          "target": 45,
+          "seekMs": 272,
+          "avsync": 0.000025,
+          "mute": "no",
+          "format": "s16",
+          "rate": "48000",
+          "syncHealthy": true
+        },
+        {
+          "target": 75,
+          "seekMs": 263,
+          "avsync": 0.000023,
+          "mute": "no",
+          "format": "s16",
+          "rate": "48000",
+          "syncHealthy": true
+        },
+        {
+          "target": 35,
+          "seekMs": 273,
+          "avsync": 0.000023,
+          "mute": "no",
+          "format": "s16",
+          "rate": "48000",
+          "syncHealthy": true
+        }
+      ],
+      "errors": []
+    },
+    {
+      "variant": "larger-queue",
+      "steps": [
+        {
+          "target": 55,
+          "seekMs": 275,
+          "avsync": 0.000021,
+          "mute": "no",
+          "format": "float",
+          "rate": "44100",
+          "syncHealthy": true
+        },
+        {
+          "target": 35,
+          "seekMs": 260,
+          "avsync": 0.000014,
+          "mute": "no",
+          "format": "float",
+          "rate": "44100",
+          "syncHealthy": true
+        },
+        {
+          "target": 65,
+          "seekMs": 268,
+          "avsync": 0.000044,
+          "mute": "no",
+          "format": "float",
+          "rate": "44100",
+          "syncHealthy": true
+        },
+        {
+          "target": 45,
+          "seekMs": 271,
+          "avsync": 0.00001,
+          "mute": "no",
+          "format": "float",
+          "rate": "44100",
+          "syncHealthy": true
+        },
+        {
+          "target": 75,
+          "seekMs": 263,
+          "avsync": 0.000026,
+          "mute": "no",
+          "format": "float",
+          "rate": "44100",
+          "syncHealthy": true
+        },
+        {
+          "target": 35,
+          "seekMs": 280,
+          "avsync": 0.000033,
+          "mute": "no",
+          "format": "float",
+          "rate": "44100",
+          "syncHealthy": true
+        }
+      ],
+      "errors": [
+        "unsupported"
+      ]
+    }
+  ],
+  "manualNoiseFreeVerified": false,
+  "readOnly": true
+}

@@ -56,6 +56,8 @@ jobs:
         run: python3 tool/release/dependencies.py --check
       - name: Generate Riverpod, Freezed, JSON and Drift code
         run: dart run build_runner build --delete-conflicting-outputs
+      - name: Generate locked Web protobuf schema
+        run: python3 tool/proto/generate.py
       - name: Check generated sources are committed
         run: python3 tool/ci/pipeline.py check-generated
       - name: Check formatting
@@ -63,7 +65,7 @@ jobs:
       - name: Static analysis
         run: flutter analyze --fatal-infos
       - name: Unit and widget tests
-        run: flutter test --coverage --reporter expanded
+        run: flutter test --coverage --concurrency 2 --reporter expanded
       - name: Upload coverage
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4

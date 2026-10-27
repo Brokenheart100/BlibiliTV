@@ -36,6 +36,7 @@ class CatalogViewModel extends _$CatalogViewModel {
     required String pageId,
     required String ownerKey,
     String query = '',
+    CatalogOptions? options,
   }) async {
     _repository = ref.watch(catalogRepositoryProvider);
     final signal = _active = CancellationSignal();
@@ -44,10 +45,12 @@ class CatalogViewModel extends _$CatalogViewModel {
       signal.cancel();
       _active?.cancel();
     });
+    if (section == 'live') return const CatalogState();
     final result = await _repository.fetchVideos(
       section: section,
       ownerKey: ownerKey,
       query: query,
+      options: options ?? const CatalogOptions(),
       cancellation: signal,
     );
     if (signal.isCancelled) return const CatalogState(paused: true);
@@ -87,6 +90,7 @@ class CatalogViewModel extends _$CatalogViewModel {
       section: section,
       ownerKey: ownerKey,
       query: query,
+      options: options ?? const CatalogOptions(),
       cursor: refresh ? null : previous.nextCursor,
       forceRefresh: refresh,
       cancellation: signal,

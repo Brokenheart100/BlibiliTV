@@ -1,0 +1,169 @@
+{
+  "status": "diagnostic",
+  "variants": [
+    {
+      "variant": "baseline",
+      "steps": [
+        {
+          "target": 55,
+          "seekMs": 290,
+          "avsync": 0.000023,
+          "mute": "no",
+          "format": "float",
+          "rate": "44100"
+        },
+        {
+          "target": 35,
+          "seekMs": 284,
+          "avsync": 0.050457,
+          "mute": "no",
+          "format": "float",
+          "rate": "44100"
+        },
+        {
+          "target": 65,
+          "seekMs": 300,
+          "avsync": 0.000022,
+          "mute": "no",
+          "format": "float",
+          "rate": "44100"
+        },
+        {
+          "target": 45,
+          "seekMs": 271,
+          "avsync": 0.050142,
+          "mute": "no",
+          "format": "float",
+          "rate": "44100"
+        },
+        {
+          "target": 75,
+          "seekMs": 272,
+          "avsync": 0.050118,
+          "mute": "no",
+          "format": "float",
+          "rate": "44100"
+        },
+        {
+          "target": 35,
+          "seekMs": 272,
+          "avsync": 0.056479,
+          "mute": "no",
+          "format": "float",
+          "rate": "44100"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "variant": "pcm16",
+      "steps": [
+        {
+          "target": 55,
+          "seekMs": 282,
+          "avsync": 0.000015,
+          "mute": "no",
+          "format": "s16",
+          "rate": "48000"
+        },
+        {
+          "target": 35,
+          "seekMs": 277,
+          "avsync": 0.050117,
+          "mute": "no",
+          "format": "s16",
+          "rate": "48000"
+        },
+        {
+          "target": 65,
+          "seekMs": 295,
+          "avsync": 0.000021,
+          "mute": "no",
+          "format": "s16",
+          "rate": "48000"
+        },
+        {
+          "target": 45,
+          "seekMs": 290,
+          "avsync": 0.011254,
+          "mute": "no",
+          "format": "s16",
+          "rate": "48000"
+        },
+        {
+          "target": 75,
+          "seekMs": 293,
+          "avsync": 0.05012,
+          "mute": "no",
+          "format": "s16",
+          "rate": "48000"
+        },
+        {
+          "target": 35,
+          "seekMs": 291,
+          "avsync": 0.050107,
+          "mute": "no",
+          "format": "s16",
+          "rate": "48000"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "variant": "guarded",
+      "steps": [
+        {
+          "target": 55,
+          "seekMs": 650,
+          "avsync": 0.000026,
+          "mute": "no",
+          "format": "float",
+          "rate": "44100"
+        },
+        {
+          "target": 35,
+          "seekMs": 649,
+          "avsync": 0.000035,
+          "mute": "no",
+          "format": "float",
+          "rate": "44100"
+        },
+        {
+          "target": 65,
+          "seekMs": 655,
+          "avsync": 0.000042,
+          "mute": "no",
+          "format": "float",
+          "rate": "44100"
+        },
+        {
+          "target": 45,
+          "seekMs": 636,
+          "avsync": 0.000023,
+          "mute": "no",
+          "format": "float",
+          "rate": "44100"
+        },
+        {
+          "target": 75,
+          "seekMs": 645,
+          "avsync": 0.000027,
+          "mute": "no",
+          "format": "float",
+          "rate": "44100"
+        },
+        {
+          "target": 35,
+          "seekMs": 624,
+          "avsync": 0.000026,
+          "mute": "no",
+          "format": "float",
+          "rate": "44100"
+        }
+      ],
+      "errors": []
+    }
+  ],
+  "manualNoiseFreeVerified": false,
+  "readOnly": true
+}

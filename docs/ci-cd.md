@@ -38,7 +38,7 @@ flowchart TD
 检查顺序：
 
 1. actionlint 1.7.12 验证工作流；Python 标准库测试验证发布守卫。
-2. 还原锁定依赖，运行 `build_runner`。已有生成文件出现 diff 或新增生成文件未提交即失败，覆盖 Riverpod、Freezed、JSON 与 Drift。
+2. 还原锁定依赖，运行 `build_runner` 和独立的 `python3 tool/proto/generate.py`。已有生成文件出现 diff 或新增生成文件未提交即失败，覆盖 Riverpod、Freezed、JSON、Drift 和 protobuf 的 pb／pbenum／pbjson 三类文件。protoc 36.2 的官方下载校验和与 protoc_plugin 25.0.0 均固定，Windows／Linux 生成走同一 schema 与 zip 提取路径。
 3. `dart format --output=none --set-exit-if-changed`、`flutter analyze --fatal-infos`、`flutter test --coverage`。
 4. 从默认产品入口 `lib/main.dart` 构建拆分 Debug APK，校验产物；覆盖率保留 14 天，Debug APK artifacts 保留 14 天。
 
@@ -110,3 +110,6 @@ M7 的本机 Release 验证使用一次性测试密钥，验证结束删除，�
 ## M7 本轮补充
 
 本轮新增依赖／原生许可清单与锁文件一致性检查；实际 versionCode 必须等于锁定 Flutter ABI 偏移加基础 build number。打包必须包含依赖清单、Dart／原生许可、安装、限制、来源和变更说明，全部纳入校验和。以上代码的本机验证与托管 CI 分开，尚未将本轮 M6／M7 推送或创建新标签。M7 稳定性目标已按用户要求调整为 15 分钟。
+
+
+M8 弹幕使用 pub.dev 托管的官方 canvas_danmaku 0.3.3，由 pubspec.lock 固定包版本与哈希。先前本地补丁和 `tool/ci/check_vendor.py` 保留作历史试验记录，不再作为应用依赖或 CI 门槛。画布生命周期测试和原生压力测试覆盖实际使用路径；应用源码的 fatal-infos 和既有守卫保持启用。

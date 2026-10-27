@@ -1,0 +1,30 @@
+{
+  "status": "running",
+  "platform": "Android",
+  "readOnly": true,
+  "variants": [
+    {
+      "requestedBackend": "opensles",
+      "actualBackend": "opensles",
+      "inputFormat": "floatp",
+      "inputSampleRate": "44100",
+      "inputChannels": "stereo",
+      "outputFormat": "float",
+      "outputSampleRate": "44100",
+      "outputChannels": "stereo",
+      "maximumAvsyncSeconds": 0.067455,
+      "errors": []
+    },
+    {
+      "requestedBackend": "audiotrack",
+      "actualBackend": "audiotrack",
+      "inputFormat": "floatp",
+      "inputSampleRate": "44100",
+      "inputChannels": "stereo",
+      "outputFormat": "float",
+      "outputSampleRate": "44100",
+      "outputChannels": "stereo"
+    }
+  ],
+  "manualNoiseFreeVerified": false
+}

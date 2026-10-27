@@ -10,15 +10,68 @@ import 'tv_button.dart';
 import 'tv_video_card.dart';
 
 class TvGridController {
-  _TvGridState? _state;
+  _TvGridState<dynamic>? _state;
   Future<void> restore() async {
     await _state?._restore();
   }
 }
 
-class TvGrid extends StatefulWidget {
+class GridItemBindings {
+  const GridItemBindings({
+    required this.onAttach,
+    required this.onDetach,
+    required this.onKey,
+    required this.onFocus,
+    required this.onPressed,
+    required this.reducedMotion,
+  });
+  final ValueChanged<FocusNode> onAttach, onDetach;
+  final KeyEventResult Function(KeyEvent) onKey;
+  final VoidCallback onFocus, onPressed;
+  final bool reducedMotion;
+}
+
+class TvGrid extends TvItemGrid<VideoSummary> {
   const TvGrid({
+    required super.items,
+    required super.memory,
+    required super.memoryKey,
+    required super.controller,
+    required super.onSelected,
+    required super.onExitLeft,
+    required super.onExitUp,
+    required super.onLoadMore,
+    required super.hasMore,
+    super.loadingMore,
+    super.loadMoreFailed,
+    super.reducedMotion,
+    super.key,
+  }) : super(itemKey: _videoKey, itemBuilder: _videoCard);
+}
+
+String _videoKey(VideoSummary item) => item.id;
+Widget _videoCard(
+  BuildContext context,
+  VideoSummary video,
+  GridItemBindings bindings,
+) => TvVideoCard(
+  key: ValueKey('video-${video.id}'),
+  video: video,
+  reducedMotion: bindings.reducedMotion,
+  onAttach: bindings.onAttach,
+  onDetach: bindings.onDetach,
+  onKey: bindings.onKey,
+  onFocus: bindings.onFocus,
+  onPressed: bindings.onPressed,
+);
+
+class TvItemGrid<T> extends StatefulWidget {
+  const TvItemGrid({
     required this.items,
+    required this.itemKey,
+    required this.itemBuilder,
+    this.artworkAspectRatio = 16 / 9,
+    this.minItemWidth = 214,
     required this.memory,
     required this.memoryKey,
     required this.controller,
@@ -32,19 +85,22 @@ class TvGrid extends StatefulWidget {
     this.reducedMotion = false,
     super.key,
   });
-  final List<VideoSummary> items;
+  final List<T> items;
+  final String Function(T) itemKey;
+  final Widget Function(BuildContext, T, GridItemBindings) itemBuilder;
+  final double artworkAspectRatio, minItemWidth;
   final FocusMemory memory;
   final String memoryKey;
   final TvGridController controller;
-  final Future<void> Function(VideoSummary video) onSelected;
+  final Future<void> Function(T video) onSelected;
   final VoidCallback onExitLeft, onExitUp;
   final Future<void> Function() onLoadMore;
   final bool hasMore, loadingMore, reducedMotion, loadMoreFailed;
   @override
-  State<TvGrid> createState() => _TvGridState();
+  State<TvItemGrid<T>> createState() => _TvGridState<T>();
 }
 
-class _TvGridState extends State<TvGrid> {
+class _TvGridState<T> extends State<TvItemGrid<T>> {
   late final scroll = ScrollController(
     initialScrollOffset: widget.memory.read(widget.memoryKey)?.offset ?? 0,
   );
@@ -60,7 +116,7 @@ class _TvGridState extends State<TvGrid> {
   }
 
   @override
-  void didUpdateWidget(TvGrid oldWidget) {
+  void didUpdateWidget(TvItemGrid<T> oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.controller != widget.controller) {
       oldWidget.controller._state = null;
@@ -95,7 +151,7 @@ class _TvGridState extends State<TvGrid> {
     for (var attempt = 0; attempt < 3 && mounted; attempt++) {
       await WidgetsBinding.instance.endOfFrame;
       if (!mounted) return;
-      final node = nodes[widget.items[index].id];
+      final node = nodes[widget.itemKey(widget.items[index])];
       if (node != null && node.context != null) {
         node.requestFocus();
         return;
@@ -108,7 +164,7 @@ class _TvGridState extends State<TvGrid> {
     final bookmark = widget.memory.read(widget.memoryKey);
     final index = bookmark == null
         ? 0
-        : widget.items.indexWhere((v) => v.id == bookmark.id);
+        : widget.items.indexWhere((v) => widget.itemKey(v) == bookmark.id);
     await _focus(index >= 0 ? index : bookmark?.index ?? 0);
   }
 
@@ -160,80 +216,90 @@ class _TvGridState extends State<TvGrid> {
   @override
   Widget build(BuildContext context) => LayoutBuilder(
     builder: (context, constraints) {
-      columns = (constraints.maxWidth / 214).floor().clamp(2, 5);
+      columns = (constraints.maxWidth / widget.minItemWidth).floor().clamp(
+        2,
+        5,
+      );
       final width = (constraints.maxWidth - 12 - (columns - 1) * 14) / columns;
-      final itemHeight = width * 9 / 16 + 72;
+      final itemHeight = width / widget.artworkAspectRatio + 72;
       rowExtent = itemHeight + 14;
-      return CustomScrollView(
-        key: const Key('catalog-scroll'),
-        controller: scroll,
-        scrollCacheExtent: ScrollCacheExtent.pixels(rowExtent * 2),
-        slivers: [
-          SliverPadding(
-            padding: const EdgeInsets.all(6),
-            sliver: SliverGrid(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: columns,
-                mainAxisExtent: itemHeight,
-                crossAxisSpacing: 14,
-                mainAxisSpacing: 14,
-              ),
-              delegate: SliverChildBuilderDelegate((context, index) {
-                final video = widget.items[index];
-                return TvVideoCard(
-                  key: ValueKey('video-${video.id}'),
-                  video: video,
-                  reducedMotion: widget.reducedMotion,
-                  onAttach: (node) => nodes[video.id] = node,
-                  onDetach: (node) {
-                    if (nodes[video.id] == node) nodes.remove(video.id);
-                  },
-                  onKey: (event) => _key(index, event),
-                  onFocus: () => widget.memory.save(
-                    widget.memoryKey,
-                    GridBookmark(
-                      video.id,
-                      index,
-                      scroll.hasClients ? scroll.offset : 0,
+      return BackdropGroup(
+        child: CustomScrollView(
+          key: const Key('catalog-scroll'),
+          controller: scroll,
+          scrollCacheExtent: ScrollCacheExtent.pixels(rowExtent * 2),
+          slivers: [
+            SliverPadding(
+              padding: const EdgeInsets.all(6),
+              sliver: SliverGrid(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: columns,
+                  mainAxisExtent: itemHeight,
+                  crossAxisSpacing: 14,
+                  mainAxisSpacing: 14,
+                ),
+                delegate: SliverChildBuilderDelegate((context, index) {
+                  final video = widget.items[index];
+                  final id = widget.itemKey(video);
+                  return widget.itemBuilder(
+                    context,
+                    video,
+                    GridItemBindings(
+                      reducedMotion: widget.reducedMotion,
+                      onAttach: (node) => nodes[id] = node,
+                      onDetach: (node) {
+                        if (nodes[id] == node) nodes.remove(id);
+                      },
+                      onKey: (event) => _key(index, event),
+                      onFocus: () => widget.memory.save(
+                        widget.memoryKey,
+                        GridBookmark(
+                          id,
+                          index,
+                          scroll.hasClients ? scroll.offset : 0,
+                        ),
+                      ),
+                      onPressed: () => unawaited(widget.onSelected(video)),
                     ),
-                  ),
-                  onPressed: () => unawaited(widget.onSelected(video)),
-                );
-              }, childCount: widget.items.length),
+                  );
+                }, childCount: widget.items.length),
+              ),
             ),
-          ),
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.all(8),
-              child: Center(
-                child: TvButton(
-                  key: const Key('load-more'),
-                  focusNode: footer,
-                  label: widget.loadingMore
-                      ? '正在加载…'
-                      : widget.loadMoreFailed
-                      ? '重试加载更多'
-                      : widget.hasMore
-                      ? '加载更多'
-                      : '已经看到全部内容',
-                  onPressed: () => unawaited(_more()),
-                  onKeyEvent: (event) {
-                    if (!isDirectionEvent(event)) return KeyEventResult.ignored;
-                    if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
-                      unawaited(_focus(widget.items.length - 1));
-                      return KeyEventResult.handled;
-                    }
-                    if (event.logicalKey == LogicalKeyboardKey.arrowLeft) {
-                      widget.onExitLeft();
-                      return KeyEventResult.handled;
-                    }
-                    return KeyEventResult.ignored;
-                  },
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.all(8),
+                child: Center(
+                  child: TvButton(
+                    key: const Key('load-more'),
+                    focusNode: footer,
+                    label: widget.loadingMore
+                        ? '正在加载…'
+                        : widget.loadMoreFailed
+                        ? '重试加载更多'
+                        : widget.hasMore
+                        ? '加载更多'
+                        : '已经看到全部内容',
+                    onPressed: () => unawaited(_more()),
+                    onKeyEvent: (event) {
+                      if (!isDirectionEvent(event)) {
+                        return KeyEventResult.ignored;
+                      }
+                      if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
+                        unawaited(_focus(widget.items.length - 1));
+                        return KeyEventResult.handled;
+                      }
+                      if (event.logicalKey == LogicalKeyboardKey.arrowLeft) {
+                        widget.onExitLeft();
+                        return KeyEventResult.handled;
+                      }
+                      return KeyEventResult.ignored;
+                    },
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       );
     },
   );

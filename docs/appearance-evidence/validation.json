@@ -1,0 +1,35 @@
+{
+  "recordedAtUtc": "2026-10-27T06:23:39.8910786Z",
+  "flutterTests": 228,
+  "flutterTestsStatus": "passed",
+  "staticAnalysis": "No errors (Flutter MCP)",
+  "formatting": "passed",
+  "device": "API 36 x86_64 TV emulator-5554",
+  "validationPackage": "app.mamba.mambatv.validation",
+  "themes": [
+    "dark",
+    "light",
+    "system"
+  ],
+  "persistentThemeRestoration": "passed after Flutter hot restart",
+  "nativeDpadFocusTrace": [
+    "nav-0",
+    "video",
+    "catalog-action",
+    "feed-recommendation",
+    "feed-following",
+    "feed-popular",
+    "feed-weekly"
+  ],
+  "nativeWeeklySelection": "passed",
+  "nativeRankingDisplay": "passed",
+  "hotReload": "succeeded",
+  "hotRestart": "succeeded",
+  "applicationErrors": 0,
+  "driverNotes": "Some exploratory driver waits timed out; traced native focus and repeated successfully.",
+  "live": "entry only; playback not implemented",
+  "publicFeedReport": "public-feeds.json",
+  "physicalTv": "not tested",
+  "arm": "not tested",
+  "releasePublished": false
+}

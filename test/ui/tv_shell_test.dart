@@ -27,6 +27,7 @@ class FailOnceCatalog extends FakeCatalogRepository {
     required String section,
     required String ownerKey,
     String query = '',
+    CatalogOptions options = const CatalogOptions(),
     String? cursor,
     int limit = 12,
     bool forceRefresh = false,
@@ -58,6 +59,7 @@ class GatedCatalog extends FakeCatalogRepository {
     required String section,
     required String ownerKey,
     String query = '',
+    CatalogOptions options = const CatalogOptions(),
     String? cursor,
     int limit = 12,
     bool forceRefresh = false,
@@ -144,7 +146,7 @@ void main() {
     tester,
   ) async {
     await pumpMamba(tester);
-    for (var i = 0; i < 3; i++) {
+    for (var i = 0; i < 4; i++) {
       await press(tester, LogicalKeyboardKey.arrowDown);
     }
     await press(tester, LogicalKeyboardKey.select);
@@ -192,6 +194,8 @@ void main() {
     tester,
   ) async {
     await pumpMamba(tester);
+    await press(tester, LogicalKeyboardKey.arrowDown);
+    expect(FocusManager.instance.primaryFocus?.debugLabel, 'nav-4');
     await press(tester, LogicalKeyboardKey.arrowDown);
     expect(FocusManager.instance.primaryFocus?.debugLabel, 'nav-1');
     await press(tester, LogicalKeyboardKey.select);

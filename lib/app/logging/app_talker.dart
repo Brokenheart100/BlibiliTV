@@ -1,17 +1,22 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
-import 'package:talker/talker.dart';
+import 'package:talker_flutter/talker_flutter.dart';
 
-Talker createAppTalker({bool enabled = kDebugMode, bool console = true}) =>
-    Talker(
-      settings: TalkerSettings(
-        enabled: enabled,
-        useConsoleLogs: console,
-        useHistory: true,
-        maxHistoryItems: 200,
-      ),
-    );
+const diagnosticsEnabled =
+    kDebugMode || bool.fromEnvironment('MAMBA_DIAGNOSTICS');
+
+Talker createAppTalker({
+  bool enabled = diagnosticsEnabled,
+  bool console = true,
+}) => TalkerFlutter.init(
+  settings: TalkerSettings(
+    enabled: enabled,
+    useConsoleLogs: console,
+    useHistory: true,
+    maxHistoryItems: 200,
+  ),
+);
 
 /// Accepts only the metadata serialized by SafeLoggingInterceptor. Raw Dio
 /// exceptions/requests/responses and provider states must never reach Talker.

@@ -1,0 +1,191 @@
+--- a/lib/danmaku_screen.dart
++++ b/lib/danmaku_screen.dart
+@@ -1,3 +1,4 @@
++import 'dart:async';
+ import 'dart:math';
+ 
+ import 'package:canvas_danmaku/danmaku_controller.dart';
+@@ -58,6 +59,36 @@
+   late final _random = Random();
+ 
+   late final Ticker _ticker;
++  Timer? _pacedTimer;
++  final _pacedClock = Stopwatch();
++  bool get _animating => _ticker.isActive || (_pacedTimer?.isActive ?? false);
++
++  // MambaTV: low-load mode requests 30 animation frames, without keeping
++  // an otherwise idle 60Hz ticker alive around an Android video texture.
++  void _startAnimation() {
++    if (_animating) return;
++    if (_option.framesPerSecond == 60) {
++      _ticker.start();
++    } else {
++      _pacedClock
++        ..reset()
++        ..start();
++      final interval =
++          Duration(microseconds: (1000000 / _option.framesPerSecond).round());
++      _pacedTimer = Timer.periodic(interval, (_) {
++        if (mounted && _running) _tick(_pacedClock.elapsed);
++      });
++    }
++  }
++
++  void _stopAnimation() {
++    if (_animating) _lastTick = _tickNotifier.value;
++    _ticker.stop();
++    _pacedTimer?.cancel();
++    _pacedTimer = null;
++    _pacedClock.stop();
++  }
++
+   late final ValueNotifier<int> _tickNotifier;
+   late final ValueNotifier<double> _opacityNotifier;
+   late int _lastTick = 0;
+@@ -138,6 +169,7 @@
+   @override
+   void dispose() {
+     _running = false;
++    _stopAnimation();
+     _ticker.dispose();
+     _clearDanmakus();
+     _tickNotifier.dispose();
+@@ -221,8 +253,8 @@
+     paragraph.dispose();
+ 
+     if (_running && added) {
+-      if (!_ticker.isActive) {
+-        _ticker.start();
++      if (!_animating) {
++        _startAnimation();
+       }
+     }
+   }
+@@ -275,8 +307,8 @@
+               )),
+         );
+         if (_running) {
+-          if (!_ticker.isActive) {
+-            _ticker.start();
++          if (!_animating) {
++            _startAnimation();
+           }
+         }
+         break;
+@@ -287,9 +319,9 @@
+   void _pause() {
+     if (!mounted) return;
+     _running = false;
+-    if (_ticker.isActive) {
++    if (_animating) {
+       _lastTick = _tickNotifier.value;
+-      _ticker.stop();
++      _stopAnimation();
+     }
+   }
+ 
+@@ -297,8 +329,8 @@
+   void _resume() {
+     if (!mounted) return;
+     _running = true;
+-    if (!_ticker.isActive) {
+-      _ticker.start();
++    if (!_animating) {
++      _startAnimation();
+     }
+     _staticDanmakuItems.refresh();
+   }
+@@ -307,9 +339,9 @@
+   void _clear() {
+     if (!mounted) return;
+     _clearDanmakus();
+-    if (_ticker.isActive) {
++    if (_animating) {
+       // SchedulerBinding.instance.addPostFrameCallback(
+-      //   (_) => _ticker.stop(),
++      //   (_) => _stopAnimation(),
+       // );
+     } else {
+       _tickNotifier.refresh();
+@@ -336,10 +368,12 @@
+         option.fontWeight != _option.fontWeight ||
+         option.strokeWidth != _option.strokeWidth;
+ 
+-    final needRestart = _ticker.isActive && clearScroll && clearParagraph;
++    final needRestart = _animating &&
++        (option.framesPerSecond != _option.framesPerSecond ||
++            clearScroll && clearParagraph);
+     if (needRestart) {
+       _lastTick = _tickNotifier.value;
+-      _ticker.stop();
++      _stopAnimation();
+     }
+ 
+     /// 需要隐藏弹幕时清理已有弹幕
+@@ -413,7 +447,7 @@
+     }
+ 
+     if (needRestart) {
+-      _ticker.start();
++      _startAnimation();
+     } else if (nonOpacityOptionChanged) {
+       _tickNotifier.refresh();
+       _staticDanmakuItems.refresh();
+@@ -499,9 +533,9 @@
+     if (_scrollDanmakuItems.isEmpty &&
+         _specialDanmakuItems.isEmpty &&
+         _staticDanmakuItems.value.isEmpty &&
+-        _ticker.isActive) {
++        _animating) {
+       _lastTick = tick;
+-      _ticker.stop();
++      _stopAnimation();
+     }
+   }
+ 
+--- a/lib/models/danmaku_option.dart
++++ b/lib/models/danmaku_option.dart
+@@ -1,6 +1,9 @@
+ class DanmakuOption {
+   /// 默认的字体大小
+   final double fontSize;
++
++  /// MambaTV: bounded animation cadence; 30/15 are low-load modes.
++  final int framesPerSecond;
+ 
+   /// 字体粗细
+   final int fontWeight;
+@@ -49,6 +52,7 @@
+ 
+   const DanmakuOption({
+     this.fontSize = 16,
++    this.framesPerSecond = 60,
+     this.fontWeight = 4,
+     this.fontFamily,
+     this.area = 1.0,
+@@ -68,6 +72,7 @@
+ 
+   DanmakuOption copyWith({
+     double? fontSize,
++    int? framesPerSecond,
+     int? fontWeight,
+     String? fontFamily,
+     double? area,
+@@ -86,6 +91,7 @@
+     return DanmakuOption(
+       area: area ?? this.area,
+       fontSize: fontSize ?? this.fontSize,
++      framesPerSecond: framesPerSecond ?? this.framesPerSecond,
+       fontWeight: fontWeight ?? this.fontWeight,
+       fontFamily: fontFamily ?? this.fontFamily,
+       duration: duration ?? this.duration,
+--- a/pubspec.yaml
++++ b/pubspec.yaml
+@@ -1,6 +1,6 @@
+ name: canvas_danmaku
+ description: "A high performance danmaku lib for flutter."
+-version: 0.3.3
++version: 0.3.3+mamba.1
+ #author: Predidit <i@predidit.com>
+ homepage: https://github.com/Predidit/canvas_danmaku
+ 

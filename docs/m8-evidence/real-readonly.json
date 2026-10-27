@@ -1,0 +1,47 @@
+{
+  "readOnly": true,
+  "authenticated": true,
+  "samples": [
+    {
+      "videoId": "BV1wR4Xz6EqG",
+      "trackCount": 1,
+      "cuesStatus": "passed",
+      "cueCount": 176,
+      "segmentMs": 360000,
+      "segmentCount": 100,
+      "danmakuCount": 29,
+      "creatorStatus": "passed",
+      "creatorCount": 30
+    },
+    {
+      "videoId": "BV1hQHW63EMc",
+      "trackCount": 0,
+      "segmentMs": 360000,
+      "segmentCount": 100,
+      "danmakuCount": 230,
+      "creatorStatus": "passed",
+      "creatorCount": 30
+    },
+    {
+      "videoId": "BV19wnQ6sExk",
+      "trackCount": 0,
+      "segmentMs": 360000,
+      "segmentCount": 100,
+      "danmakuCount": 815,
+      "creatorStatus": "passed",
+      "creatorCount": 30
+    }
+  ],
+  "recordedAtUtc": "2026-10-25T12:25:33.154422Z",
+  "followingStatus": "passed",
+  "followingCount": 20,
+  "followingNextPage": "passed",
+  "filteredSearchStatus": "passed",
+  "remoteWrites": 0,
+  "diagnostics": [
+    "manifest:bytes:1388,size:360000,total:100",
+    "manifest:bytes:608,size:360000,total:100",
+    "manifest:bytes:492,size:360000,total:100"
+  ],
+  "hostRecordedAtUtc": "2026-10-26T08:26:51.643674Z"
+}

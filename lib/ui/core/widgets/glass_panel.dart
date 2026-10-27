@@ -2,6 +2,8 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
+import '../theme/tv_theme.dart';
+
 /// Bounded blur for navigation and playback chrome, never every grid item.
 class GlassPanel extends StatelessWidget {
   const GlassPanel({
@@ -19,9 +21,9 @@ class GlassPanel extends StatelessWidget {
   Widget build(BuildContext context) {
     final panel = DecoratedBox(
       decoration: BoxDecoration(
-        color: const Color(0xC0212430),
+        color: context.tvColors.panel,
         borderRadius: BorderRadius.circular(radius),
-        border: Border.all(color: Colors.white.withValues(alpha: .10)),
+        border: Border.all(color: context.tvColors.line),
       ),
       child: Padding(padding: padding, child: child),
     );
@@ -42,11 +44,13 @@ class TvBackdrop extends StatelessWidget {
   final Widget child;
   @override
   Widget build(BuildContext context) => DecoratedBox(
-    decoration: const BoxDecoration(
+    decoration: BoxDecoration(
       gradient: LinearGradient(
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
-        colors: [Color(0xFF17243C), Color(0xFF10121D), Color(0xFF21192D)],
+        colors: Theme.of(context).brightness == Brightness.light
+            ? const [Color(0xFFF5F7FA), Color(0xFFECEFF5), Color(0xFFF0EAF1)]
+            : const [Color(0xFF17243C), Color(0xFF10121D), Color(0xFF21192D)],
         stops: [0, .55, 1],
       ),
     ),

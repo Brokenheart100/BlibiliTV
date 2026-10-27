@@ -29,6 +29,7 @@ class SearchRaceCatalog extends FakeCatalogRepository {
     required String section,
     required String ownerKey,
     String query = '',
+    CatalogOptions options = const CatalogOptions(),
     String? cursor,
     int limit = 12,
     bool forceRefresh = false,
@@ -83,6 +84,7 @@ class LongDetailCatalog extends FakeCatalogRepository {
 }
 
 Future<void> openSearch(WidgetTester tester) async {
+  await press(tester, LogicalKeyboardKey.arrowDown);
   await press(tester, LogicalKeyboardKey.arrowDown);
   await press(tester, LogicalKeyboardKey.select);
 }

@@ -9,6 +9,9 @@ Duration? catalogCacheLifetime(String path) => switch (path) {
   '/x/web-interface/wbi/view' ||
   '/x/web-interface/archive/related' => const Duration(minutes: 3),
   '/x/web-interface/popular' ||
+  '/x/web-interface/popular/series/list' ||
+  '/x/web-interface/popular/series/one' ||
+  '/x/web-interface/ranking/v2' ||
   '/x/web-interface/wbi/search/type' => const Duration(minutes: 1),
   _ => null,
 };

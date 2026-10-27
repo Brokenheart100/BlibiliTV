@@ -6,8 +6,8 @@ import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../app/providers/repository_providers.dart';
 import '../../../domain/entities/app_models.dart';
+import '../settings/view_models/settings_view_model.dart';
 
 import '../../core/focus/focus_memory.dart';
 import '../../core/theme/tv_theme.dart';
@@ -23,18 +23,23 @@ class TvShell extends StatefulWidget {
 }
 
 class _TvShellState extends State<TvShell> {
-  final nodes = List.generate(4, (i) => FocusNode(debugLabel: 'nav-$i'));
+  final nodes = List.generate(5, (i) => FocusNode(debugLabel: 'nav-$i'));
+  final themeNode = FocusNode(debugLabel: 'nav-theme');
   final entries = <int, VoidCallback>{};
   bool confirming = false;
-  static const labels = ['发现', '搜索', '我的', '设置'];
+  static const labels = ['发现', '搜索', '我的', '设置', '历史记录'];
+  // Keep route identities stable while changing the visible/focus order.
+  static const navigationOrder = [0, 4, 1, 2, 3];
   static const icons = [
     CupertinoIcons.compass,
     CupertinoIcons.search,
     CupertinoIcons.person_crop_circle,
     CupertinoIcons.gear_alt,
+    CupertinoIcons.clock,
   ];
   @override
   void dispose() {
+    themeNode.dispose();
     for (final node in nodes) {
       node.dispose();
     }
@@ -68,11 +73,17 @@ class _TvShellState extends State<TvShell> {
 
   KeyEventResult _key(int index, KeyEvent event) {
     if (!isDirectionEvent(event)) return KeyEventResult.ignored;
+    final position = navigationOrder.indexOf(index);
     switch (event.logicalKey) {
       case LogicalKeyboardKey.arrowUp:
-        nodes[(index - 1).clamp(0, 3)].requestFocus();
+        nodes[navigationOrder[(position - 1).clamp(0, nodes.length - 1)]]
+            .requestFocus();
       case LogicalKeyboardKey.arrowDown:
-        nodes[(index + 1).clamp(0, 3)].requestFocus();
+        if (position == navigationOrder.length - 1) {
+          themeNode.requestFocus();
+        } else {
+          nodes[navigationOrder[position + 1]].requestFocus();
+        }
       case LogicalKeyboardKey.arrowRight:
         entries[widget.navigationShell.currentIndex]?.call();
       case LogicalKeyboardKey.arrowLeft:
@@ -104,96 +115,127 @@ class _TvShellState extends State<TvShell> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(12, 12, 0, 12),
                 child: SizedBox(
-                  width: MediaQuery.sizeOf(context).width < 800 ? 136 : 156,
+                  key: const Key('icon-navigation-rail'),
+                  width: 76,
                   child: GlassPanel(
-                    padding: const EdgeInsets.fromLTRB(10, 24, 10, 18),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 16,
+                    ),
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Padding(
-                          padding: EdgeInsets.only(left: 8),
-                          child: Row(
-                            children: [
-                              Icon(
-                                CupertinoIcons.play_circle_fill,
-                                color: TvColors.accent,
-                                size: 27,
+                        Semantics(
+                          label: 'MambaTV',
+                          child: Icon(
+                            CupertinoIcons.play_circle_fill,
+                            color: context.tvColors.accent,
+                            size: 30,
+                          ),
+                        ),
+                        const SizedBox(height: 24),
+                        Expanded(
+                          child: SingleChildScrollView(
+                            child: Column(
+                              children: [
+                                for (final i in navigationOrder)
+                                  Padding(
+                                    padding: const EdgeInsets.only(bottom: 12),
+                                    child: Builder(
+                                      builder: (itemContext) => SizedBox(
+                                        width: double.infinity,
+                                        child: TvButton(
+                                          key: ValueKey('nav-$i'),
+                                          label: labels[i],
+                                          icon: icons[i],
+                                          iconOnly: true,
+                                          compact: true,
+                                          focusNode: nodes[i],
+                                          autofocus: i == 0,
+                                          selected:
+                                              widget
+                                                  .navigationShell
+                                                  .currentIndex ==
+                                              i,
+                                          onFocusChange: (focused) {
+                                            if (focused) {
+                                              unawaited(
+                                                Scrollable.ensureVisible(
+                                                  itemContext,
+                                                  alignment: .5,
+                                                ),
+                                              );
+                                            }
+                                          },
+                                          onKeyEvent: (event) => _key(i, event),
+                                          onPressed: () => _selectBranch(i),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        Consumer(
+                          builder: (context, ref, _) {
+                            final settings = ref
+                                .watch(settingsViewModelProvider)
+                                .value;
+                            final light =
+                                Theme.of(context).brightness ==
+                                Brightness.light;
+                            return SizedBox(
+                              width: double.infinity,
+                              child: TvButton(
+                                key: const Key('nav-theme'),
+                                label: light ? '切换至深色模式' : '切换至浅色模式',
+                                icon: light
+                                    ? CupertinoIcons.moon
+                                    : CupertinoIcons.sun_max,
+                                iconOnly: true,
+                                compact: true,
+                                focusNode: themeNode,
+                                onPressed: () {
+                                  if (settings == null || settings.saving) {
+                                    return;
+                                  }
+                                  unawaited(
+                                    ref
+                                        .read(
+                                          settingsViewModelProvider.notifier,
+                                        )
+                                        .savePreferences(
+                                          settings.settings.copyWith(
+                                            theme: light
+                                                ? AppTheme.dark
+                                                : AppTheme.light,
+                                          ),
+                                        ),
+                                  );
+                                },
+                                onKeyEvent: (event) {
+                                  if (!isDirectionEvent(event)) {
+                                    return KeyEventResult.ignored;
+                                  }
+                                  if (event.logicalKey ==
+                                      LogicalKeyboardKey.arrowUp) {
+                                    nodes[navigationOrder.last].requestFocus();
+                                  } else if (event.logicalKey ==
+                                      LogicalKeyboardKey.arrowRight) {
+                                    entries[widget.navigationShell.currentIndex]
+                                        ?.call();
+                                  } else if (event.logicalKey !=
+                                          LogicalKeyboardKey.arrowDown &&
+                                      event.logicalKey !=
+                                          LogicalKeyboardKey.arrowLeft) {
+                                    return KeyEventResult.ignored;
+                                  }
+                                  return KeyEventResult.handled;
+                                },
                               ),
-                              SizedBox(width: 7),
-                              Text(
-                                'MAMBA',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w800,
-                                  fontSize: 17,
-                                  letterSpacing: .6,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const Padding(
-                          padding: EdgeInsets.fromLTRB(10, 6, 0, 26),
-                          child: Text(
-                            '给好内容，一块大屏',
-                            style: TextStyle(
-                              fontSize: 10,
-                              color: TvColors.muted,
-                            ),
-                          ),
-                        ),
-                        for (var i = 0; i < labels.length; i++) ...[
-                          SizedBox(
-                            width: double.infinity,
-                            child: TvButton(
-                              key: ValueKey('nav-$i'),
-                              label: labels[i],
-                              icon: icons[i],
-                              compact: true,
-                              focusNode: nodes[i],
-                              autofocus: i == 0,
-                              selected:
-                                  widget.navigationShell.currentIndex == i,
-                              onKeyEvent: (event) => _key(i, event),
-                              onPressed: () => _selectBranch(i),
-                            ),
-                          ),
-                          const SizedBox(height: 12),
-                        ],
-                        const Spacer(),
-                        Padding(
-                          padding: EdgeInsets.only(left: 10),
-                          child: Consumer(
-                            builder: (context, ref, _) {
-                              final result = ref.watch(sessionProvider);
-                              final label = result.isLoading
-                                  ? '正在恢复账号'
-                                  : switch (result.value?.status) {
-                                      SessionStatus.authenticated => '账号已登录',
-                                      SessionStatus.expired => '登录需要更新',
-                                      SessionStatus.offline => '离线 · 账号保留',
-                                      SessionStatus.storageFailure => '存储待处理',
-                                      _ => '游客模式',
-                                    };
-                              return Text(
-                                label,
-                                style: const TextStyle(
-                                  color: TvColors.accent,
-                                  fontSize: 11,
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-                        const SizedBox(height: 5),
-                        const Padding(
-                          padding: EdgeInsets.only(left: 10),
-                          child: Text(
-                            '方向键移动 · 确认选择',
-                            style: TextStyle(
-                              fontSize: 9,
-                              color: TvColors.muted,
-                            ),
-                          ),
+                            );
+                          },
                         ),
                       ],
                     ),

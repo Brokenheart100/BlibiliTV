@@ -17,9 +17,19 @@ import '../../domain/repositories/repositories.dart';
 import '../../domain/library/library.dart';
 import '../../data/repositories/drift_history_repository.dart';
 import '../../data/repositories/bilibili_library_repository.dart';
+import '../../data/repositories/bilibili_personal_home_repository.dart';
+import '../../domain/library/personal_home.dart';
 import 'infrastructure_providers.dart';
 
 part 'repository_providers.g.dart';
+
+@Riverpod(keepAlive: true)
+PersonalHomeRepository personalHomeRepository(Ref ref) =>
+    BilibiliPersonalHomeRepository(
+      ref.watch(bilibiliApiProvider),
+      ref.watch(catalogRepositoryProvider),
+      ref.watch(libraryRepositoryProvider),
+    );
 
 @Riverpod(keepAlive: true)
 LocalHistoryRepository localHistoryRepository(Ref ref) =>

@@ -38,6 +38,10 @@ class LocalSettingsRepository implements SettingsRepository {
               : 0,
           autoNext: values['autoNext'] as bool? ?? false,
           syncHistory: values['syncHistory'] as bool? ?? false,
+          theme: AppTheme.values.firstWhere(
+            (theme) => theme.name == values['theme'],
+            orElse: () => AppTheme.dark,
+          ),
         ),
       );
     } catch (_) {
@@ -60,6 +64,7 @@ class LocalSettingsRepository implements SettingsRepository {
           'defaultQuality': settings.defaultQuality,
           'autoNext': settings.autoNext,
           'syncHistory': settings.syncHistory,
+          'theme': settings.theme.name,
         }),
       );
       return const Success(null);

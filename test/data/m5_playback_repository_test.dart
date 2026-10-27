@@ -130,6 +130,32 @@ void main() {
     expect(calls.where((r) => r.uri.path.endsWith('/playurl')).length, 2);
   });
   test(
+    'DASH metadata accepts video camelCase and audio snake_case ranges',
+    () async {
+      final dash = payload['dash']! as Map<String, Object?>;
+      final video = (dash['video']! as List).first as Map<String, Object?>;
+      video.addAll(<String, Object>{
+        'mimeType': 'video/mp4',
+        'width': 854,
+        'height': 480,
+        'SegmentBase': {'Initialization': '0-999', 'indexRange': '1000-1499'},
+      });
+      final audio = (dash['audio']! as List).first as Map<String, Object?>;
+      audio.addAll(<String, Object>{
+        'mime_type': 'audio/mp4',
+        'audioSamplingRate': 48000,
+        'segment_base': {'initialization': '0-599', 'index_range': '600-999'},
+      });
+      final source = (await resolve(quality: 32)).valueOrThrow;
+      expect(source.videoDash!.initializationRange, '0-999');
+      expect(source.videoDash!.indexRange, '1000-1499');
+      expect(source.videoDash!.width, 854);
+      expect(source.audioDash!.indexRange, '600-999');
+      expect(source.audioDash!.audioSamplingRate, 48000);
+      expect(source.alternate!.audioDash, same(source.audioDash));
+    },
+  );
+  test(
     'missing requested quality is an error rather than silent downgrade',
     () async {
       final result = await resolve(quality: 80);

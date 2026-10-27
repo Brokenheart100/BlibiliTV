@@ -1,0 +1,22 @@
+# ADR 0010：M8 媒体覆盖层与内容发现
+
+日期：2026-10-26。状态：实现；验证结果与未完成项以 [M8 验收](../m8-validation.md) 为准。承接 [ADR 0009](0009-m8-m9-roadmap-and-feature-boundaries.md)，M9 未开工。
+
+## 决策
+
+- 沿用 Flutter、Riverpod AsyncNotifier、Freezed 与 MVVM／整洁架构。`domain/overlays/` 汇集字幕、弹幕和设备偏好契约；生成的 protobuf 类型只在 Data 使用。目录与早期规划中的占位名称差异不改变依赖方向。
+- `PlaybackTimeline` 以唯一引擎的原生快照为锚，最多外推 250 ms，暂停／缓冲冻结，seek／倍速变化重新校准。50 ms 定时采样只查询该时间轴，不累计播放时间。字幕变化才更新文字；弹幕画布自己的 ticker 负责动画，不再叠加第二个 vsync 循环。
+- 首批字幕为 Web JSON 轨道，使用 Flutter 文本叠加、二分检索、最多两行，支持语言／AI 标识、字号、底部位置和 ±5 秒偏移。路由持有轻量字幕选择，切画质可释放引擎与数据订阅而保留同分 P 选择；选集或账号代次改变则隔离。
+- 只读弹幕复用官方 Pub 托管 `canvas_danmaku 0.3.3`（MIT），支持 mode 1／4／5，关闭高级弹幕；限流、过滤、媒体调度与生命周期仍由本应用负责。活动数量上限依次为 40／20／10 条，库的 Flutter ticker 跟随屏幕刷新率，应用不声明可控制 30／15 fps。持续超预算先降低密度，再暂停弹幕，由用户手动重新开启。持续负载统计排除控制条／菜单的临时毛玻璃动画，初次解析／文字缓存预热 5 秒、降密度后预热 2 秒，A/B 等待控制条完全隐藏且稳定后再记录。先前本地调度补丁、picture 缓存与 Skia 对照均未通过持续压力，不进入当前应用依赖。此选择不代表各设备性能验收已通过。
+- 为避免整块动画画布的离屏透明合成，文字颜色承载 alpha，黑色描边保持可读；菜单明确称“文字透明度”。依据 [Flutter Opacity 性能说明](https://api.flutter.dev/flutter/widgets/Opacity-class.html)，具体收益按本机实际报告判断，不推定 ARM 结果。
+- 协议使用 `protobuf 6.1.0`、`fixnum 1.1.1`、开发期 `protoc_plugin 25.0.0` 和官方 `protoc 36.2`。`tool/proto/danmaku.proto` 是本项目最小 Web 字段声明；字段编号与固定上游及实际响应交叉核对，没有复制 PiliPlus 生成文件或引入 App gRPC 凭据。
+- 代码生成独立于 build_runner，固定平台下载摘要，使用项目锁定插件；Windows 编译原生生成器以避免 cmd 消费 protobuf stdin，protoc 输出 zip 后仅提取三份预期 Dart 文件。CI 同时检查 `.pb.dart`／`.pbenum.dart`／`.pbjson.dart` 漂移。
+- 字幕／弹幕响应不进入通用 HTTP 缓存。单次声明长度 2 MiB、流解码 8 MiB、单段 20000 条；分段元数据决定时长，前／当前／后最多三段，估算缓存预算 32 MiB，网络顺序请求。取消、账号 scope 和请求 epoch 同时限制迟到回写。
+- 大正文解析使用顶层 isolate 函数，只捕获字节。原生试跑发现实例方法内的闭包会捕获 Repository／Dio，导致不可发送对象异常；修复后真实账号字幕正文读取通过。取消无法终止已启动的 isolate，但结果不得回写过期代次。
+- 字幕 CDN 只允许 HTTPS 的 bilibili.com／hdslb.com 子域、443、无 userinfo、无重定向，仅附媒体请求头，不附账号 Cookie。签名定位仅保留在有界、账号 scope 内存映射，不进入领域模型、路由或日志。
+- UP 页复用目录分页与焦点记忆；关注流放在首页第三个分页，保留四个主导航。只映射普通 archive 卡片，搜索显式应用排序／时长条件，条件进入 Provider 请求键；私人关注流不扩充缓存白名单。
+- 偏好独立保存到 `app.overlays.v1`；缺字段／坏字段局部回退。Drift 保持 v2，旧 AppSettings 与观看记录不迁移。点赞／投币按计划作为独立增量延期，不暴露未验证写入入口。
+
+## 验证边界
+
+真实账号仅只读；公开协议、真实账号、合成时序、TV 模拟器 profile 和物理／人工分别记录。先前媒体时钟漂移与过早自动暂停的报告保留，短测不代表 15 分钟压力通过。M7 的单点 avsync 异常不因本轮采样正常而被声明已修复。公共发布仍只提供 ARM32／ARM64，模拟器 x86_64 不构成 ARM 硬解验收。

@@ -1,0 +1,126 @@
+{
+  "status": "failed",
+  "readOnly": true,
+  "bufferSource": "mpv demuxer-cache-time via media_kit buffer stream",
+  "samples": [],
+  "observations": [
+    {
+      "elapsedSeconds": 0,
+      "bufferSeconds": 0.0,
+      "positionSeconds": 0.0,
+      "nativeBuffer": "",
+      "playing": false,
+      "durationSeconds": 0.0,
+      "nativeCacheState": ""
+    },
+    {
+      "elapsedSeconds": 5,
+      "bufferSeconds": -0.1,
+      "positionSeconds": 3.633,
+      "nativeBuffer": "-0.100000",
+      "playing": true,
+      "durationSeconds": 436.166,
+      "nativeCacheState": "{\"cache-end\":-0.100000,\"reader-pts\":3.700000,\"eof\":false,\"underrun\":false,\"idle\":true,\"total-bytes\":4299856,\"fw-bytes\":4202032,\"debug-low-level-seeks\":1,\"debug-byte-level-seeks\":1,\"debug-ts-last\":-0.100000,\"bof-cached\":true,\"eof-cached\":false,\"seekable-ranges\":[{\"start\":0.000000,\"end\":199.800000}]}"
+    },
+    {
+      "elapsedSeconds": 10,
+      "bufferSeconds": -0.1,
+      "positionSeconds": 8.666,
+      "nativeBuffer": "-0.100000",
+      "playing": true,
+      "durationSeconds": 436.166,
+      "nativeCacheState": "{\"cache-end\":-0.100000,\"reader-pts\":8.733313,\"eof\":false,\"underrun\":false,\"idle\":true,\"total-bytes\":4299856,\"fw-bytes\":4091904,\"debug-low-level-seeks\":1,\"debug-byte-level-seeks\":1,\"debug-ts-last\":-0.100000,\"bof-cached\":true,\"eof-cached\":false,\"seekable-ranges\":[{\"start\":0.000000,\"end\":199.800000}]}"
+    },
+    {
+      "elapsedSeconds": 15,
+      "bufferSeconds": -0.1,
+      "positionSeconds": 13.7,
+      "nativeBuffer": "-0.100000",
+      "playing": true,
+      "durationSeconds": 436.166,
+      "nativeCacheState": "{\"cache-end\":-0.100000,\"reader-pts\":13.733313,\"eof\":false,\"underrun\":false,\"idle\":true,\"total-bytes\":4299856,\"fw-bytes\":3986864,\"debug-low-level-seeks\":1,\"debug-byte-level-seeks\":1,\"debug-ts-last\":-0.100000,\"bof-cached\":true,\"eof-cached\":false,\"seekable-ranges\":[{\"start\":0.000000,\"end\":199.800000}]}"
+    },
+    {
+      "elapsedSeconds": 20,
+      "bufferSeconds": -0.1,
+      "positionSeconds": 18.7,
+      "nativeBuffer": "-0.100000",
+      "playing": true,
+      "durationSeconds": 436.166,
+      "nativeCacheState": "{\"cache-end\":-0.100000,\"reader-pts\":18.733313,\"eof\":false,\"underrun\":false,\"idle\":true,\"total-bytes\":4299856,\"fw-bytes\":3880016,\"debug-low-level-seeks\":1,\"debug-byte-level-seeks\":1,\"debug-ts-last\":-0.100000,\"bof-cached\":true,\"eof-cached\":false,\"seekable-ranges\":[{\"start\":0.000000,\"end\":199.800000}]}"
+    },
+    {
+      "elapsedSeconds": 25,
+      "bufferSeconds": -0.1,
+      "positionSeconds": 23.6,
+      "nativeBuffer": "-0.100000",
+      "playing": true,
+      "durationSeconds": 436.166,
+      "nativeCacheState": "{\"cache-end\":-0.100000,\"reader-pts\":23.666688,\"eof\":false,\"underrun\":false,\"idle\":true,\"total-bytes\":4299856,\"fw-bytes\":3777504,\"debug-low-level-seeks\":1,\"debug-byte-level-seeks\":1,\"debug-ts-last\":-0.100000,\"bof-cached\":true,\"eof-cached\":false,\"seekable-ranges\":[{\"start\":0.000000,\"end\":199.800000}]}"
+    },
+    {
+      "elapsedSeconds": 30,
+      "bufferSeconds": -0.1,
+      "positionSeconds": 28.633,
+      "nativeBuffer": "-0.100000",
+      "playing": true,
+      "durationSeconds": 436.166,
+      "nativeCacheState": "{\"cache-end\":-0.100000,\"reader-pts\":28.700000,\"eof\":false,\"underrun\":false,\"idle\":true,\"total-bytes\":4299856,\"fw-bytes\":3674048,\"debug-low-level-seeks\":1,\"debug-byte-level-seeks\":1,\"debug-ts-last\":-0.100000,\"bof-cached\":true,\"eof-cached\":false,\"seekable-ranges\":[{\"start\":0.000000,\"end\":199.800000}]}"
+    },
+    {
+      "elapsedSeconds": 35,
+      "bufferSeconds": -0.1,
+      "positionSeconds": 33.633,
+      "nativeBuffer": "-0.100000",
+      "playing": true,
+      "durationSeconds": 436.166,
+      "nativeCacheState": "{\"cache-end\":-0.100000,\"reader-pts\":33.700000,\"eof\":false,\"underrun\":false,\"idle\":true,\"total-bytes\":4299856,\"fw-bytes\":3574704,\"debug-low-level-seeks\":1,\"debug-byte-level-seeks\":1,\"debug-ts-last\":-0.100000,\"bof-cached\":true,\"eof-cached\":false,\"seekable-ranges\":[{\"start\":0.000000,\"end\":199.800000}]}"
+    },
+    {
+      "elapsedSeconds": 40,
+      "bufferSeconds": -0.1,
+      "positionSeconds": 38.666,
+      "nativeBuffer": "-0.100000",
+      "playing": true,
+      "durationSeconds": 436.166,
+      "nativeCacheState": "{\"cache-end\":-0.100000,\"reader-pts\":38.700000,\"eof\":false,\"underrun\":false,\"idle\":true,\"total-bytes\":4299856,\"fw-bytes\":3472496,\"debug-low-level-seeks\":1,\"debug-byte-level-seeks\":1,\"debug-ts-last\":-0.100000,\"bof-cached\":true,\"eof-cached\":false,\"seekable-ranges\":[{\"start\":0.000000,\"end\":199.800000}]}"
+    },
+    {
+      "elapsedSeconds": 45,
+      "bufferSeconds": -0.1,
+      "positionSeconds": 43.666,
+      "nativeBuffer": "-0.100000",
+      "playing": true,
+      "durationSeconds": 436.166,
+      "nativeCacheState": "{\"cache-end\":-0.100000,\"reader-pts\":43.700000,\"eof\":false,\"underrun\":false,\"idle\":true,\"total-bytes\":4299856,\"fw-bytes\":3365104,\"debug-low-level-seeks\":1,\"debug-byte-level-seeks\":1,\"debug-ts-last\":-0.100000,\"bof-cached\":true,\"eof-cached\":false,\"seekable-ranges\":[{\"start\":0.000000,\"end\":199.800000}]}"
+    },
+    {
+      "elapsedSeconds": 50,
+      "bufferSeconds": -0.1,
+      "positionSeconds": 48.7,
+      "nativeBuffer": "-0.100000",
+      "playing": true,
+      "durationSeconds": 436.166,
+      "nativeCacheState": "{\"cache-end\":-0.100000,\"reader-pts\":48.800000,\"eof\":false,\"underrun\":false,\"idle\":true,\"total-bytes\":4299856,\"fw-bytes\":3253952,\"debug-low-level-seeks\":1,\"debug-byte-level-seeks\":1,\"debug-ts-last\":-0.100000,\"bof-cached\":true,\"eof-cached\":false,\"seekable-ranges\":[{\"start\":0.000000,\"end\":199.800000}]}"
+    },
+    {
+      "elapsedSeconds": 55,
+      "bufferSeconds": -0.1,
+      "positionSeconds": 53.7,
+      "nativeBuffer": "-0.100000",
+      "playing": true,
+      "durationSeconds": 436.166,
+      "nativeCacheState": "{\"cache-end\":-0.100000,\"reader-pts\":53.766688,\"eof\":false,\"underrun\":false,\"idle\":true,\"total-bytes\":4299856,\"fw-bytes\":3147856,\"debug-low-level-seeks\":1,\"debug-byte-level-seeks\":1,\"debug-ts-last\":-0.100000,\"bof-cached\":true,\"eof-cached\":false,\"seekable-ranges\":[{\"start\":0.000000,\"end\":199.800000}]}"
+    },
+    {
+      "elapsedSeconds": 60,
+      "bufferSeconds": -0.1,
+      "positionSeconds": 58.6,
+      "nativeBuffer": "-0.100000",
+      "playing": true,
+      "durationSeconds": 436.166,
+      "nativeCacheState": "{\"cache-end\":-0.100000,\"reader-pts\":58.666688,\"eof\":false,\"underrun\":false,\"idle\":true,\"total-bytes\":4299856,\"fw-bytes\":3040544,\"debug-low-level-seeks\":1,\"debug-byte-level-seeks\":1,\"debug-ts-last\":-0.100000,\"bof-cached\":true,\"eof-cached\":false,\"seekable-ranges\":[{\"start\":0.000000,\"end\":199.800000}]}"
+    }
+  ],
+  "recordedAtUtc": "2026-10-26T16:54:47.798277Z"
+}

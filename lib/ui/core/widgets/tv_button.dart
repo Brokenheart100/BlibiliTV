@@ -16,6 +16,7 @@ class TvButton extends StatefulWidget {
     this.onKeyEvent,
     this.onFocusChange,
     this.compact = false,
+    this.iconOnly = false,
     super.key,
   });
   final String label;
@@ -25,6 +26,7 @@ class TvButton extends StatefulWidget {
   final bool autofocus;
   final bool selected;
   final bool compact;
+  final bool iconOnly;
   final TvKeyHandler? onKeyEvent;
   final ValueChanged<bool>? onFocusChange;
   @override
@@ -34,69 +36,89 @@ class TvButton extends StatefulWidget {
 class _TvButtonState extends State<TvButton> {
   bool focused = false;
   @override
-  Widget build(BuildContext context) => Focus(
-    canRequestFocus: false,
-    skipTraversal: true,
-    onKeyEvent: (_, event) =>
-        widget.onKeyEvent?.call(event) ?? KeyEventResult.ignored,
-    child: AnimatedContainer(
-      duration: const Duration(milliseconds: 100),
-      decoration: BoxDecoration(
-        color: focused
-            ? Colors.white
-            : widget.selected
-            ? const Color(0xFF38445F)
-            : const Color(0x16FFFFFF),
-        borderRadius: BorderRadius.circular(17),
-        border: Border.all(
-          color: focused
-              ? Colors.white
-              : widget.selected
-              ? TvColors.accent.withValues(alpha: .4)
-              : TvColors.line,
-          width: 2,
-        ),
-      ),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          focusNode: widget.focusNode,
-          autofocus: widget.autofocus,
-          onTap: widget.onPressed,
-          borderRadius: BorderRadius.circular(10),
-          onFocusChange: (value) {
-            setState(() => focused = value);
-            widget.onFocusChange?.call(value);
-          },
-          child: Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: widget.compact ? 12 : 16,
-              vertical: TvSpacing.medium,
+  Widget build(BuildContext context) => Semantics(
+    label: widget.iconOnly ? widget.label : null,
+    selected: widget.selected,
+    button: true,
+    child: Tooltip(
+      message: widget.iconOnly ? widget.label : '',
+      child: Focus(
+        canRequestFocus: false,
+        skipTraversal: true,
+        onKeyEvent: (_, event) =>
+            widget.onKeyEvent?.call(event) ?? KeyEventResult.ignored,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 100),
+          decoration: BoxDecoration(
+            color: focused
+                ? context.tvColors.focus
+                : widget.selected
+                ? context.tvColors.selected
+                : context.tvColors.button,
+            borderRadius: BorderRadius.circular(17),
+            border: Border.all(
+              color: focused
+                  ? context.tvColors.accent
+                  : widget.selected
+                  ? context.tvColors.accent.withValues(alpha: .4)
+                  : context.tvColors.line,
+              width: 2,
             ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                if (widget.icon != null) ...[
-                  Icon(
-                    widget.icon,
-                    size: 20,
-                    color: focused ? TvColors.background : TvColors.accent,
-                  ),
-                  const SizedBox(width: 10),
-                ],
-                Flexible(
-                  child: Text(
-                    widget.label,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      color: focused ? TvColors.background : Colors.white,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 14,
-                    ),
-                  ),
+          ),
+          child: Material(
+            color: Colors.transparent,
+            child: InkWell(
+              focusNode: widget.focusNode,
+              autofocus: widget.autofocus,
+              onTap: widget.onPressed,
+              borderRadius: BorderRadius.circular(10),
+              onFocusChange: (value) {
+                setState(() => focused = value);
+                widget.onFocusChange?.call(value);
+              },
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: widget.iconOnly
+                      ? 12
+                      : widget.compact
+                      ? 12
+                      : 16,
+                  vertical: TvSpacing.medium,
                 ),
-              ],
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: widget.iconOnly
+                      ? MainAxisAlignment.center
+                      : MainAxisAlignment.start,
+                  children: [
+                    if (widget.icon != null) ...[
+                      Icon(
+                        widget.icon,
+                        size: widget.iconOnly ? 24 : 20,
+                        color: focused
+                            ? context.tvColors.onFocus
+                            : context.tvColors.accent,
+                      ),
+                      if (!widget.iconOnly) const SizedBox(width: 10),
+                    ],
+                    if (!widget.iconOnly)
+                      Flexible(
+                        child: Text(
+                          widget.label,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            color: focused
+                                ? context.tvColors.onFocus
+                                : context.tvColors.text,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+              ),
             ),
           ),
         ),

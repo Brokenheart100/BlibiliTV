@@ -1,0 +1,18 @@
+{
+  "status": "rejected",
+  "kind": "media-clock-divergence",
+  "serial": "emulator-5554",
+  "avd": "Mamba_TV_Verify_API36",
+  "ownedByThisProject": false,
+  "nativeSpeed": 1.0,
+  "sampleElapsedSeconds": 60,
+  "cumulativeMediaMs": 111200,
+  "allowedDriftSeconds": 30,
+  "avSyncSeconds": 0.050659,
+  "audioPtsSeconds": 111.261416,
+  "hostClockAtInspectionUtc": "2026-10-26T05:32:06Z",
+  "deviceClockAtInspectionUtc": "2026-10-25T09:30:51Z",
+  "conclusion": "Rejected by existing assertion; root cause not established. Preserve the other project's AVD and retry on this project's cold-booted AVD with fullyLive test frame policy.",
+  "physicalTv": false,
+  "manualLipSyncVerified": false
+}

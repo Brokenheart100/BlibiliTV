@@ -1,0 +1,181 @@
+{
+  "status": "passed",
+  "recordedAtUtc": "2026-10-26T05:48:31.968216Z",
+  "mode": "profile",
+  "isolatedPackage": true,
+  "owner": "guest",
+  "remoteWrites": 0,
+  "requestedSeconds": 60,
+  "cumulativeMediaAtEndMs": 61500,
+  "elapsedSeconds": 62,
+  "requestedDurationMet": true,
+  "fifteenMinuteThresholdMet": false,
+  "videoId": "BV1wR4Xz6EqG",
+  "cycles": [
+    {
+      "cycle": 1,
+      "rssBytes": 380321792,
+      "liveEngines": 0
+    },
+    {
+      "cycle": 2,
+      "rssBytes": 326168576,
+      "liveEngines": 0
+    }
+  ],
+  "nativeErrorEvents": [],
+  "samples": [
+    {
+      "elapsedSeconds": 0,
+      "partId": "40027950776",
+      "positionMs": 1566,
+      "cumulativeMediaMs": 1566,
+      "rate": 1.0,
+      "durationMs": 436166,
+      "nativeSpeed": "1.000000",
+      "nativePosition": "1.566688",
+      "audioOutput": "opensles",
+      "audioSpeedCorrection": "1.000000",
+      "phase": "playing",
+      "audioSampleRate": 44100,
+      "rssBytes": 348418048,
+      "imageCacheBytes": 10824480,
+      "liveEngines": 1,
+      "avSyncSeconds": 0.000027,
+      "audioPtsSeconds": 1.55036,
+      "overlayMetrics": {
+        "created": 5,
+        "disposed": 4,
+        "active": 1,
+        "maximum": 1,
+        "tickerFrames": 1553,
+        "captionChanges": 32,
+        "admittedDanmaku": 118,
+        "cleared": 11,
+        "maximumDanmaku": 40,
+        "activeTickers": 1,
+        "lowLoadTransitions": 1,
+        "disabledTransitions": 1
+      }
+    },
+    {
+      "elapsedSeconds": 60,
+      "partId": "40027950776",
+      "positionMs": 61500,
+      "cumulativeMediaMs": 61500,
+      "rate": 1.0,
+      "durationMs": 436166,
+      "nativeSpeed": "1.000000",
+      "nativePosition": "61.500000",
+      "audioOutput": "opensles",
+      "audioSpeedCorrection": "1.000000",
+      "phase": "playing",
+      "audioSampleRate": 44100,
+      "rssBytes": 341135360,
+      "imageCacheBytes": 10824480,
+      "liveEngines": 1,
+      "avSyncSeconds": 0.000079,
+      "audioPtsSeconds": 61.48935,
+      "overlayMetrics": {
+        "created": 5,
+        "disposed": 4,
+        "active": 1,
+        "maximum": 1,
+        "tickerFrames": 5148,
+        "captionChanges": 92,
+        "admittedDanmaku": 151,
+        "cleared": 11,
+        "maximumDanmaku": 40,
+        "activeTickers": 1,
+        "lowLoadTransitions": 2,
+        "disabledTransitions": 2
+      }
+    }
+  ],
+  "naturalAutoNextTransitions": [],
+  "maximumEngines": 1,
+  "created": 4,
+  "released": 4,
+  "liveAfterReturn": 0,
+  "finalRssBytes": 327831552,
+  "frameSamplesTotal": 3825,
+  "frameWindowSize": 3825,
+  "buildWindowP95Ms": 1.408,
+  "rasterWindowP95Ms": 18.088,
+  "manualLipSyncVerified": false,
+  "physicalTv": false,
+  "comparisonWindows": [
+    {
+      "mode": "off",
+      "elapsedMs": 10010,
+      "frameCount": 541,
+      "buildP95Ms": 1.077,
+      "rasterP95Ms": 6.728,
+      "rasterP99Ms": 15.643,
+      "overBudgetRatio": 0.005545286506469501,
+      "tickerFrames": 0
+    },
+    {
+      "mode": "subtitles",
+      "elapsedMs": 10034,
+      "frameCount": 601,
+      "buildP95Ms": 1.184,
+      "rasterP95Ms": 17.791,
+      "rasterP99Ms": 19.156,
+      "overBudgetRatio": 0.1281198003327787,
+      "tickerFrames": 600
+    },
+    {
+      "mode": "both",
+      "elapsedMs": 10048,
+      "frameCount": 603,
+      "buildP95Ms": 1.612,
+      "rasterP95Ms": 18.104,
+      "rasterP99Ms": 22.205,
+      "overBudgetRatio": 0.1558872305140962,
+      "tickerFrames": 597
+    }
+  ],
+  "subtitleTimingSamples": [
+    {
+      "rate": 0.5,
+      "nativePositionMs": 35000.0,
+      "cueStartMs": 34000,
+      "cueEndMs": 35800,
+      "outsideCueMs": 0.0
+    },
+    {
+      "rate": 1.0,
+      "nativePositionMs": 35333.312,
+      "cueStartMs": 34000,
+      "cueEndMs": 35800,
+      "outsideCueMs": 0.0
+    },
+    {
+      "rate": 2.0,
+      "nativePositionMs": 35000.0,
+      "cueStartMs": 34000,
+      "cueEndMs": 35800,
+      "outsideCueMs": 0.0
+    }
+  ],
+  "subtitleSource": "synthetic multi-track fixture; real authenticated body read verified separately",
+  "danmakuSource": "real public segments plus 20 synthetic entries per media second",
+  "realDanmakuDecoded": 124,
+  "syntheticDanmakuGenerated": 57600,
+  "overlayMetrics": {
+    "created": 5,
+    "disposed": 5,
+    "active": 0,
+    "maximum": 1,
+    "tickerFrames": 5149,
+    "captionChanges": 92,
+    "admittedDanmaku": 151,
+    "cleared": 11,
+    "maximumDanmaku": 40,
+    "activeTickers": 0,
+    "lowLoadTransitions": 2,
+    "disabledTransitions": 2
+  },
+  "hostRecordedAtUtc": "2026-10-26T05:48:32.442110Z"
+}

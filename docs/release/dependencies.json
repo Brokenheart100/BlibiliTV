@@ -1,9 +1,9 @@
 {
-  "pubspecLockSha256": "e95482cca98e4b0a3b20199a0608283c39efb698306bea1f8a4141481d72929c",
-  "lockCanonicalSha256": "e95482cca98e4b0a3b20199a0608283c39efb698306bea1f8a4141481d72929c",
-  "nativeNoticesSha256": "4d093e31ff53f2d334369ccc80645fc8fbe63685476396534219f4fc29895542",
-  "runtimePackageCount": 137,
-  "allDependencyCount": 180,
+  "pubspecLockSha256": "67ee8181b56cc27a51ccbfe72831869e21dc7daf2ebb191f849e8ab8e230462c",
+  "lockCanonicalSha256": "67ee8181b56cc27a51ccbfe72831869e21dc7daf2ebb191f849e8ab8e230462c",
+  "nativeNoticesSha256": "1dd2eac304b0754ef4ac9bdfd3e05192b611ac9c16546bbd42fbe4f395da6a0b",
+  "runtimePackageCount": 158,
+  "allDependencyCount": 202,
   "packages": [
     {
       "package": "_fe_analyzer_shared",
@@ -76,6 +76,78 @@
       "source": "https://github.com/ryanheise/audio_session",
       "licenseFile": "LICENSE",
       "licenseSha256": "2568490c678ba27cc8a405238637c4ba76adc632232f05dc1c36cbf59381dba4"
+    },
+    {
+      "package": "better_player",
+      "version": "1.29.0",
+      "kind": "direct",
+      "runtimeGraph": true,
+      "source": "https://github.com/jhomlala/betterplayer/tree/master/packages/better_player",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "ed01541f02ebeb52060c15fb48bc2617753b5b54a79f2bcee111111f1408a769"
+    },
+    {
+      "package": "better_player_android",
+      "version": "1.9.0",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/jhomlala/betterplayer/tree/master/packages/better_player_android",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "155830ac23202bb6e396123bd91a0cdcaa94279b5cee97fbbb4244411bc5f3bf"
+    },
+    {
+      "package": "better_player_ios",
+      "version": "1.9.0",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/jhomlala/betterplayer/tree/master/packages/better_player_ios",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "155830ac23202bb6e396123bd91a0cdcaa94279b5cee97fbbb4244411bc5f3bf"
+    },
+    {
+      "package": "better_player_linux",
+      "version": "1.0.0",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/jhomlala/betterplayer/tree/master/packages/better_player_linux",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "90448e0008534b4c6ea03b01743451223838bef1fd8356d68c7ed25bdbe2dd00"
+    },
+    {
+      "package": "better_player_macos",
+      "version": "1.4.1",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/jhomlala/betterplayer/tree/master/packages/better_player_macos",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "155830ac23202bb6e396123bd91a0cdcaa94279b5cee97fbbb4244411bc5f3bf"
+    },
+    {
+      "package": "better_player_platform_interface",
+      "version": "1.5.0",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/jhomlala/betterplayer/tree/master/packages/better_player_platform_interface",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "155830ac23202bb6e396123bd91a0cdcaa94279b5cee97fbbb4244411bc5f3bf"
+    },
+    {
+      "package": "better_player_web",
+      "version": "1.3.1",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/jhomlala/betterplayer/tree/master/packages/better_player_web",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "f9c77a5880f8cc806cc0a9f2573868eccd16eac2a7acf0fba26d123d2bfdff9a"
+    },
+    {
+      "package": "better_player_windows",
+      "version": "1.3.0",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/jhomlala/betterplayer/tree/master/packages/better_player_windows",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "155830ac23202bb6e396123bd91a0cdcaa94279b5cee97fbbb4244411bc5f3bf"
     },
     {
       "package": "boolean_selector",
@@ -168,6 +240,15 @@
       "licenseSha256": "31b6d676e72277911cfee3688ca9411387eb5ce7a2f722cef30bbea0bcbee60e"
     },
     {
+      "package": "canvas_danmaku",
+      "version": "0.3.3",
+      "kind": "direct",
+      "runtimeGraph": true,
+      "source": "https://github.com/Predidit/canvas_danmaku",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "a674a4b706a5ef7bca1fe017d89e4e0e7154ac8fc9e8f7b2397430082a4a370a"
+    },
+    {
       "package": "characters",
       "version": "1.4.1",
       "kind": "transitive",
@@ -249,6 +330,15 @@
       "licenseSha256": "ad6a71997da90924b2cfb1fb47ec46537f70faf469efe016168794ae45ed6888"
     },
     {
+      "package": "cross_file",
+      "version": "0.3.5+5",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/flutter/packages/tree/main/packages/cross_file",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "420f7739f169097f0aad1242045169cd643c8f1d94e62866fad265ae4c369b7d"
+    },
+    {
       "package": "crypto",
       "version": "3.0.7",
       "kind": "direct",
@@ -259,7 +349,7 @@
     },
     {
       "package": "cupertino_icons",
-      "version": "1.0.9",
+      "version": "2.0.0",
       "kind": "direct",
       "runtimeGraph": true,
       "source": "https://github.com/flutter/packages/tree/main/third_party/packages/cupertino_icons",
@@ -386,7 +476,7 @@
     {
       "package": "fixnum",
       "version": "1.1.1",
-      "kind": "transitive",
+      "kind": "direct",
       "runtimeGraph": true,
       "source": "https://github.com/dart-lang/core/tree/main/pkgs/fixnum",
       "licenseFile": "LICENSE",
@@ -571,6 +661,15 @@
       "source": "https://github.com/dart-lang/tools/tree/main/pkgs/graphs",
       "licenseFile": "LICENSE",
       "licenseSha256": "ea97a7558a7bd7cee4e2355f7529e3cbebb0dcbb546ddb9a90f10c9eb6b08da5"
+    },
+    {
+      "package": "group_button",
+      "version": "5.3.4",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/Frezyx/group_button",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "282d481dfff153dd7adb1ae586a8522cc277a53162ce4fea25cfc24da6c280bf"
     },
     {
       "package": "hooks",
@@ -1068,6 +1167,24 @@
       "licenseSha256": "5f018bbc25a55406d7a4e1d3229135439e315210b0050ca56dbb367a4934e85d"
     },
     {
+      "package": "protobuf",
+      "version": "6.1.0",
+      "kind": "direct",
+      "runtimeGraph": true,
+      "source": "https://github.com/google/protobuf.dart/tree/master/protobuf",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "7e124af6a556f045cb3a20cafbdaa31602ac2c82cbcb3c3b15faaaf514b06028"
+    },
+    {
+      "package": "protoc_plugin",
+      "version": "25.0.0",
+      "kind": "dev",
+      "runtimeGraph": false,
+      "source": "https://github.com/google/protobuf.dart/tree/master/protoc_plugin",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "7e124af6a556f045cb3a20cafbdaa31602ac2c82cbcb3c3b15faaaf514b06028"
+    },
+    {
       "package": "pub_semver",
       "version": "2.2.1",
       "kind": "transitive",
@@ -1165,6 +1282,24 @@
       "source": "https://github.com/alexmercerind/safe_local_storage.git",
       "licenseFile": "LICENSE",
       "licenseSha256": "d4cfdb498601b2872c7a09d06c62f92f5c751261bdb6fc4ce436940c7ccac78a"
+    },
+    {
+      "package": "share_plus",
+      "version": "13.3.1",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/fluttercommunity/plus_plugins",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "eb9741a672906ebd01fd9b3bef38f6c82eff250e91149cf404539ee7981079fd"
+    },
+    {
+      "package": "share_plus_platform_interface",
+      "version": "7.2.0",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/fluttercommunity/plus_plugins",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "3b38d48befd0af70b892e13d10c9e34679416c24a9277f962629951c64d71f4c"
     },
     {
       "package": "shared_preferences",
@@ -1429,7 +1564,16 @@
     },
     {
       "package": "talker",
-      "version": "5.1.21",
+      "version": "5.2.0",
+      "kind": "direct",
+      "runtimeGraph": true,
+      "source": "https://github.com/Frezyx/talker",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "3acadeb2974854fcaeb9675f5801a57b158477c1b54f9bd695dd6c112a3e3fae"
+    },
+    {
+      "package": "talker_flutter",
+      "version": "5.2.0",
       "kind": "direct",
       "runtimeGraph": true,
       "source": "https://github.com/Frezyx/talker",
@@ -1440,6 +1584,15 @@
       "package": "talker_logger",
       "version": "5.2.0",
       "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/Frezyx/talker",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "3acadeb2974854fcaeb9675f5801a57b158477c1b54f9bd695dd6c112a3e3fae"
+    },
+    {
+      "package": "talker_riverpod_logger",
+      "version": "5.2.0",
+      "kind": "direct",
       "runtimeGraph": true,
       "source": "https://github.com/Frezyx/talker",
       "licenseFile": "LICENSE",
@@ -1491,6 +1644,42 @@
       "licenseSha256": "2e3000f38718f050869d57540c288c661a446f64df1ba4ea4764df552b04a331"
     },
     {
+      "package": "url_launcher_linux",
+      "version": "3.2.3",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/flutter/packages/tree/main/packages/url_launcher/url_launcher_linux",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "420f7739f169097f0aad1242045169cd643c8f1d94e62866fad265ae4c369b7d"
+    },
+    {
+      "package": "url_launcher_platform_interface",
+      "version": "2.3.2",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/flutter/packages/tree/main/packages/url_launcher/url_launcher_platform_interface",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "89519eca6f7b9529b35bdddd623a58c3af06a88c458dbd6531ddb4675acf75a9"
+    },
+    {
+      "package": "url_launcher_web",
+      "version": "2.4.3",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/flutter/packages/tree/main/packages/url_launcher/url_launcher_web",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "420f7739f169097f0aad1242045169cd643c8f1d94e62866fad265ae4c369b7d"
+    },
+    {
+      "package": "url_launcher_windows",
+      "version": "3.1.6",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/flutter/packages/tree/main/packages/url_launcher/url_launcher_windows",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "420f7739f169097f0aad1242045169cd643c8f1d94e62866fad265ae4c369b7d"
+    },
+    {
       "package": "uuid",
       "version": "4.6.0",
       "kind": "transitive",
@@ -1507,6 +1696,15 @@
       "source": "https://github.com/flutter/core-packages/tree/main/packages/vector_math",
       "licenseFile": "LICENSE",
       "licenseSha256": "420f7739f169097f0aad1242045169cd643c8f1d94e62866fad265ae4c369b7d"
+    },
+    {
+      "package": "visibility_detector",
+      "version": "0.4.0+2",
+      "kind": "transitive",
+      "runtimeGraph": true,
+      "source": "https://github.com/google/flutter.widgets/tree/master/packages/visibility_detector",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "d347790d98693ff63129eafe676bac5cb5247c972f1a36f631bfa0e4dbb17293"
     },
     {
       "package": "vm_service",
@@ -1601,7 +1799,7 @@
     {
       "package": "xml",
       "version": "7.1.0",
-      "kind": "transitive",
+      "kind": "direct",
       "runtimeGraph": true,
       "source": "https://github.com/renggli/dart-xml",
       "licenseFile": "LICENSE",

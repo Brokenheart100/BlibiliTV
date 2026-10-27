@@ -2,6 +2,8 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mambatv/app/app.dart';
+import 'package:mambatv/app/logging/app_container.dart';
+import 'package:mambatv/app/logging/app_talker.dart';
 import 'package:mambatv/app/bootstrap.dart';
 import 'package:mambatv/app/providers/infrastructure_providers.dart';
 import 'package:mambatv/app/providers/repository_providers.dart';
@@ -12,8 +14,16 @@ import 'package:mambatv/domain/repositories/repositories.dart';
 import 'package:mambatv/ui/features/settings/view_models/settings_view_model.dart';
 
 import 'memory_preferences.dart';
+import 'fake_overlays.dart';
+
+import 'package:mambatv/app/providers/overlay_providers.dart';
+
 import 'fake_playback.dart';
 import 'fake_auth.dart';
+import 'fake_personal_home.dart';
+
+import 'package:mambatv/domain/library/personal_home.dart';
+
 import 'memory_search_history.dart';
 import 'fake_library.dart';
 
@@ -37,6 +47,7 @@ Future<ProviderContainer> pumpMamba(
   LibraryRepository? library,
   CacheCleaner? cacheCleaner,
   List<LicenseNotice>? licenses,
+  PersonalHomeRepository? personalHome,
 }) async {
   tester.view.physicalSize = size;
   tester.view.devicePixelRatio = 1;
@@ -45,9 +56,18 @@ Future<ProviderContainer> pumpMamba(
   await tester.binding.setSurfaceSize(size);
   addTearDown(() => tester.binding.setSurfaceSize(null));
   final session = sessions ?? MemorySessionRepository();
-  final container = ProviderContainer(
-    retry: (_, _) => null,
+  final container = createAppContainer(
+    talker: createAppTalker(console: false),
     overrides: [
+      personalHomeRepositoryProvider.overrideWithValue(
+        personalHome ??
+            FakePersonalHomeRepository(session: () => session.current),
+      ),
+      subtitleRepositoryProvider.overrideWithValue(FakeOverlays()),
+      danmakuRepositoryProvider.overrideWithValue(FakeOverlays()),
+      overlayPreferencesRepositoryProvider.overrideWithValue(
+        MemoryOverlayPreferences(),
+      ),
       if (licenses != null)
         licenseNoticesProvider.overrideWith((ref) async => licenses),
       localHistoryRepositoryProvider.overrideWithValue(

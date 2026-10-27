@@ -1,0 +1,49 @@
+{
+  "status": "running",
+  "platform": "Android",
+  "readOnly": true,
+  "variants": [
+    {
+      "variant": "opensles",
+      "requestedBackend": "opensles",
+      "actualBackend": "opensles",
+      "inputFormat": "floatp",
+      "inputSampleRate": "44100",
+      "inputChannels": "stereo",
+      "outputFormat": "float",
+      "outputSampleRate": "44100",
+      "outputChannels": "stereo",
+      "maximumAvsyncSeconds": 0.083374,
+      "errors": []
+    },
+    {
+      "variant": "opensles-pcm16",
+      "requestedBackend": "opensles",
+      "actualBackend": "opensles",
+      "inputFormat": "floatp",
+      "inputSampleRate": "44100",
+      "inputChannels": "stereo",
+      "outputFormat": "s16",
+      "outputSampleRate": "48000",
+      "outputChannels": "stereo",
+      "maximumAvsyncSeconds": 0.083617,
+      "errors": []
+    },
+    {
+      "variant": "audiotrack",
+      "requestedBackend": "audiotrack",
+      "actualBackend": "audiotrack",
+      "inputFormat": "floatp",
+      "inputSampleRate": "44100",
+      "inputChannels": "stereo",
+      "outputFormat": "float",
+      "outputSampleRate": "44100",
+      "outputChannels": "stereo",
+      "maximumAvsyncSeconds": 1.452967,
+      "errors": [
+        "unsupported"
+      ]
+    }
+  ],
+  "manualNoiseFreeVerified": false
+}

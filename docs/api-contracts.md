@@ -119,3 +119,27 @@ M3 真实申请返回的二维码目标为 HTTPS `account.bilibili.com`；实现
 详情没有 aid 时先读取已验证的 WBI view 解析真实 aid，不能由 BVID 猜测。空 list 兼容 null；不支持的历史 business／空 BVID 保留为不可播放条目。权限、鉴权、限流、网络、超时、契约错误使用安全 Failure，不展示服务端原始响应或个人内容。
 
 所有个人列表命令都先读当前状态，最多发出一次 POST，再读确认。响应丢失但目标状态已观察到时确认成功；未确认时保留原始意图，关闭／重开弹层也不会在同一会话盲目重放。账号替换销毁原 API scope，旧请求取消；不将未确认命令持久化或排队到新账号。
+
+## M8 已实现的只读契约（2026-10-26）
+
+字幕、弹幕读取、UP／关注视频、点赞／投币、PGC 和直播的固定上游线索与待验证项见 [总开发计划第 11.5 节](development-plan.md#115-接口依赖与缓存决策)。本次另行查看 PiliPlus 提交 `affac5334fc41744894618d9fb53b7101db9532a`，不替换 M0／M6 的历史参考来源。
+
+| 能力 | 请求 | 读取字段与分页 | 验证 |
+| --- | --- | --- | --- |
+| 字幕轨道 | `GET api.bilibili.com/x/player/wbi/v2`，WBI，`bvid`／`cid`，当前账号 Cookie | `subtitle.subtitles` 的 id_str／id、lan、lan_doc、ai_type、subtitle_url；最多处理 32 轨 | 游客空轨正常；真实登录样本 1 轨 AI，其他样本 0 轨 |
+| 字幕正文 | 元数据提供的受限 HTTPS CDN URL，不附 Cookie、不跟随重定向 | JSON `body` 中 from／to（秒）、content；转为整数 ms、排序、最多 20000 cue | 登录元数据得到的真实正文 176 cue，实际画面可见；合成重叠／坏数据回归 |
+| 弹幕元数据 | `GET api.bilibili.com/x/v2/dm/web/view`，`type=1`、`oid=cid` | protobuf WebView 字段 4 的 SegmentConfig；page_size 字段 1 为 ms，total 字段 2 为段数 | 真实公开及原生读取；样本 page_size=360000，total 由响应提供，未硬编码 |
+| 弹幕分段 | `GET api.bilibili.com/x/v2/dm/web/seg.so`，`type=1`、`oid=cid`、`segment_index`（从 1 起） | Segment.elems 字段 1；条目 id=1、progress=2（ms）、mode=3、fontsize=4、color=5、content=7、id_str=12 | 真实公开／原生样本；仅 mode 1／4／5，按 ID 去重；未知字段兼容 |
+| UP 公开视频 | `GET api.bilibili.com/x/space/wbi/arc/search`，WBI；mid、pn、ps=30、tid=0、order=pubdate／click、platform=web、web_location=1550101、order_avoided=true | `list.vlist`，bvid／title／author／pic／length／play；`page.count` 决定下一页，空页终止 | 真实账号三组各 30 条；合成请求／排序／分页回归 |
+| 关注视频流 | `GET api.bilibili.com/x/polymer/web-dynamic/v1/feed/all`，当前账号 Cookie；type=video、可选 offset | items[].modules.module_dynamic.major，仅 MAJOR_TYPE_ARCHIVE；author、archive；has_more／offset，重复游标终止 | 真实账号首屏 20 条及下一页；合成混合卡片过滤、游客拦截；无通用缓存 |
+| 搜索筛选 | 既有 WBI 搜索路径；order=totalrank／pubdate／click、duration=0..4；原始默认请求保持兼容 | 时长 0 全部、1 小于 10 分、2 为 10–30 分、3 为 30–60 分、4 大于 60 分；query／选项共同决定请求键 | 真实读取 Flutter＋最新＋短视频；其余组合合成参数校验，未逐一真实验收 |
+
+正文流限制为声明长度 2 MiB、已解码字节 8 MiB；禁止 CDN userinfo、非 443 端口、非指定域名及重定向。字幕签名 URL 只存 Data 的有界内存映射；不进入模型默认打印、路由或持久存储。`SubtitleCue`／`DanmakuItem` 不自动打印正文。弹幕分段按实际 manifest 定位，最多前／当前／后三段、顺序网络请求，估算缓存不超过 32 MiB。
+
+轨道／正文／分段的格式、超限、网络、取消和鉴权错误均映射为安全 Failure；增强错误通过菜单局部重试，视频继续播放。关闭、后台或 scope 变化取消请求，epoch 拦截迟到解析。账号代次控制 Repository 生存期；关注私人数据绕过通用 HTTP 缓存，未增加全局 GET 缓存规则。
+
+实测计数见 [公开 spike](m8-evidence/interface-spike.json)、[账号只读](m8-evidence/real-readonly.json) 与 [验收](m8-validation.md)。账号报告的 recordedAtUtc 来自当时旧模拟器时钟，不能当作主机时间；执行发生于本轮 2026-10-26，原报告保持不改写。不同客户端的 manifest.total 样本出现差异，按各自响应处理，未推定原因。
+
+## M8 可选增量与 M9 尚未验证的契约
+
+点赞／投币是独立延期增量；没有新增对应生产命令或真实写入验收。PGC／直播需独立内容 ID、解析与错误契约；UGC 心跳、时长和续播规则不自动适用。后续继续按“来源／日期、请求与响应字段、合成 fixture、真实只读样本、失败语义、范围”补录。

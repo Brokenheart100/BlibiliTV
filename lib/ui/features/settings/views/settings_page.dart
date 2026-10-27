@@ -21,7 +21,7 @@ class SettingsPage extends ConsumerStatefulWidget {
 }
 
 class _SettingsPageState extends ConsumerState<SettingsPage> {
-  final nodes = List.generate(10, (i) => FocusNode(debugLabel: 'setting-$i'));
+  final nodes = List.generate(13, (i) => FocusNode(debugLabel: 'setting-$i'));
   final scroll = ScrollController();
   TvShellScope? shell;
   void _entry() {
@@ -79,7 +79,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
         children: [
           Text('设置', style: Theme.of(context).textTheme.headlineLarge),
           const SizedBox(height: 5),
-          const Text('让大屏，更合你的习惯', style: TextStyle(color: TvColors.muted)),
+          Text('让大屏，更合你的习惯', style: TextStyle(color: context.tvColors.muted)),
           const SizedBox(height: 24),
           if (result.value?.message != null)
             Padding(
@@ -88,7 +88,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                 result.value!.message!,
                 key: const Key('settings-message'),
                 maxLines: 2,
-                style: const TextStyle(color: TvColors.accent),
+                style: TextStyle(color: context.tvColors.accent),
               ),
             ),
           Expanded(
@@ -116,7 +116,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                     builder: (rowContext) => Container(
                       padding: const EdgeInsets.all(18),
                       decoration: BoxDecoration(
-                        color: TvColors.surface,
+                        color: context.tvColors.surface,
                         borderRadius: BorderRadius.circular(16),
                       ),
                       child: Row(
@@ -134,8 +134,8 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                                 const SizedBox(height: 5),
                                 Text(
                                   description,
-                                  style: const TextStyle(
-                                    color: TvColors.muted,
+                                  style: TextStyle(
+                                    color: context.tvColors.muted,
                                     fontSize: 12,
                                   ),
                                 ),
@@ -306,6 +306,46 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                       () async {
                         await context.push<void>('/settings/licenses');
                         if (mounted) nodes[9].requestFocus();
+                      },
+                    ),
+                    row(
+                      10,
+                      'setting-overlays',
+                      '字幕与弹幕',
+                      '语言、大小、位置、屏蔽和默认开关。',
+                      '观看增强',
+                      () async {
+                        await context.push<void>('/settings/overlays');
+                        if (mounted) nodes[10].requestFocus();
+                      },
+                    ),
+                    row(
+                      11,
+                      'setting-theme',
+                      '外观',
+                      '浅色、跟随系统或深色；自动记住你的选择。',
+                      switch (s.theme) {
+                        AppTheme.light => '浅色',
+                        AppTheme.dark => '深色',
+                        AppTheme.system => '跟随系统',
+                      },
+                      () => _save(
+                        s.copyWith(
+                          theme:
+                              AppTheme.values[(s.theme.index + 1) %
+                                  AppTheme.values.length],
+                        ),
+                      ),
+                    ),
+                    row(
+                      12,
+                      'setting-logs',
+                      '诊断日志',
+                      '查看本次运行的网络与状态记录。',
+                      '查看日志',
+                      () async {
+                        await context.push<void>('/settings/logs');
+                        if (mounted) nodes[12].requestFocus();
                       },
                     ),
                   ],

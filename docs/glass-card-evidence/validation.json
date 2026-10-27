@@ -1,0 +1,23 @@
+{
+  "date": "2026-10-27",
+  "flutterTestsPassed": 240,
+  "staticAnalysis": "passed_no_diagnostics",
+  "formatCheck": {"files": 239, "changed": 0},
+  "schemaVersion": 3,
+  "migrationTests": ["v1_to_v3", "v2_to_v3_preserves_metadata_and_progress"],
+  "nativeValidation": {
+    "device": "Android TV emulator API 36 x86_64",
+    "package": "app.mamba.mambatv.validation",
+    "identity": "guest",
+    "darkAndLightHome": "passed",
+    "publicCreatorAvatars": "passed",
+    "historyEntryAndDpadReturn": "passed",
+    "hotReload": "passed",
+    "runtimeErrors": 0,
+    "finalAppearance": "dark"
+  },
+  "personalTabsValidation": "synthetic_account_widget_tests",
+  "physicalTv": "not_run",
+  "armDevice": "not_run",
+  "published": false
+}

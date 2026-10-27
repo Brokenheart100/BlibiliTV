@@ -1,0 +1,11 @@
+{
+  "output": "G7u (NVIDIA High Definition Audio)",
+  "samples": 100,
+  "sessionPeaks": [
+    {
+      "pid": 7260,
+      "max": 0.651214599609375,
+      "nonzeroSamples": 65
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "status": "passed-after-cold-start",
+  "device": "Mamba_TV_API36 / emulator-5556 / Android API 36",
+  "applicationId": "app.mamba.mambatv.validation",
+  "readOnly": true,
+  "playingDpadBurst": {
+    "rightPresses": 12,
+    "leftPresses": 4,
+    "targetPreviewObserved": "02:09",
+    "subsequentPositionObserved": "02:48",
+    "subsequentPhase": "正在播放",
+    "scope": "actual ADB input, target preview and resumed position observed through Flutter MCP; elapsed playback is not subtracted to claim exact burst displacement"
+  },
+  "pausedDpadBurst": {
+    "before": "05:53",
+    "forwardActivations": 2,
+    "rewindActivations": 4,
+    "expectedNetSeconds": -20,
+    "after": "05:33",
+    "phaseAfter": "已暂停"
+  },
+  "normalExit": "PlayerPage absent after Back",
+  "hotRestartAfterExit": "succeeded",
+  "runtimeErrorsAfterControlledRecheck": [],
+  "developmentLimitation": {
+    "action": "hot restart while native playback was active",
+    "observed": "libmpv SIGSEGV; debug app lost connection",
+    "workaroundVerified": "cold start, normal player exit, then hot restart",
+    "rootCauseConfirmed": false,
+    "fixed": false
+  },
+  "manualLipSyncVerified": false,
+  "physicalTv": false
+}

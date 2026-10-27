@@ -9,6 +9,54 @@ part of 'repository_providers.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
 
+@ProviderFor(personalHomeRepository)
+final personalHomeRepositoryProvider = PersonalHomeRepositoryProvider._();
+
+final class PersonalHomeRepositoryProvider
+    extends
+        $FunctionalProvider<
+          PersonalHomeRepository,
+          PersonalHomeRepository,
+          PersonalHomeRepository
+        >
+    with $Provider<PersonalHomeRepository> {
+  PersonalHomeRepositoryProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'personalHomeRepositoryProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$personalHomeRepositoryHash();
+
+  @$internal
+  @override
+  $ProviderElement<PersonalHomeRepository> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  PersonalHomeRepository create(Ref ref) {
+    return personalHomeRepository(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(PersonalHomeRepository value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<PersonalHomeRepository>(value),
+    );
+  }
+}
+
+String _$personalHomeRepositoryHash() =>
+    r'8f2531d2cd89dacc2811bef6cf372095fe568dda';
+
 @ProviderFor(localHistoryRepository)
 final localHistoryRepositoryProvider = LocalHistoryRepositoryProvider._();
 

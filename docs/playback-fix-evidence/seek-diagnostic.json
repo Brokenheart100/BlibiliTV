@@ -1,0 +1,1395 @@
+{
+  "status": "diagnostic",
+  "experiments": true,
+  "variants": [
+    {
+      "variant": "baseline",
+      "steps": [
+        {
+          "target": 35,
+          "seekReturnedMs": 10,
+          "stableAfterMs": 1068,
+          "recovered": true,
+          "failure": null,
+          "samples": [
+            {
+              "position": 35.2,
+              "audioPts": 35.265109,
+              "avsync": 0.050022,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            },
+            {
+              "position": 35.533313,
+              "audioPts": 35.531398,
+              "avsync": -0.000004,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            },
+            {
+              "position": 35.8,
+              "audioPts": 35.786357,
+              "avsync": 0.000006,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            },
+            {
+              "position": 36.066688,
+              "audioPts": 36.053434,
+              "avsync": 0.000006,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            }
+          ]
+        },
+        {
+          "target": 85,
+          "seekReturnedMs": 7,
+          "stableAfterMs": 1065,
+          "recovered": true,
+          "failure": null,
+          "samples": [
+            {
+              "position": 85.3,
+              "audioPts": 85.271017,
+              "avsync": -0.000006,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            },
+            {
+              "position": 85.566688,
+              "audioPts": 85.532386,
+              "avsync": 0.000003,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            },
+            {
+              "position": 85.833313,
+              "audioPts": 85.805081,
+              "avsync": 0.000013,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            },
+            {
+              "position": 86.066688,
+              "audioPts": 86.066283,
+              "avsync": 0.000006,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            }
+          ]
+        },
+        {
+          "target": 25,
+          "seekReturnedMs": 12,
+          "stableAfterMs": 1065,
+          "recovered": true,
+          "failure": null,
+          "samples": [
+            {
+              "position": 25.2,
+              "audioPts": 25.254277,
+              "avsync": 0.050073,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            },
+            {
+              "position": 25.533313,
+              "audioPts": 25.521653,
+              "avsync": 0.00001,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            },
+            {
+              "position": 25.8,
+              "audioPts": 25.789954,
+              "avsync": 0.000009,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            },
+            {
+              "position": 26.066688,
+              "audioPts": 26.056143,
+              "avsync": 0.000009,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            }
+          ]
+        },
+        {
+          "target": 120,
+          "seekReturnedMs": 29,
+          "stableAfterMs": 1100,
+          "recovered": true,
+          "failure": null,
+          "samples": [
+            {
+              "position": 120.3,
+              "audioPts": 120.283113,
+              "avsync": -0.000008,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            },
+            {
+              "position": 120.566688,
+              "audioPts": 120.548135,
+              "avsync": 0.000002,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            },
+            {
+              "position": 120.833313,
+              "audioPts": 120.815023,
+              "avsync": 0.000005,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            },
+            {
+              "position": 121.1,
+              "audioPts": 121.085145,
+              "avsync": 0.000005,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            }
+          ]
+        },
+        {
+          "target": 15,
+          "seekReturnedMs": 8,
+          "stableAfterMs": 1068,
+          "recovered": true,
+          "failure": null,
+          "samples": [
+            {
+              "position": 15.2,
+              "audioPts": 15.261384,
+              "avsync": 0.050071,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            },
+            {
+              "position": 15.533313,
+              "audioPts": 15.529121,
+              "avsync": 0.000005,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            },
+            {
+              "position": 15.8,
+              "audioPts": 15.797515,
+              "avsync": 0.000004,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            },
+            {
+              "position": 16.066688,
+              "audioPts": 16.065032,
+              "avsync": 0.000007,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            }
+          ]
+        },
+        {
+          "target": 180,
+          "seekReturnedMs": 21,
+          "stableAfterMs": 1082,
+          "recovered": true,
+          "failure": null,
+          "samples": [
+            {
+              "position": 180.3,
+              "audioPts": 180.279106,
+              "avsync": -0.000002,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            },
+            {
+              "position": 180.566688,
+              "audioPts": 180.54207,
+              "avsync": 0.000003,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            },
+            {
+              "position": 180.833313,
+              "audioPts": 180.810722,
+              "avsync": 0.000017,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            },
+            {
+              "position": 181.1,
+              "audioPts": 181.078741,
+              "avsync": 0.000005,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            }
+          ]
+        },
+        {
+          "target": 40,
+          "seekReturnedMs": 9,
+          "stableAfterMs": 1064,
+          "recovered": true,
+          "failure": null,
+          "samples": [
+            {
+              "position": 40.2,
+              "audioPts": 40.253657,
+              "avsync": 0.050039,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            },
+            {
+              "position": 40.533313,
+              "audioPts": 40.522218,
+              "avsync": 0.000004,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            },
+            {
+              "position": 40.8,
+              "audioPts": 40.789001,
+              "avsync": 0.000002,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            },
+            {
+              "position": 41.066688,
+              "audioPts": 41.056069,
+              "avsync": 0.000006,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            }
+          ]
+        },
+        {
+          "target": 210,
+          "seekReturnedMs": 14,
+          "stableAfterMs": 1083,
+          "recovered": true,
+          "failure": null,
+          "samples": [
+            {
+              "position": 210.3,
+              "audioPts": 210.273432,
+              "avsync": -0.000006,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            },
+            {
+              "position": 210.566688,
+              "audioPts": 210.539774,
+              "avsync": 0.000002,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            },
+            {
+              "position": 210.833313,
+              "audioPts": 210.806813,
+              "avsync": 0.000007,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            },
+            {
+              "position": 211.1,
+              "audioPts": 211.075783,
+              "avsync": 0.000005,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            }
+          ]
+        },
+        {
+          "target": 10,
+          "seekReturnedMs": 9,
+          "stableAfterMs": 1065,
+          "recovered": true,
+          "failure": null,
+          "samples": [
+            {
+              "position": 10.2,
+              "audioPts": 10.270138,
+              "avsync": 0.050051,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            },
+            {
+              "position": 10.533313,
+              "audioPts": 10.530391,
+              "avsync": 0.0,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            },
+            {
+              "position": 10.833312,
+              "audioPts": 10.804901,
+              "avsync": 0.000014,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            },
+            {
+              "position": 11.066688,
+              "audioPts": 11.063842,
+              "avsync": 0.000008,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            }
+          ]
+        }
+      ],
+      "errors": [],
+      "videoSync": "audio",
+      "audioOutput": "opensles"
+    },
+    {
+      "variant": "framedrop",
+      "steps": [
+        {
+          "target": 35,
+          "seekReturnedMs": 8,
+          "stableAfterMs": 1065,
+          "recovered": true,
+          "failure": null,
+          "samples": [
+            {
+              "position": 35.3,
+              "audioPts": 35.265161,
+              "avsync": -0.000007,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            },
+            {
+              "position": 35.533313,
+              "audioPts": 35.53121,
+              "avsync": -0.0,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            },
+            {
+              "position": 35.8,
+              "audioPts": 35.798446,
+              "avsync": 0.000002,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            },
+            {
+              "position": 36.066688,
+              "audioPts": 36.064518,
+              "avsync": 0.000004,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            }
+          ]
+        },
+        {
+          "target": 85,
+          "seekReturnedMs": 17,
+          "stableAfterMs": 1617,
+          "recovered": true,
+          "failure": null,
+          "samples": [
+            {
+              "position": 85.0,
+              "audioPts": null,
+              "avsync": 0.0,
+              "seeking": "yes",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            },
+            {
+              "position": 85.0,
+              "audioPts": null,
+              "avsync": 0.0,
+              "seeking": "yes",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            },
+            {
+              "position": 85.333313,
+              "audioPts": 85.308313,
+              "avsync": -0.000003,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            },
+            {
+              "position": 85.6,
+              "audioPts": 85.576054,
+              "avsync": 0.000005,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            },
+            {
+              "position": 85.866687,
+              "audioPts": 85.84222,
+              "avsync": 0.000006,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            },
+            {
+              "position": 86.133313,
+              "audioPts": 86.111073,
+              "avsync": 0.000005,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            }
+          ]
+        },
+        {
+          "target": 25,
+          "seekReturnedMs": 10,
+          "stableAfterMs": 1131,
+          "recovered": true,
+          "failure": null,
+          "samples": [
+            {
+              "position": 25.0,
+              "audioPts": 25.004567,
+              "avsync": 0.0,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            },
+            {
+              "position": 25.4,
+              "audioPts": 25.389451,
+              "avsync": 0.000006,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            },
+            {
+              "position": 25.666688,
+              "audioPts": 25.654773,
+              "avsync": 0.000005,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            },
+            {
+              "position": 25.933312,
+              "audioPts": 25.922628,
+              "avsync": 0.000005,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            }
+          ]
+        },
+        {
+          "target": 120,
+          "seekReturnedMs": 10,
+          "stableAfterMs": 1068,
+          "recovered": true,
+          "failure": null,
+          "samples": [
+            {
+              "position": 120.2,
+              "audioPts": 120.258173,
+              "avsync": 0.050041,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            },
+            {
+              "position": 120.533313,
+              "audioPts": 120.528837,
+              "avsync": 0.000002,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            },
+            {
+              "position": 120.8,
+              "audioPts": 120.792783,
+              "avsync": 0.000008,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            },
+            {
+              "position": 121.066688,
+              "audioPts": 121.062546,
+              "avsync": 0.000005,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            }
+          ]
+        },
+        {
+          "target": 15,
+          "seekReturnedMs": 9,
+          "stableAfterMs": 1417,
+          "recovered": true,
+          "failure": null,
+          "samples": [
+            {
+              "position": 15.0,
+              "audioPts": null,
+              "avsync": 0.0,
+              "seeking": "yes",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            },
+            {
+              "position": 15.4,
+              "audioPts": 15.36045,
+              "avsync": 0.000001,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            },
+            {
+              "position": 15.633313,
+              "audioPts": 15.627616,
+              "avsync": 0.000003,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            },
+            {
+              "position": 15.9,
+              "audioPts": 15.895538,
+              "avsync": 0.000005,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            },
+            {
+              "position": 16.166688,
+              "audioPts": 16.166372,
+              "avsync": 0.000005,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            }
+          ]
+        },
+        {
+          "target": 180,
+          "seekReturnedMs": 7,
+          "stableAfterMs": 1064,
+          "recovered": true,
+          "failure": null,
+          "samples": [
+            {
+              "position": 180.166687,
+              "audioPts": 180.149406,
+              "avsync": -0.000008,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            },
+            {
+              "position": 180.533312,
+              "audioPts": 180.50957,
+              "avsync": 0.000001,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            },
+            {
+              "position": 180.8,
+              "audioPts": 180.7767,
+              "avsync": 0.000004,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            },
+            {
+              "position": 181.066688,
+              "audioPts": 181.04559,
+              "avsync": 0.000004,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            }
+          ]
+        },
+        {
+          "target": 40,
+          "seekReturnedMs": 9,
+          "stableAfterMs": 1061,
+          "recovered": true,
+          "failure": null,
+          "samples": [
+            {
+              "position": 40.2,
+              "audioPts": 40.258462,
+              "avsync": 0.051008,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            },
+            {
+              "position": 40.533313,
+              "audioPts": 40.521732,
+              "avsync": 0.000004,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            },
+            {
+              "position": 40.8,
+              "audioPts": 40.794879,
+              "avsync": 0.000003,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            },
+            {
+              "position": 41.066688,
+              "audioPts": 41.056221,
+              "avsync": 0.000004,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            }
+          ]
+        },
+        {
+          "target": 210,
+          "seekReturnedMs": 6,
+          "stableAfterMs": 1066,
+          "recovered": true,
+          "failure": null,
+          "samples": [
+            {
+              "position": 210.2,
+              "audioPts": 210.266867,
+              "avsync": 0.05152,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            },
+            {
+              "position": 210.533312,
+              "audioPts": 210.523168,
+              "avsync": -0.000004,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            },
+            {
+              "position": 210.8,
+              "audioPts": 210.797257,
+              "avsync": 0.000004,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            },
+            {
+              "position": 211.066688,
+              "audioPts": 211.057538,
+              "avsync": 0.000006,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            }
+          ]
+        },
+        {
+          "target": 10,
+          "seekReturnedMs": 9,
+          "stableAfterMs": 1398,
+          "recovered": true,
+          "failure": null,
+          "samples": [
+            {
+              "position": 10.0,
+              "audioPts": null,
+              "avsync": 0.0,
+              "seeking": "yes",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            },
+            {
+              "position": 10.4,
+              "audioPts": 10.373044,
+              "avsync": 0.000008,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            },
+            {
+              "position": 10.666688,
+              "audioPts": 10.642743,
+              "avsync": 0.000009,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            },
+            {
+              "position": 10.933312,
+              "audioPts": 10.910344,
+              "avsync": 0.000005,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            },
+            {
+              "position": 11.2,
+              "audioPts": 11.174981,
+              "avsync": 0.000007,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            }
+          ]
+        }
+      ],
+      "errors": [],
+      "videoSync": "audio",
+      "audioOutput": "opensles"
+    },
+    {
+      "variant": "edl",
+      "steps": [
+        {
+          "target": 35,
+          "seekReturnedMs": 11,
+          "stableAfterMs": 1067,
+          "recovered": true,
+          "failure": null,
+          "samples": [
+            {
+              "position": 35.2,
+              "audioPts": 35.256602,
+              "avsync": 0.050095,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            },
+            {
+              "position": 35.566688,
+              "audioPts": 35.521742,
+              "avsync": -0.000001,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            },
+            {
+              "position": 35.8,
+              "audioPts": 35.794373,
+              "avsync": 0.000002,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            },
+            {
+              "position": 36.066688,
+              "audioPts": 36.056326,
+              "avsync": 0.000004,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            }
+          ]
+        },
+        {
+          "target": 85,
+          "seekReturnedMs": 5,
+          "stableAfterMs": 1065,
+          "recovered": true,
+          "failure": null,
+          "samples": [
+            {
+              "position": 85.2,
+              "audioPts": 85.266947,
+              "avsync": 0.050599,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            },
+            {
+              "position": 85.533313,
+              "audioPts": 85.528371,
+              "avsync": -0.000004,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            },
+            {
+              "position": 85.8,
+              "audioPts": 85.800322,
+              "avsync": 0.000007,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            },
+            {
+              "position": 86.066688,
+              "audioPts": 86.061561,
+              "avsync": 0.000005,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            }
+          ]
+        },
+        {
+          "target": 25,
+          "seekReturnedMs": 10,
+          "stableAfterMs": 1067,
+          "recovered": true,
+          "failure": null,
+          "samples": [
+            {
+              "position": 25.2,
+              "audioPts": 25.260374,
+              "avsync": 0.050062,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            },
+            {
+              "position": 25.533313,
+              "audioPts": 25.518771,
+              "avsync": -0.0,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            },
+            {
+              "position": 25.8,
+              "audioPts": 25.793175,
+              "avsync": 0.000003,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            },
+            {
+              "position": 26.066688,
+              "audioPts": 26.052993,
+              "avsync": 0.000006,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            }
+          ]
+        },
+        {
+          "target": 120,
+          "seekReturnedMs": 9,
+          "stableAfterMs": 1064,
+          "recovered": true,
+          "failure": null,
+          "samples": [
+            {
+              "position": 120.2,
+              "audioPts": 120.263104,
+              "avsync": 0.050043,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            },
+            {
+              "position": 120.533313,
+              "audioPts": 120.529509,
+              "avsync": 0.000003,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            },
+            {
+              "position": 120.8,
+              "audioPts": 120.798984,
+              "avsync": 0.000002,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            },
+            {
+              "position": 121.066688,
+              "audioPts": 121.064112,
+              "avsync": 0.000005,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            }
+          ]
+        },
+        {
+          "target": 15,
+          "seekReturnedMs": 8,
+          "stableAfterMs": 1066,
+          "recovered": true,
+          "failure": null,
+          "samples": [
+            {
+              "position": 15.2,
+              "audioPts": 15.264728,
+              "avsync": 0.050042,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            },
+            {
+              "position": 15.533313,
+              "audioPts": 15.531412,
+              "avsync": 0.000003,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            },
+            {
+              "position": 15.833312,
+              "audioPts": 15.801468,
+              "avsync": 0.000005,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            },
+            {
+              "position": 16.066688,
+              "audioPts": 16.066477,
+              "avsync": 0.000007,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            }
+          ]
+        },
+        {
+          "target": 180,
+          "seekReturnedMs": 9,
+          "stableAfterMs": 1065,
+          "recovered": true,
+          "failure": null,
+          "samples": [
+            {
+              "position": 180.2,
+              "audioPts": 180.263043,
+              "avsync": 0.050132,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            },
+            {
+              "position": 180.533312,
+              "audioPts": 180.52155,
+              "avsync": -0.000004,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            },
+            {
+              "position": 180.8,
+              "audioPts": 180.793753,
+              "avsync": 0.000002,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            },
+            {
+              "position": 181.066688,
+              "audioPts": 181.053293,
+              "avsync": 0.000005,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            }
+          ]
+        },
+        {
+          "target": 40,
+          "seekReturnedMs": 8,
+          "stableAfterMs": 1066,
+          "recovered": true,
+          "failure": null,
+          "samples": [
+            {
+              "position": 40.2,
+              "audioPts": 40.265219,
+              "avsync": 0.050033,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            },
+            {
+              "position": 40.533313,
+              "audioPts": 40.535386,
+              "avsync": 0.000005,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            },
+            {
+              "position": 40.8,
+              "audioPts": 40.800933,
+              "avsync": 0.000004,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            },
+            {
+              "position": 41.066688,
+              "audioPts": 41.068421,
+              "avsync": 0.000004,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            }
+          ]
+        },
+        {
+          "target": 210,
+          "seekReturnedMs": 8,
+          "stableAfterMs": 1068,
+          "recovered": true,
+          "failure": null,
+          "samples": [
+            {
+              "position": 210.2,
+              "audioPts": 210.268196,
+              "avsync": 0.050248,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            },
+            {
+              "position": 210.566688,
+              "audioPts": 210.537553,
+              "avsync": 0.000001,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            },
+            {
+              "position": 210.833313,
+              "audioPts": 210.804955,
+              "avsync": 0.00001,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            },
+            {
+              "position": 211.1,
+              "audioPts": 211.073226,
+              "avsync": 0.000005,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            }
+          ]
+        },
+        {
+          "target": 10,
+          "seekReturnedMs": 6,
+          "stableAfterMs": 1064,
+          "recovered": true,
+          "failure": null,
+          "samples": [
+            {
+              "position": 10.3,
+              "audioPts": 10.270554,
+              "avsync": 0.000003,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            },
+            {
+              "position": 10.533313,
+              "audioPts": 10.526597,
+              "avsync": 0.0,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            },
+            {
+              "position": 10.8,
+              "audioPts": 10.799343,
+              "avsync": 0.000006,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            },
+            {
+              "position": 11.066688,
+              "audioPts": 11.058972,
+              "avsync": 0.000006,
+              "seeking": "no",
+              "cachePaused": "no",
+              "vo": "mediacodec_embed",
+              "hwdec": "mediacodec",
+              "videoConfigured": "yes"
+            }
+          ]
+        }
+      ],
+      "errors": [],
+      "videoSync": "audio",
+      "audioOutput": "opensles"
+    }
+  ],
+  "mode": "profile",
+  "recordedAtUtc": "2026-10-26T14:50:23.479897Z"
+}

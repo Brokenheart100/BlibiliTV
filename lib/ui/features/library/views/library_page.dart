@@ -10,7 +10,9 @@ import '../../../../app/providers/repository_providers.dart';
 import '../../../../domain/entities/app_models.dart';
 import '../../../../domain/library/library.dart';
 import '../../../core/theme/tv_theme.dart';
-import '../../../core/widgets/glass_panel.dart';
+import '../../../core/focus/focus_memory.dart';
+import '../../../core/widgets/liquid_glass_card.dart';
+import '../../../core/widgets/creator_avatar.dart';
 import '../../../core/widgets/tv_button.dart';
 import '../../../core/widgets/tv_dialog.dart';
 import '../../../core/widgets/tv_video_card.dart';
@@ -18,7 +20,18 @@ import '../view_models/library_view_model.dart';
 import 'personal_actions_dialog.dart';
 
 class LibraryPage extends ConsumerStatefulWidget {
-  const LibraryPage({super.key});
+  const LibraryPage({
+    this.historyOnly = false,
+    this.branchIndex,
+    this.initialSection = LibrarySection.local,
+    this.initialFolderId,
+    this.initialFolderTitle,
+    super.key,
+  });
+  final bool historyOnly;
+  final int? branchIndex;
+  final LibrarySection initialSection;
+  final String? initialFolderId, initialFolderTitle;
   @override
   ConsumerState<LibraryPage> createState() => _LibraryPageState();
 }
@@ -30,20 +43,41 @@ class _LibraryPageState extends ConsumerState<LibraryPage> {
   final refresh = FocusNode(debugLabel: 'library-refresh');
   final clear = FocusNode(debugLabel: 'library-clear');
   final footer = FocusNode(debugLabel: 'library-footer');
-  final tabs = List.generate(4, (i) => FocusNode(debugLabel: 'library-tab-$i'));
+  late final tabs = List.generate(
+    sections.length,
+    (i) => FocusNode(debugLabel: 'library-tab-$i'),
+  );
   final rows = <String, List<FocusNode>>{};
   final scroll = ScrollController();
-  final sections = [
-    LibrarySection.local,
-    LibrarySection.remote,
-    LibrarySection.folders,
-    LibrarySection.watchLater,
-  ];
-  final labels = ['本地观看', 'B站历史', '收藏夹', '稍后再看'];
+  late final sections = widget.historyOnly
+      ? [LibrarySection.local, LibrarySection.remote]
+      : [
+          LibrarySection.local,
+          LibrarySection.remote,
+          LibrarySection.folders,
+          LibrarySection.watchLater,
+        ];
+  late final labels = widget.historyOnly
+      ? ['本地观看', 'B站历史']
+      : ['本地观看', 'B站历史', '收藏夹', '稍后再看'];
+  TvShellScope? shell;
+  void _entry() => tabs[tabIndex].requestFocus();
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    shell = TvShellScope.maybeOf(context);
+    if (widget.branchIndex != null) {
+      shell?.registerContent(widget.branchIndex!, _entry);
+    }
+  }
+
   late LibraryViewModelProvider provider;
   List<LibraryEntry> items = [];
   @override
   void dispose() {
+    if (widget.branchIndex != null) {
+      shell?.unregisterContent(widget.branchIndex!, _entry);
+    }
     for (final node in [
       back,
       refresh,
@@ -98,6 +132,8 @@ class _LibraryPageState extends ConsumerState<LibraryPage> {
   void _back() {
     if (section == LibrarySection.folder) {
       _select(LibrarySection.folders);
+    } else if (widget.branchIndex != null) {
+      shell?.focusNavigation();
     } else if (context.canPop()) {
       context.pop();
     } else {
@@ -169,10 +205,11 @@ class _LibraryPageState extends ConsumerState<LibraryPage> {
   Widget build(BuildContext context) {
     final session = ref.watch(sessionProvider).value ?? const Session();
     if (scope != session.scopeKey) {
+      final initial = scope == null;
       scope = session.scopeKey;
-      section = LibrarySection.local;
-      folderId = null;
-      folderTitle = null;
+      section = initial ? widget.initialSection : LibrarySection.local;
+      folderId = initial ? widget.initialFolderId : null;
+      folderTitle = initial ? widget.initialFolderTitle : null;
     }
     provider = libraryViewModelProvider(
       ownerKey: session.ownerKey,
@@ -199,12 +236,18 @@ class _LibraryPageState extends ConsumerState<LibraryPage> {
                   children: [
                     TvButton(
                       key: const Key('library-back'),
-                      label: '返回',
+                      label: widget.branchIndex == null ? '返回' : '返回导航',
                       focusNode: back,
-                      autofocus: true,
+                      autofocus: widget.branchIndex == null,
                       icon: CupertinoIcons.chevron_left,
                       onPressed: _back,
                       onKeyEvent: (e) {
+                        if (isDirectionEvent(e) &&
+                            e.logicalKey == LogicalKeyboardKey.arrowLeft &&
+                            widget.branchIndex != null) {
+                          shell?.focusNavigation();
+                          return KeyEventResult.handled;
+                        }
                         if (e is KeyDownEvent &&
                             e.logicalKey == LogicalKeyboardKey.arrowDown) {
                           tabs[tabIndex].requestFocus();
@@ -216,7 +259,8 @@ class _LibraryPageState extends ConsumerState<LibraryPage> {
                     const SizedBox(width: 18),
                     Expanded(
                       child: Text(
-                        folderTitle ?? '你的观看与收藏',
+                        folderTitle ??
+                            (widget.historyOnly ? '历史记录' : '你的观看与收藏'),
                         style: Theme.of(context).textTheme.headlineMedium,
                       ),
                     ),
@@ -269,10 +313,16 @@ class _LibraryPageState extends ConsumerState<LibraryPage> {
                               back.requestFocus();
                             } else if (e.logicalKey ==
                                 LogicalKeyboardKey.arrowLeft) {
-                              tabs[(i - 1).clamp(0, 3)].requestFocus();
+                              if (i == 0 && widget.branchIndex != null) {
+                                shell?.focusNavigation();
+                              } else {
+                                tabs[(i - 1).clamp(0, tabs.length - 1)]
+                                    .requestFocus();
+                              }
                             } else if (e.logicalKey ==
                                 LogicalKeyboardKey.arrowRight) {
-                              tabs[(i + 1).clamp(0, 3)].requestFocus();
+                              tabs[(i + 1).clamp(0, tabs.length - 1)]
+                                  .requestFocus();
                             } else {
                               return KeyEventResult.ignored;
                             }
@@ -289,7 +339,7 @@ class _LibraryPageState extends ConsumerState<LibraryPage> {
                     section == LibrarySection.local
                         ? '仅保存在这台设备，游客与各账号分别保存。'
                         : '来自当前B站账号，本地续播位置优先。',
-                    style: const TextStyle(color: TvColors.muted),
+                    style: TextStyle(color: context.tvColors.muted),
                   ),
                 ),
                 if (state?.notice != null)
@@ -405,7 +455,7 @@ class _LibraryPageState extends ConsumerState<LibraryPage> {
 
                             return Padding(
                               padding: const EdgeInsets.only(bottom: 10),
-                              child: GlassPanel(
+                              child: LiquidGlassCard(
                                 padding: const EdgeInsets.all(12),
                                 child: Row(
                                   children: [
@@ -431,17 +481,34 @@ class _LibraryPageState extends ConsumerState<LibraryPage> {
                                             overflow: TextOverflow.ellipsis,
                                           ),
                                           const SizedBox(height: 6),
-                                          Text(
-                                            item.unavailableReason ??
-                                                (item.folderId != null
-                                                    ? '${item.count} 个视频'
-                                                    : '${item.video.creator}  ·  ${item.position.inMinutes}:${(item.position.inSeconds % 60).toString().padLeft(2, '0')}'),
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: const TextStyle(
-                                              color: TvColors.muted,
-                                              fontSize: 12,
-                                            ),
+                                          Row(
+                                            children: [
+                                              if (item.folderId == null) ...[
+                                                CreatorAvatar(
+                                                  name: item.video.creator,
+                                                  url: item
+                                                      .video
+                                                      .creatorAvatarUrl,
+                                                ),
+                                                const SizedBox(width: 7),
+                                              ],
+                                              Expanded(
+                                                child: Text(
+                                                  item.unavailableReason ??
+                                                      (item.folderId != null
+                                                          ? '${item.count} 个视频'
+                                                          : '${item.video.creator}  ·  ${item.position.inMinutes}:${(item.position.inSeconds % 60).toString().padLeft(2, '0')}'),
+                                                  maxLines: 1,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: TextStyle(
+                                                    color:
+                                                        context.tvColors.muted,
+                                                    fontSize: 12,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
                                           ),
                                         ],
                                       ),

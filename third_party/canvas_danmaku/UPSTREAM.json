@@ -1,0 +1,70 @@
+{
+  "package": "canvas_danmaku",
+  "version": "0.3.3",
+  "archive": "https://pub.dev/api/archives/canvas_danmaku-0.3.3.tar.gz",
+  "sha256": "1ff071d027b1cf3320d4b58ff1aee6811de51ce39b5b5773c2e0d7693e02d401",
+  "source": "https://github.com/Predidit/canvas_danmaku",
+  "changes": "30/15fps bounded low-load animation cadence; original cache/layout/track algorithms retained",
+  "files": {
+    "CHANGELOG.md": {
+      "upstreamSha256": "30c1ce8ccb56e531c4be96c0357659e548d2fafa465ea71dbd37a1835307d67e",
+      "sha256": "30c1ce8ccb56e531c4be96c0357659e548d2fafa465ea71dbd37a1835307d67e"
+    },
+    "lib/base_danmaku_painter.dart": {
+      "upstreamSha256": "7a8939ffc9a822015c0e013d3e305c6624f615290e2d662da694cd0252a71951",
+      "sha256": "7a8939ffc9a822015c0e013d3e305c6624f615290e2d662da694cd0252a71951"
+    },
+    "lib/canvas_danmaku.dart": {
+      "upstreamSha256": "c58d74579574163145cebe36639beecbc4f96d9c003e87341c6b19e7185450b9",
+      "sha256": "c58d74579574163145cebe36639beecbc4f96d9c003e87341c6b19e7185450b9"
+    },
+    "lib/danmaku_controller.dart": {
+      "upstreamSha256": "19bca435b8df8d88600365a30a6398dcddaf996be7aa9085eac4ea65bd6d70fd",
+      "sha256": "19bca435b8df8d88600365a30a6398dcddaf996be7aa9085eac4ea65bd6d70fd"
+    },
+    "lib/danmaku_screen.dart": {
+      "upstreamSha256": "70dbab3d116650407df6c887a75e64c2680bd7f34f2485a2ae29a07bebaf6603",
+      "sha256": "67716f9171a121fbbba46344a70966d88bc1b31c77c034b17fbad2e5333e4fda"
+    },
+    "lib/models/danmaku_content_item.dart": {
+      "upstreamSha256": "bdbfd4747a23409cf36d5fc3b4bb15654dbdd38f80d13fd6adb684c9950c6805",
+      "sha256": "bdbfd4747a23409cf36d5fc3b4bb15654dbdd38f80d13fd6adb684c9950c6805"
+    },
+    "lib/models/danmaku_item.dart": {
+      "upstreamSha256": "558027b3d22a85f620293c2020a44015a11354a1fab25a83c9e3f720133ec05d",
+      "sha256": "558027b3d22a85f620293c2020a44015a11354a1fab25a83c9e3f720133ec05d"
+    },
+    "lib/models/danmaku_option.dart": {
+      "upstreamSha256": "fff1a84779d3fde57353d36c7d67fa57a76b2fb60bb49850f5ee934d98b22c41",
+      "sha256": "756e35fe199342f5be4add841d1f4701d6604d56030903d13ed7b9078f04a18f"
+    },
+    "lib/scroll_danmaku_painter.dart": {
+      "upstreamSha256": "79ae96fef992757340daea6162d2dd9bb1df37a15e8e313500a4388e3965aeeb",
+      "sha256": "79ae96fef992757340daea6162d2dd9bb1df37a15e8e313500a4388e3965aeeb"
+    },
+    "lib/special_danmaku_painter.dart": {
+      "upstreamSha256": "530b5c46ea8d83f269458b12e57190424868026ecbc52a44bb58ecd7eb853ca8",
+      "sha256": "530b5c46ea8d83f269458b12e57190424868026ecbc52a44bb58ecd7eb853ca8"
+    },
+    "lib/static_danmaku_painter.dart": {
+      "upstreamSha256": "d4eb002c3b19153eca1baa38284f6f4935215c4ad249e19bd0b99538e95a8966",
+      "sha256": "d4eb002c3b19153eca1baa38284f6f4935215c4ad249e19bd0b99538e95a8966"
+    },
+    "lib/utils/utils.dart": {
+      "upstreamSha256": "bb4f63a7f4442af5acb1ef0026fe255ef11084aed95f6fe67a085fda5984028a",
+      "sha256": "bb4f63a7f4442af5acb1ef0026fe255ef11084aed95f6fe67a085fda5984028a"
+    },
+    "LICENSE": {
+      "upstreamSha256": "89331c2a35f4d73bb9f30dff98c9222971366ab1e46e757cb9a8bb865ed4ee8a",
+      "sha256": "89331c2a35f4d73bb9f30dff98c9222971366ab1e46e757cb9a8bb865ed4ee8a"
+    },
+    "pubspec.yaml": {
+      "upstreamSha256": "c32f53a94fb7fbb23864c8dd04e6190cba8d162068a12a967a41b57bac46a871",
+      "sha256": "d26e6de9860e921ef1495a0dead282c0bce810455a8ea87909834a85bf653fba"
+    },
+    "README.md": {
+      "upstreamSha256": "f5471892a89ebb54603111bc8a0a5f8cdd36e733d2cc61b8c8ca0d95ca5f824d",
+      "sha256": "f5471892a89ebb54603111bc8a0a5f8cdd36e733d2cc61b8c8ca0d95ca5f824d"
+    }
+  }
+}

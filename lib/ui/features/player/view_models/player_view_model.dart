@@ -45,6 +45,7 @@ abstract class PlayerState with _$PlayerState {
     @Default(0) int recoveryAttempts,
     @Default(0) int surfaceGeneration,
     @Default(Duration.zero) Duration resumedFrom,
+    Duration? seekTarget,
     AppFailure? failure,
     String? notice,
   }) = _PlayerState;
@@ -68,6 +69,8 @@ class PlayerViewModel extends _$PlayerViewModel {
   Future<void> _writes = Future<void>.value();
   Future<void> _operations = Future<void>.value();
   Future<void>? _releasing;
+  Future<void>? _seekDrain;
+  int _seekEpoch = -1, _seekRevision = 0;
   Duration? _targetPosition;
   int? _targetQuality;
   final _saveClock = Stopwatch();
@@ -167,6 +170,7 @@ class PlayerViewModel extends _$PlayerViewModel {
     final oldPlan = _plan;
     state = state.copyWith(
       phase: PlayerPhase.resolving,
+      seekTarget: null,
       failure: null,
       notice: manual ? null : '正在恢复播放，请稍候',
       recoveryAttempts: manual ? 0 : state.recoveryAttempts,
@@ -290,7 +294,7 @@ class PlayerViewModel extends _$PlayerViewModel {
             phase: phase,
             failure: snapshot.failure,
           );
-          if (!opening) _reporter?.accept(snapshot);
+          if (!opening && state.seekTarget == null) _reporter?.accept(snapshot);
           if (snapshot.position >= plan.startAt - const Duration(seconds: 2)) {
             resumeConfirmed = true;
           }
@@ -306,10 +310,11 @@ class PlayerViewModel extends _$PlayerViewModel {
             );
             if (progress.isValid) {
               _lastValid = progress;
-              if ((progress.position - _lastSavedPosition).abs() >=
-                      const Duration(seconds: 5) ||
-                  _saveClock.elapsed >= const Duration(seconds: 5) ||
-                  snapshot.completed) {
+              if (state.seekTarget == null &&
+                  ((progress.position - _lastSavedPosition).abs() >=
+                          const Duration(seconds: 5) ||
+                      _saveClock.elapsed >= const Duration(seconds: 5) ||
+                      snapshot.completed)) {
                 _save();
               }
             }
@@ -329,7 +334,9 @@ class PlayerViewModel extends _$PlayerViewModel {
             unawaited(
               _recover(
                 snapshot.failure!,
-                at: opening ? plan.startAt : snapshot.position,
+                at: opening
+                    ? plan.startAt
+                    : state.seekTarget ?? snapshot.position,
               ),
             );
           }
@@ -513,35 +520,79 @@ class PlayerViewModel extends _$PlayerViewModel {
   }
 
   Future<void> seekBy(Duration delta) {
+    if (_lease == null ||
+        _lease!.isClosed ||
+        !{
+          PlayerPhase.playing,
+          PlayerPhase.paused,
+          PlayerPhase.completed,
+        }.contains(state.phase) ||
+        state.snapshot.duration <= Duration.zero) {
+      return Future.value();
+    }
     final epoch = _epoch;
-    return _enqueue(() async {
-      final lease = _lease;
-      if (!ref.mounted ||
-          epoch != _epoch ||
-          lease == null ||
-          lease.isClosed ||
-          state.snapshot.duration <= Duration.zero) {
-        return;
-      }
-      final target = (state.snapshot.position + delta).inMilliseconds.clamp(
-        0,
-        (state.snapshot.duration.inMilliseconds - 1000).clamp(0, 1 << 53),
-      );
-      try {
-        await lease.engine.seek(Duration(milliseconds: target));
-        _save();
-      } catch (_) {
-        if (ref.mounted) state = state.copyWith(notice: '暂时无法跳转，请重试');
-      }
-    });
+    final target = ((state.seekTarget ?? state.snapshot.position) + delta)
+        .inMilliseconds
+        .clamp(
+          0,
+          (state.snapshot.duration.inMilliseconds - 1000).clamp(0, 1 << 53),
+        );
+    state = state.copyWith(seekTarget: Duration(milliseconds: target));
+    _seekRevision++;
+    if (_seekEpoch == epoch && _seekDrain != null) return _seekDrain!;
+    _seekEpoch = epoch;
+    late final Future<void> drain;
+    drain =
+        _enqueue(() async {
+          try {
+            // At most one native seek is in flight. Repeated D-pad input updates
+            // its final target instead of queuing a decoder restart for every key.
+            while (ref.mounted && epoch == _epoch) {
+              final lease = _lease, destination = state.seekTarget;
+              if (lease == null || lease.isClosed || destination == null) {
+                return;
+              }
+              final revision = _seekRevision;
+              await lease.engine.seek(destination);
+              if (!ref.mounted || epoch != _epoch) return;
+              if (revision == _seekRevision) {
+                state = state.copyWith(seekTarget: null);
+                _save();
+                return;
+              }
+            }
+          } catch (error) {
+            if (!ref.mounted || epoch != _epoch) return;
+            final destination = state.seekTarget ?? state.snapshot.position;
+            final failure = error is AppFailure
+                ? error
+                : const AppFailure(FailureKind.timeout, '跳转未恢复');
+            state = state.copyWith(
+              phase: PlayerPhase.failed,
+              seekTarget: null,
+              failure: failure,
+              notice: null,
+            );
+            if (!_failureHandling) {
+              _failureHandling = true;
+              unawaited(_recover(failure, at: destination));
+            }
+          }
+        }).whenComplete(() {
+          if (identical(_seekDrain, drain)) _seekDrain = null;
+        });
+    _seekDrain = drain;
+    return drain;
   }
 
   Future<void> setRate(double rate) => _parameter(rate, true);
   Future<void> setVolume(double volume) => _parameter(volume, false);
   Duration get _replacementPosition =>
-      state.phase == PlayerPhase.resolving || state.phase == PlayerPhase.opening
-      ? _targetPosition ?? _lastValid?.position ?? state.snapshot.position
-      : state.snapshot.position;
+      state.seekTarget ??
+      (state.phase == PlayerPhase.resolving ||
+              state.phase == PlayerPhase.opening
+          ? _targetPosition ?? _lastValid?.position ?? state.snapshot.position
+          : state.snapshot.position);
   Future<void> _parameter(double value, bool rate) {
     if (!value.isFinite ||
         (rate ? value < .5 || value > 2 : value < 0 || value > 100)) {
@@ -635,6 +686,7 @@ class PlayerViewModel extends _$PlayerViewModel {
     _active?.cancel();
     state = state.copyWith(
       phase: PlayerPhase.paused,
+      seekTarget: null,
       snapshot: state.snapshot.copyWith(playing: false),
       notice: '已暂停，按确认继续',
       failure: null,
@@ -647,7 +699,9 @@ class PlayerViewModel extends _$PlayerViewModel {
   Future<void> close() async {
     _epoch++;
     _active?.cancel();
-    if (ref.mounted) state = state.copyWith(phase: PlayerPhase.closed);
+    if (ref.mounted) {
+      state = state.copyWith(phase: PlayerPhase.closed, seekTarget: null);
+    }
     await _release();
     await _operations;
     await _writes;

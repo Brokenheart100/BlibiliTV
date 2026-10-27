@@ -15,7 +15,8 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$EngineSnapshot {
 
- bool get playing; bool get buffering; bool get completed; Duration get position; Duration get duration; int get width; int get height; int get audioSampleRate; double get rate; double get volume; AppFailure? get failure;
+ bool get playing; bool get buffering; bool get completed; Duration get position; Duration get duration;/// Absolute timeline endpoint reported by the native demuxer cache.
+ Duration get bufferedPosition; int get width; int get height; int get audioSampleRate; double get rate; double get volume; AppFailure? get failure;
 /// Create a copy of EngineSnapshot
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -27,20 +28,20 @@ $EngineSnapshotCopyWith<EngineSnapshot> get copyWith => _$EngineSnapshotCopyWith
 @override
 bool operator ==(Object other) {
   final _this = this as EngineSnapshot;
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is EngineSnapshot&&(identical(other.playing, _this.playing) || other.playing == _this.playing)&&(identical(other.buffering, _this.buffering) || other.buffering == _this.buffering)&&(identical(other.completed, _this.completed) || other.completed == _this.completed)&&(identical(other.position, _this.position) || other.position == _this.position)&&(identical(other.duration, _this.duration) || other.duration == _this.duration)&&(identical(other.width, _this.width) || other.width == _this.width)&&(identical(other.height, _this.height) || other.height == _this.height)&&(identical(other.audioSampleRate, _this.audioSampleRate) || other.audioSampleRate == _this.audioSampleRate)&&(identical(other.rate, _this.rate) || other.rate == _this.rate)&&(identical(other.volume, _this.volume) || other.volume == _this.volume)&&(identical(other.failure, _this.failure) || other.failure == _this.failure));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is EngineSnapshot&&(identical(other.playing, _this.playing) || other.playing == _this.playing)&&(identical(other.buffering, _this.buffering) || other.buffering == _this.buffering)&&(identical(other.completed, _this.completed) || other.completed == _this.completed)&&(identical(other.position, _this.position) || other.position == _this.position)&&(identical(other.duration, _this.duration) || other.duration == _this.duration)&&(identical(other.bufferedPosition, _this.bufferedPosition) || other.bufferedPosition == _this.bufferedPosition)&&(identical(other.width, _this.width) || other.width == _this.width)&&(identical(other.height, _this.height) || other.height == _this.height)&&(identical(other.audioSampleRate, _this.audioSampleRate) || other.audioSampleRate == _this.audioSampleRate)&&(identical(other.rate, _this.rate) || other.rate == _this.rate)&&(identical(other.volume, _this.volume) || other.volume == _this.volume)&&(identical(other.failure, _this.failure) || other.failure == _this.failure));
 }
 
 
 @override
 int get hashCode {
   final _this = this as EngineSnapshot;
-  return Object.hash(runtimeType,_this.playing,_this.buffering,_this.completed,_this.position,_this.duration,_this.width,_this.height,_this.audioSampleRate,_this.rate,_this.volume,_this.failure);
+  return Object.hash(runtimeType,_this.playing,_this.buffering,_this.completed,_this.position,_this.duration,_this.bufferedPosition,_this.width,_this.height,_this.audioSampleRate,_this.rate,_this.volume,_this.failure);
 }
 
 @override
 String toString() {
   final _this = this as EngineSnapshot;
-  return 'EngineSnapshot(playing: ${_this.playing}, buffering: ${_this.buffering}, completed: ${_this.completed}, position: ${_this.position}, duration: ${_this.duration}, width: ${_this.width}, height: ${_this.height}, audioSampleRate: ${_this.audioSampleRate}, rate: ${_this.rate}, volume: ${_this.volume}, failure: ${_this.failure})';
+  return 'EngineSnapshot(playing: ${_this.playing}, buffering: ${_this.buffering}, completed: ${_this.completed}, position: ${_this.position}, duration: ${_this.duration}, bufferedPosition: ${_this.bufferedPosition}, width: ${_this.width}, height: ${_this.height}, audioSampleRate: ${_this.audioSampleRate}, rate: ${_this.rate}, volume: ${_this.volume}, failure: ${_this.failure})';
 }
 
 
@@ -51,7 +52,7 @@ abstract mixin class $EngineSnapshotCopyWith<$Res>  {
   factory $EngineSnapshotCopyWith(EngineSnapshot value, $Res Function(EngineSnapshot) _then) = _$EngineSnapshotCopyWithImpl;
 @useResult
 $Res call({
- bool playing, bool buffering, bool completed, Duration position, Duration duration, int width, int height, int audioSampleRate, double rate, double volume, AppFailure? failure
+ bool playing, bool buffering, bool completed, Duration position, Duration duration, Duration bufferedPosition, int width, int height, int audioSampleRate, double rate, double volume, AppFailure? failure
 });
 
 
@@ -68,13 +69,14 @@ class _$EngineSnapshotCopyWithImpl<$Res>
 
 /// Create a copy of EngineSnapshot
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? playing = null,Object? buffering = null,Object? completed = null,Object? position = null,Object? duration = null,Object? width = null,Object? height = null,Object? audioSampleRate = null,Object? rate = null,Object? volume = null,Object? failure = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? playing = null,Object? buffering = null,Object? completed = null,Object? position = null,Object? duration = null,Object? bufferedPosition = null,Object? width = null,Object? height = null,Object? audioSampleRate = null,Object? rate = null,Object? volume = null,Object? failure = freezed,}) {
   return _then(EngineSnapshot(
 playing: null == playing ? _self.playing : playing // ignore: cast_nullable_to_non_nullable
 as bool,buffering: null == buffering ? _self.buffering : buffering // ignore: cast_nullable_to_non_nullable
 as bool,completed: null == completed ? _self.completed : completed // ignore: cast_nullable_to_non_nullable
 as bool,position: null == position ? _self.position : position // ignore: cast_nullable_to_non_nullable
 as Duration,duration: null == duration ? _self.duration : duration // ignore: cast_nullable_to_non_nullable
+as Duration,bufferedPosition: null == bufferedPosition ? _self.bufferedPosition : bufferedPosition // ignore: cast_nullable_to_non_nullable
 as Duration,width: null == width ? _self.width : width // ignore: cast_nullable_to_non_nullable
 as int,height: null == height ? _self.height : height // ignore: cast_nullable_to_non_nullable
 as int,audioSampleRate: null == audioSampleRate ? _self.audioSampleRate : audioSampleRate // ignore: cast_nullable_to_non_nullable
@@ -166,10 +168,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool playing,  bool buffering,  bool completed,  Duration position,  Duration duration,  int width,  int height,  int audioSampleRate,  double rate,  double volume,  AppFailure? failure)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool playing,  bool buffering,  bool completed,  Duration position,  Duration duration,  Duration bufferedPosition,  int width,  int height,  int audioSampleRate,  double rate,  double volume,  AppFailure? failure)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _EngineSnapshot() when $default != null:
-return $default(_that.playing,_that.buffering,_that.completed,_that.position,_that.duration,_that.width,_that.height,_that.audioSampleRate,_that.rate,_that.volume,_that.failure);case _:
+return $default(_that.playing,_that.buffering,_that.completed,_that.position,_that.duration,_that.bufferedPosition,_that.width,_that.height,_that.audioSampleRate,_that.rate,_that.volume,_that.failure);case _:
   return orElse();
 
 }
@@ -187,10 +189,10 @@ return $default(_that.playing,_that.buffering,_that.completed,_that.position,_th
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool playing,  bool buffering,  bool completed,  Duration position,  Duration duration,  int width,  int height,  int audioSampleRate,  double rate,  double volume,  AppFailure? failure)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool playing,  bool buffering,  bool completed,  Duration position,  Duration duration,  Duration bufferedPosition,  int width,  int height,  int audioSampleRate,  double rate,  double volume,  AppFailure? failure)  $default,) {final _that = this;
 switch (_that) {
 case _EngineSnapshot():
-return $default(_that.playing,_that.buffering,_that.completed,_that.position,_that.duration,_that.width,_that.height,_that.audioSampleRate,_that.rate,_that.volume,_that.failure);case _:
+return $default(_that.playing,_that.buffering,_that.completed,_that.position,_that.duration,_that.bufferedPosition,_that.width,_that.height,_that.audioSampleRate,_that.rate,_that.volume,_that.failure);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -207,10 +209,10 @@ return $default(_that.playing,_that.buffering,_that.completed,_that.position,_th
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool playing,  bool buffering,  bool completed,  Duration position,  Duration duration,  int width,  int height,  int audioSampleRate,  double rate,  double volume,  AppFailure? failure)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool playing,  bool buffering,  bool completed,  Duration position,  Duration duration,  Duration bufferedPosition,  int width,  int height,  int audioSampleRate,  double rate,  double volume,  AppFailure? failure)?  $default,) {final _that = this;
 switch (_that) {
 case _EngineSnapshot() when $default != null:
-return $default(_that.playing,_that.buffering,_that.completed,_that.position,_that.duration,_that.width,_that.height,_that.audioSampleRate,_that.rate,_that.volume,_that.failure);case _:
+return $default(_that.playing,_that.buffering,_that.completed,_that.position,_that.duration,_that.bufferedPosition,_that.width,_that.height,_that.audioSampleRate,_that.rate,_that.volume,_that.failure);case _:
   return null;
 
 }
@@ -222,7 +224,7 @@ return $default(_that.playing,_that.buffering,_that.completed,_that.position,_th
 
 
 class _EngineSnapshot implements EngineSnapshot {
-  const _EngineSnapshot({this.playing = false, this.buffering = false, this.completed = false, this.position = Duration.zero, this.duration = Duration.zero, this.width = 0, this.height = 0, this.audioSampleRate = 0, this.rate = 1.0, this.volume = 100.0, this.failure});
+  const _EngineSnapshot({this.playing = false, this.buffering = false, this.completed = false, this.position = Duration.zero, this.duration = Duration.zero, this.bufferedPosition = Duration.zero, this.width = 0, this.height = 0, this.audioSampleRate = 0, this.rate = 1.0, this.volume = 100.0, this.failure});
   
 
 @override@JsonKey() final  bool playing;
@@ -230,6 +232,8 @@ class _EngineSnapshot implements EngineSnapshot {
 @override@JsonKey() final  bool completed;
 @override@JsonKey() final  Duration position;
 @override@JsonKey() final  Duration duration;
+/// Absolute timeline endpoint reported by the native demuxer cache.
+@override@JsonKey() final  Duration bufferedPosition;
 @override@JsonKey() final  int width;
 @override@JsonKey() final  int height;
 @override@JsonKey() final  int audioSampleRate;
@@ -247,18 +251,18 @@ _$EngineSnapshotCopyWith<_EngineSnapshot> get copyWith => __$EngineSnapshotCopyW
 
 @override
 bool operator ==(Object other) {
-    return identical(this, other) || (other.runtimeType == runtimeType&&other is _EngineSnapshot&&(identical(other.playing, playing) || other.playing == playing)&&(identical(other.buffering, buffering) || other.buffering == buffering)&&(identical(other.completed, completed) || other.completed == completed)&&(identical(other.position, position) || other.position == position)&&(identical(other.duration, duration) || other.duration == duration)&&(identical(other.width, width) || other.width == width)&&(identical(other.height, height) || other.height == height)&&(identical(other.audioSampleRate, audioSampleRate) || other.audioSampleRate == audioSampleRate)&&(identical(other.rate, rate) || other.rate == rate)&&(identical(other.volume, volume) || other.volume == volume)&&(identical(other.failure, failure) || other.failure == failure));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _EngineSnapshot&&(identical(other.playing, playing) || other.playing == playing)&&(identical(other.buffering, buffering) || other.buffering == buffering)&&(identical(other.completed, completed) || other.completed == completed)&&(identical(other.position, position) || other.position == position)&&(identical(other.duration, duration) || other.duration == duration)&&(identical(other.bufferedPosition, bufferedPosition) || other.bufferedPosition == bufferedPosition)&&(identical(other.width, width) || other.width == width)&&(identical(other.height, height) || other.height == height)&&(identical(other.audioSampleRate, audioSampleRate) || other.audioSampleRate == audioSampleRate)&&(identical(other.rate, rate) || other.rate == rate)&&(identical(other.volume, volume) || other.volume == volume)&&(identical(other.failure, failure) || other.failure == failure));
 }
 
 
 @override
 int get hashCode {
-    return Object.hash(runtimeType,playing,buffering,completed,position,duration,width,height,audioSampleRate,rate,volume,failure);
+    return Object.hash(runtimeType,playing,buffering,completed,position,duration,bufferedPosition,width,height,audioSampleRate,rate,volume,failure);
 }
 
 @override
 String toString() {
-    return 'EngineSnapshot(playing: $playing, buffering: $buffering, completed: $completed, position: $position, duration: $duration, width: $width, height: $height, audioSampleRate: $audioSampleRate, rate: $rate, volume: $volume, failure: $failure)';
+    return 'EngineSnapshot(playing: $playing, buffering: $buffering, completed: $completed, position: $position, duration: $duration, bufferedPosition: $bufferedPosition, width: $width, height: $height, audioSampleRate: $audioSampleRate, rate: $rate, volume: $volume, failure: $failure)';
 }
 
 
@@ -269,7 +273,7 @@ abstract mixin class _$EngineSnapshotCopyWith<$Res> implements $EngineSnapshotCo
   factory _$EngineSnapshotCopyWith(_EngineSnapshot value, $Res Function(_EngineSnapshot) _then) = __$EngineSnapshotCopyWithImpl;
 @override @useResult
 $Res call({
- bool playing, bool buffering, bool completed, Duration position, Duration duration, int width, int height, int audioSampleRate, double rate, double volume, AppFailure? failure
+ bool playing, bool buffering, bool completed, Duration position, Duration duration, Duration bufferedPosition, int width, int height, int audioSampleRate, double rate, double volume, AppFailure? failure
 });
 
 
@@ -286,13 +290,14 @@ class __$EngineSnapshotCopyWithImpl<$Res>
 
 /// Create a copy of EngineSnapshot
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? playing = null,Object? buffering = null,Object? completed = null,Object? position = null,Object? duration = null,Object? width = null,Object? height = null,Object? audioSampleRate = null,Object? rate = null,Object? volume = null,Object? failure = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? playing = null,Object? buffering = null,Object? completed = null,Object? position = null,Object? duration = null,Object? bufferedPosition = null,Object? width = null,Object? height = null,Object? audioSampleRate = null,Object? rate = null,Object? volume = null,Object? failure = freezed,}) {
   return _then(_EngineSnapshot(
 playing: null == playing ? _self.playing : playing // ignore: cast_nullable_to_non_nullable
 as bool,buffering: null == buffering ? _self.buffering : buffering // ignore: cast_nullable_to_non_nullable
 as bool,completed: null == completed ? _self.completed : completed // ignore: cast_nullable_to_non_nullable
 as bool,position: null == position ? _self.position : position // ignore: cast_nullable_to_non_nullable
 as Duration,duration: null == duration ? _self.duration : duration // ignore: cast_nullable_to_non_nullable
+as Duration,bufferedPosition: null == bufferedPosition ? _self.bufferedPosition : bufferedPosition // ignore: cast_nullable_to_non_nullable
 as Duration,width: null == width ? _self.width : width // ignore: cast_nullable_to_non_nullable
 as int,height: null == height ? _self.height : height // ignore: cast_nullable_to_non_nullable
 as int,audioSampleRate: null == audioSampleRate ? _self.audioSampleRate : audioSampleRate // ignore: cast_nullable_to_non_nullable

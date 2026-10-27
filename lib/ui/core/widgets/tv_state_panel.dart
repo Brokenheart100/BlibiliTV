@@ -25,14 +25,14 @@ class TvStatePanel extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(icon, size: 42, color: TvColors.accent),
+            Icon(icon, size: 42, color: context.tvColors.accent),
             const SizedBox(height: 16),
             Text(title, style: Theme.of(context).textTheme.titleLarge),
             const SizedBox(height: 8),
             Text(
               message,
               textAlign: TextAlign.center,
-              style: const TextStyle(color: TvColors.muted),
+              style: TextStyle(color: context.tvColors.muted),
             ),
             const SizedBox(height: 20),
             TvButton(

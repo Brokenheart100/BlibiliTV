@@ -1,0 +1,63 @@
+{
+  "status": "failed",
+  "variants": [
+    {
+      "variant": "baseline",
+      "steps": [
+        {
+          "target": 55,
+          "seekMs": 321,
+          "avsync": 0.000039,
+          "mute": "no",
+          "format": "float",
+          "rate": "44100"
+        },
+        {
+          "target": 35,
+          "seekMs": 337,
+          "avsync": 0.058809,
+          "mute": "no",
+          "format": "float",
+          "rate": "44100"
+        },
+        {
+          "target": 65,
+          "seekMs": 302,
+          "avsync": 0.063049,
+          "mute": "no",
+          "format": "float",
+          "rate": "44100"
+        },
+        {
+          "target": 45,
+          "seekMs": 298,
+          "avsync": 0.000016,
+          "mute": "no",
+          "format": "float",
+          "rate": "44100"
+        },
+        {
+          "target": 75,
+          "seekMs": 293,
+          "avsync": 0.000024,
+          "mute": "no",
+          "format": "float",
+          "rate": "44100"
+        },
+        {
+          "target": 35,
+          "seekMs": 302,
+          "avsync": 0.000015,
+          "mute": "no",
+          "format": "float",
+          "rate": "44100"
+        }
+      ],
+      "errors": [
+        "unsupported"
+      ]
+    }
+  ],
+  "manualNoiseFreeVerified": false,
+  "readOnly": true
+}

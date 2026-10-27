@@ -1,0 +1,17 @@
+// Minimal read-only Web wire schema. Field numbers verified against public
+// Web responses and PiliPlus affac5334fc41744894618d9fb53b7101db9532a
+// lib/grpc/bilibili/community/service/dm/v1.pb.dart; no upstream code copied.
+syntax = "proto3";
+package mambatv.web;
+message SegmentConfig { int64 page_size = 1; int64 total = 2; }
+message WebView { SegmentConfig dm_sge = 4; }
+message DanmakuEntry {
+  int64 id = 1;
+  int32 progress = 2;
+  int32 mode = 3;
+  int32 fontsize = 4;
+  uint32 color = 5;
+  string content = 7;
+  string id_str = 12;
+}
+message Segment { repeated DanmakuEntry elems = 1; }

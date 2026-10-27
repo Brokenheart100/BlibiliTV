@@ -1,0 +1,114 @@
+{
+  "status": "failed",
+  "requestedSeconds": 60,
+  "physicalTv": false,
+  "manualLipSyncVerified": false,
+  "comparisonWindows": [
+    {
+      "mode": "off",
+      "elapsedMs": 10101,
+      "frameCount": 559,
+      "buildP95Ms": 1.189,
+      "rasterP95Ms": 16.366,
+      "rasterP99Ms": 20.924,
+      "overBudgetRatio": 0.03577817531305903,
+      "clockSamples": 0,
+      "disabledTransitions": 0
+    },
+    {
+      "mode": "subtitles",
+      "elapsedMs": 10031,
+      "frameCount": 559,
+      "buildP95Ms": 0.786,
+      "rasterP95Ms": 4.368,
+      "rasterP99Ms": 6.579,
+      "overBudgetRatio": 0.0,
+      "clockSamples": 200,
+      "disabledTransitions": 0
+    },
+    {
+      "mode": "both",
+      "elapsedMs": 10016,
+      "frameCount": 561,
+      "buildP95Ms": 1.092,
+      "rasterP95Ms": 16.201,
+      "rasterP99Ms": 17.693,
+      "overBudgetRatio": 0.0285204991087344,
+      "clockSamples": 200,
+      "disabledTransitions": 1
+    }
+  ],
+  "subtitleTimingSamples": [
+    {
+      "rate": 0.5,
+      "nativePositionMs": 35000.0,
+      "cueStartMs": 34000,
+      "cueEndMs": 35800,
+      "outsideCueMs": 0.0
+    },
+    {
+      "rate": 1.0,
+      "nativePositionMs": 35333.312,
+      "cueStartMs": 34000,
+      "cueEndMs": 35800,
+      "outsideCueMs": 0.0
+    },
+    {
+      "rate": 2.0,
+      "nativePositionMs": 35000.0,
+      "cueStartMs": 34000,
+      "cueEndMs": 35800,
+      "outsideCueMs": 0.0
+    }
+  ],
+  "samples": [
+    {
+      "elapsedSeconds": 0,
+      "partId": "40027950776",
+      "positionMs": 1566,
+      "cumulativeMediaMs": 1566,
+      "rate": 1.0,
+      "durationMs": 436166,
+      "nativeSpeed": "1.000000",
+      "nativePosition": "1.566688",
+      "audioOutput": "opensles",
+      "audioSpeedCorrection": "1.000000",
+      "phase": "playing",
+      "audioSampleRate": 44100,
+      "rssBytes": 349810688,
+      "imageCacheBytes": 10824480,
+      "liveEngines": 1,
+      "avSyncSeconds": 0.000027,
+      "audioPtsSeconds": 1.564106,
+      "overlayMetrics": {
+        "created": 5,
+        "disposed": 4,
+        "active": 1,
+        "maximum": 1,
+        "clockSamples": 742,
+        "captionChanges": 45,
+        "admittedDanmaku": 131,
+        "cleared": 13,
+        "maximumDanmaku": 40,
+        "activeSchedulers": 1,
+        "lowLoadTransitions": 1,
+        "disabledTransitions": 1
+      }
+    }
+  ],
+  "overlayMetrics": {
+    "created": 5,
+    "disposed": 5,
+    "active": 0,
+    "maximum": 1,
+    "clockSamples": 980,
+    "captionChanges": 57,
+    "admittedDanmaku": 188,
+    "cleared": 13,
+    "maximumDanmaku": 40,
+    "activeSchedulers": 0,
+    "lowLoadTransitions": 2,
+    "disabledTransitions": 2
+  },
+  "hostRecordedAtUtc": "2026-10-26T06:26:57.428602Z"
+}

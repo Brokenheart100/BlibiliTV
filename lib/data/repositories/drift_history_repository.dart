@@ -21,7 +21,7 @@ class DriftHistoryRepository implements LocalHistoryRepository {
       final rows = await database
           .customSelect(
             '''
-        SELECT p.*, h.title, h.creator, h.cover_url, h.duration_seconds, h.view_count
+        SELECT p.*, h.title, h.creator, h.cover_url, h.creator_avatar_url, h.duration_seconds, h.view_count
         FROM watch_progress_rows p LEFT JOIN history_videos h
         ON p.owner_key=h.owner_key AND p.video_id=h.video_id
         WHERE p.owner_key=? AND p.position_ms>=1000 AND p.duration_ms>=p.position_ms
@@ -46,6 +46,9 @@ class DriftHistoryRepository implements LocalHistoryRepository {
                       'B站视频 ${row.read<String>('video_id')}',
                   creator: row.readNullable<String>('creator') ?? '本地观看记录',
                   coverUrl: row.readNullable<String>('cover_url'),
+                  creatorAvatarUrl: row.readNullable<String>(
+                    'creator_avatar_url',
+                  ),
                   durationSeconds: row.read<int>('duration_ms') ~/ 1000,
                   viewCount: row.readNullable<int>('view_count') ?? 0,
                 ),
@@ -77,6 +80,7 @@ class DriftHistoryRepository implements LocalHistoryRepository {
               title: video.title,
               creator: video.creator,
               coverUrl: Value(video.coverUrl),
+              creatorAvatarUrl: Value(video.creatorAvatarUrl),
               durationSeconds: video.durationSeconds,
               viewCount: Value(video.viewCount),
             ),

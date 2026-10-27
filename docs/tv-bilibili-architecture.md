@@ -1,8 +1,8 @@
 # MambaTV：TV 端 B 站客户端设计原则与架构
 
-日期：2026-10-25。状态：M5 播放控制、换源恢复、焦点与本地续播已实施并通过本机／TV 模拟器自动验收，见 [M5 记录](m5-validation.md) 和 [ADR 0006](adr/0006-playback-controls-and-recovery.md)。人工音画与物理设备仍待补验；内容、账号和游客播放历史证据保留于 [M4](m4-validation.md)、[M3](m3-validation.md) 与 [M2](m2-validation.md)。
+日期：2026-10-26。状态：M0–M7 已形成 [v1.0.0 正式签名发布](https://github.com/Brokenheart100/BlibiliTV/releases/tag/v1.0.0)，含观看记录、个人列表、播放偏好、许可页和 CI/CD；179 项 Flutter 测试及 13 项守卫通过托管检查。物理 TV、人工音画与真实账号写入仍待验收。M8 必交功能已实现，但持续弹幕性能未通过，实际结果见 [M8 验收](m8-validation.md) 与 [ADR 0010](adr/0010-m8-media-overlays-and-discovery.md)；M9 未开工，分层扩展与范围见 [总开发计划第 11 节](development-plan.md#11-m8m9详细开发计划) 和 [ADR 0009](adr/0009-m8-m9-roadmap-and-feature-boundaries.md)。下文的早期快照与历史补充继续保留。
 
-配套执行文档：[详细开发计划](development-plan.md)。
+配套执行文档：[总开发计划（含 M8／M9 详细计划）](development-plan.md)。
 
 M5（2026-10-25）已实现播放器控制、串行切换与限次恢复。新增 PlaybackFocus 抽象、按调用方持有的焦点所有权和实际资源能力菜单；见 [ADR 0006](adr/0006-playback-controls-and-recovery.md) 与 [M5 验证](m5-validation.md)，验收尚未完成的内容单列。
 
@@ -29,7 +29,7 @@ M5（2026-10-25）已实现播放器控制、串行切换与限次恢复。新�
 
 ## 2. 产品范围
 
-### v0.1.0：日常观看版本
+### v1.0.0：日常观看版本（原草案 v0.1.0）
 
 - 游客浏览已验证可用的热门内容、搜索和普通 UGC 视频。
 - 扫码登录、启动时恢复会话、登录失效提示、退出登录。
@@ -42,15 +42,15 @@ M5（2026-10-25）已实现播放器控制、串行切换与限次恢复。新�
 
 推荐、远端历史和清晰度的实际可用范围，以账号权限、接口验证和设备能力为准。不能将“获取到地址”视为“已经可以稳定播放”。
 
-### v0.2.0：观看增强
+### M8／建议 v1.1.0：观看增强（原草案 v0.2.0）
 
 - 字幕与基础弹幕，含关闭、大小、速度、密度和性能降级。
 - UP 主视频列表与关注内容，扩展搜索筛选。
 - 点赞、投币等交互按独立功能实现，投币需要明确数量与确认操作。
 
-### 后续独立评估
+### M9：内容扩展与后续独立能力
 
-直播、番剧／影视、评论浏览、投屏、离线下载、多账号切换、语音／手机辅助输入。番剧与直播使用独立内容模型和播放解析器，不能直接当作普通 UGC 的别名。
+核心先做类型化播放、番剧／影视与直播基础观看；投屏接收、UGC 下载／离线和多账号分别通过专项验证后独立交付。番剧与直播使用独立内容模型和播放解析器，不能直接当作普通 UGC 的别名。评论浏览、语音／手机辅助输入仍保留在后续 backlog，工期不计入 M9 核心。
 
 私信、发布动态、评论编辑与完整手机端功能对齐不属于首版目标。
 
@@ -73,7 +73,7 @@ M5（2026-10-25）已实现播放器控制、串行切换与限次恢复。新�
 
 | 关注点 | 选择 | 状态与理由 |
 | --- | --- | --- |
-| UI | Flutter、Material 3 基础控件、独立 TV 组件 | 确定；深色大屏主题、统一间距与焦点样式 |
+| UI | Flutter、Material 3 基础控件、独立 TV 组件 | 确定；深色／浅色／跟随系统、纯图标侧栏、胶囊 Tabs、统一间距与焦点样式 |
 | MVVM | `flutter_riverpod` 的 `Notifier`／`AsyncNotifier` + 不可变 UiState | 确定；ViewModel 承担页面状态与命令，异步初始化使用 `AsyncValue` 表达 |
 | 依赖注入 | Riverpod Provider 图 + 业务对象构造函数注入 | 确定；App 中的 Provider 绑定 Repository／UseCase，实现不接收 Ref |
 | Riverpod 生成 | `riverpod_annotation` + `riverpod_generator`，复用 `build_runner` | 确定；集中处理声明与生成，具体兼容版本在 M0／M1 锁定 |
@@ -84,7 +84,7 @@ M5（2026-10-25）已实现播放器控制、串行切换与限次恢复。新�
 | 结构化本地数据 | Drift / SQLite | 确定；历史、续播、缓存和迁移由 Repository 管理 |
 | 简单设置 | `shared_preferences` 的异步接口 | 确定；仅保存可恢复的偏好，不能存账号秘密或关键观看进度 |
 | 凭据 | `flutter_secure_storage` 封装的 CredentialStore | 确定；实际 Android 版本、备份恢复和设备兼容性在 M0 验证 |
-| 播放 | `media_kit` + `media_kit_video` + `media_kit_libs_video` | 候选；必须通过 M0/M2 音视频分离、请求头和真机硬解验证 |
+| 播放 | Android：`better_player`／Media3；Windows 与构建时回退：`media_kit` 系列 | 2026-10-27 起 Android 默认试用 Better Player；保留 PlaybackEngine 边界，见 [试用与回退](better-player-trial.md)。历史 M0–M7 结果仅适用于当时的 media_kit，真机验证待补 |
 | 播放替代 | Android Media3 适配器 | 备选；仅在候选引擎关键能力失败后评估，不并行维护两套引擎 |
 | 图片／二维码 | 成熟的缓存图片组件与二维码渲染组件 | M1 选定；限制解码尺寸，不自写图片缓存或二维码编码 |
 | 测试 | `flutter_test`、`integration_test`、独立 ProviderContainer／ProviderScope overrides、手写 Fake | 确定；重点覆盖状态机、Provider 生命周期、请求竞态、焦点与真实播放 |
@@ -195,7 +195,7 @@ docs/
 | `DiscoveryRepository` | 推荐、热门；各自分页语义在数据层转换 |
 | `SearchRepository` | 搜索与查询条件；响应绑定查询标识，丢弃过期结果 |
 | `VideoRepository` | 视频详情、分 P、相关内容，保持视频标识与分段标识分离 |
-| `PlaybackRepository` | 获取播放资源、有效清晰度／音轨／字幕、失效后重新解析 |
+| `PlaybackRepository` | 当前 UGC 播放资源、有效清晰度／音轨、失效后重新解析；M8 字幕使用独立 Repository，M9 再扩展类型化解析 |
 | `HistoryRepository` | 本地播放进度与观看列表；远端历史读取／上报作为独立能力 |
 | `LibraryRepository` | 收藏夹、稍后再看、写操作；远端结果与本地缓存一致性 |
 | `SettingsRepository` | 播放和界面偏好 |
@@ -277,7 +277,7 @@ Flutter `FocusNode` 由 View／UI 控制器创建释放；ViewModel 可以保存
 
 深色背景、清晰对比、16:9 视频卡片、可远距离阅读的字号。焦点使用边框／背景／轻微缩放组合，不能只靠颜色。以逻辑尺寸和布局断点适配窗口，实测 720p、1080p 和 4K 输出；限制卡片尺寸与每行数量，不以物理分辨率直接乘大字号。预留可调整边缘安全区，不做全屏高成本模糊。
 
-按用户 M2 要求，当前视觉采用深色 iOS 风格：Cupertino 图标、大标题、连续圆角、浮动侧栏、半透明玻璃面板和白色高对比焦点；使用系统字体回退。模糊只在有裁剪边界的侧栏和控制条使用，网格卡片不逐项模糊。该风格服务于 Android TV 遥控器，不依赖 iOS 触摸手势；当前实测输出为模拟器 1080p，其他分辨率和物理 TV 仍须补验。
+视觉沿用 iOS 风格：Cupertino 图标、大标题、连续圆角、浮动侧栏和玻璃面板。2026-10-27 按用户参考图加入纯图标侧栏、六项胶囊 Tabs，以及深色／浅色／跟随系统外观；视频控制层保持深色。焦点使用描边与背景双重提示，使用系统字体回退。模糊只在有裁剪边界的侧栏和控制条使用，网格卡片不逐项模糊。该风格服务于 Android TV 遥控器，不依赖 iOS 触摸手势；本轮模拟器实测为 1080p，组件布局覆盖 640×360／1280×720，物理 TV 仍待补验。见 [外观与首页 Tabs](appearance-and-home-tabs.md)。
 
 ## 9. 登录、接口与错误处理
 
@@ -308,7 +308,7 @@ Cookie、刷新令牌与未确认旧令牌放在安全存储的同一个版本�
 - 只有只读且可安全重放的请求进行有限退避重试；尊重服务限流提示。取消不显示为故障，限流不进行高频重试。
 - Riverpod 3 存在 Provider 构建失败自动重试机制；本项目在根 ProviderScope 显式关闭该重试，由数据层统一管理允许重试的只读请求，播放恢复由播放协调器管理。避免 Provider、Dio 和业务层叠加重试；写命令不放入可重算构建。参见 [Riverpod 重试机制](https://riverpod.dev/docs/concepts2/retry)。
 - 收藏、投币等写请求不盲目重试。响应丢失时先查询最终状态，或给出待确认结果；能恢复时才提交新的动作。
-- 请求日志使用应用级 Riverpod Provider 注入的 Talker 5.1.21，沿用字段白名单：event、method、status、category、elapsedMs；调试模式最多 200 条内存历史，profile/release 默认关闭。具体策略见 [日志约定](logging.md)。Cookie、令牌、二维码、完整签名与媒体链接不进入日志。
+- 请求日志使用应用级 Riverpod Provider 注入的 Talker 5.2.0，沿用字段白名单：event、method、status、category、elapsedMs；talker_flutter 和 talker_riverpod_logger 共用该实例，提供 TV 日志查看和脱敏状态摘要。调试模式最多 200 条内存历史，profile/release 默认关闭，可为专用诊断构建显式开启。具体策略见 [日志约定](logging.md)。Cookie、令牌、二维码、完整签名与媒体链接不进入日志。
 - DTO 映射发现关键字段不兼容时返回明确错误；可选字段缺失允许降级，不能把异常伪装为空列表。
 
 ## 10. 播放架构与恢复策略
@@ -397,3 +397,15 @@ M0 隔离验证入口已实现真实游客接口、扫码申请和模拟器音�
 ### M7 发布准备补充（2026-10-25）
 
 按 [ADR 0008](adr/0008-release-readiness-and-validation.md) 保持包名／版本策略和数据边界，新增品牌资源、按需加载的 TV 许可页与发布材料校验；验证包显示独立的“验证”名称。稳定性按用户调整为 15 分钟，真实 TV 与正式签名不由测试证书或模拟器替代。结果及已记录的时钟波动见 [M7](m7-validation.md)。
+
+### M8 实现与 M9 规划补充（2026-10-26）
+
+按 [ADR 0009](adr/0009-m8-m9-roadmap-and-feature-boundaries.md) 和 [总开发计划第 11 节](development-plan.md#11-m8m9详细开发计划) 增量扩展：
+
+| 阶段 | 新边界 | 保留的规则 |
+| --- | --- | --- |
+| M8 | PlaybackTimeline；SubtitleRepository／DanmakuRepository；独立覆盖层 ViewModel／画布；UP／关注／筛选及互动端口 | 时间轴来自唯一引擎；逐帧刷新不触发整页重建；Web 协议先实测，互动不自动重放 |
+| M9 核心 | PlaybackTarget 联合类型；ResolvedPlayback／PlaybackCapabilities；UGC／PGC／Live 解析器及内容类型历史键 | 共享唯一 Coordinator；Domain 不依赖媒体插件；直播不伪装成可 seek 的 UGC |
+| M9 可选 | 投屏接收、下载任务／本地资源、多账号切换事务 | 专项验证后接入；签名链接不持久化；同一时间一个活动账号，不跨账号重放命令 |
+
+M8 已采用 JSON 字幕、canvas_danmaku 0.3.3、protobuf 6.1.0 和独立的媒体覆盖层。领域模型放在 domain/overlays；SubtitleViewModel／DanmakuViewModel 管理异步作用域，路由锚定轻量 SubtitleChoice 保留切画质选择。50 ms 定时查询原生锚点（最多外推 250 ms），画布自身驱动动画，字幕变化才重绘。设备偏好独立于账号与原 AppSettings，Drift 保持 v2。实现与许可／性能取舍见 ADR 0010；M9 类型化历史按需做 v2→v3 和 v1→最新迁移。完整 TV 流程、15 分钟与性能预算、设备／人工边界以[总开发计划第 11 节](development-plan.md#11-m8m9详细开发计划)为准。

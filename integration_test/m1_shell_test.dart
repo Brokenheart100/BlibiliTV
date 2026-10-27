@@ -36,7 +36,7 @@ void main() {
     final schema = await tester.runAsync(
       () => database.customSelect('PRAGMA user_version').getSingle(),
     );
-    expect(schema!.read<int>('user_version'), 1);
+    expect(schema!.read<int>('user_version'), database.schemaVersion);
 
     Future<void> key(LogicalKeyboardKey value) async {
       await tester.sendKeyEvent(value);
@@ -60,7 +60,7 @@ void main() {
     expect(find.byType(AlertDialog), findsNothing);
     expect(FocusManager.instance.primaryFocus?.debugLabel, card);
     await key(LogicalKeyboardKey.arrowLeft);
-    for (var index = 0; index < 3; index++) {
+    for (var index = 0; index < 4; index++) {
       await key(LogicalKeyboardKey.arrowDown);
     }
     await key(LogicalKeyboardKey.select);
@@ -94,7 +94,7 @@ void main() {
     expect(tester.takeException(), isNull);
     binding.reportData = {
       'recordedAtUtc': DateTime.now().toUtc().toIso8601String(),
-      'schemaVersion': 1,
+      'schemaVersion': database.schemaVersion,
       'nativeStartup': true,
       'detailBackRestoresCard': true,
       'backKeyPlusPlatformCallbackPopsOnce': true,

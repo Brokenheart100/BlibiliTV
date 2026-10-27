@@ -13,6 +13,7 @@ BiliVideoDto _$BiliVideoDtoFromJson(Map<String, dynamic> json) => BiliVideoDto(
   creator: readCreator(json, 'creator') as String,
   duration: durationSeconds(json['duration']),
   views: jsonInteger(readViews(json, 'views')),
+  creatorAvatarUrl: avatarUrl(readCreatorAvatar(json, 'creatorAvatarUrl')),
 );
 
 BiliPartDto _$BiliPartDtoFromJson(Map<String, dynamic> json) => BiliPartDto(

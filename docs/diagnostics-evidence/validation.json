@@ -1,0 +1,47 @@
+{
+  "date": "2026-10-28",
+  "packages": {
+    "talker": "5.2.0",
+    "talker_flutter": "5.2.0",
+    "talker_riverpod_logger": "5.2.0"
+  },
+  "flutterTestsPassed": 250,
+  "staticAnalysis": "passed_no_diagnostics",
+  "formatCheck": {"files": 247, "changed": 0},
+  "dependencyInventory": {"lockedPackages": 202, "runtimePackages": 158, "licenseCheck": "passed"},
+  "privacyTests": [
+    "http_success_and_failure_metadata_only",
+    "family_arguments_and_account_details_not_logged",
+    "raw_state_toString_never_called",
+    "raw_errors_and_stack_traces_not_retained",
+    "1000_native_clock_updates_deduplicated",
+    "disabled_diagnostics_retain_nothing",
+    "history_bounded_to_200"
+  ],
+  "widgetValidation": {
+    "sizes": ["640x360", "960x540"],
+    "themes": ["light", "dark"],
+    "scrollToLog27": "passed",
+    "filters": "passed",
+    "freezeWhileReading": "passed",
+    "clearConfirmation": "passed",
+    "returnFocus": "setting-12"
+  },
+  "nativeValidation": {
+    "device": "Android TV emulator API 36 x86_64",
+    "package": "app.mamba.mambatv.validation",
+    "buildAndInstall": "passed",
+    "settingsEntryViaDpad": "passed",
+    "actualHttpAndRiverpodLogs": "passed",
+    "readerAndListDpad": "passed",
+    "backRestoresSetting12": "passed",
+    "hotReload": "passed",
+    "finalRuntimeErrors": 0,
+    "remoteAccountWriteRequests": 0,
+    "driverWaitTimeoutsBeforeRetry": 1,
+    "finalAppearance": "dark"
+  },
+  "physicalTv": "not_run",
+  "releaseBuild": "not_run",
+  "published": false
+}

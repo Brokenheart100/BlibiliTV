@@ -13,6 +13,276 @@ part of 'app_models.dart';
 // dart format off
 T _$identity<T>(T value) => value;
 /// @nodoc
+mixin _$CatalogOptions {
+
+ int get creatorId; VideoOrder get order; int get duration;
+/// Create a copy of CatalogOptions
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$CatalogOptionsCopyWith<CatalogOptions> get copyWith => _$CatalogOptionsCopyWithImpl<CatalogOptions>(this as CatalogOptions, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  final _this = this as CatalogOptions;
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CatalogOptions&&(identical(other.creatorId, _this.creatorId) || other.creatorId == _this.creatorId)&&(identical(other.order, _this.order) || other.order == _this.order)&&(identical(other.duration, _this.duration) || other.duration == _this.duration));
+}
+
+
+@override
+int get hashCode {
+  final _this = this as CatalogOptions;
+  return Object.hash(runtimeType,_this.creatorId,_this.order,_this.duration);
+}
+
+@override
+String toString() {
+  final _this = this as CatalogOptions;
+  return 'CatalogOptions(creatorId: ${_this.creatorId}, order: ${_this.order}, duration: ${_this.duration})';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $CatalogOptionsCopyWith<$Res>  {
+  factory $CatalogOptionsCopyWith(CatalogOptions value, $Res Function(CatalogOptions) _then) = _$CatalogOptionsCopyWithImpl;
+@useResult
+$Res call({
+ int creatorId, VideoOrder order, int duration
+});
+
+
+
+
+}
+/// @nodoc
+class _$CatalogOptionsCopyWithImpl<$Res>
+    implements $CatalogOptionsCopyWith<$Res> {
+  _$CatalogOptionsCopyWithImpl(this._self, this._then);
+
+  final CatalogOptions _self;
+  final $Res Function(CatalogOptions) _then;
+
+/// Create a copy of CatalogOptions
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? creatorId = null,Object? order = null,Object? duration = null,}) {
+  return _then(CatalogOptions(
+creatorId: null == creatorId ? _self.creatorId : creatorId // ignore: cast_nullable_to_non_nullable
+as int,order: null == order ? _self.order : order // ignore: cast_nullable_to_non_nullable
+as VideoOrder,duration: null == duration ? _self.duration : duration // ignore: cast_nullable_to_non_nullable
+as int,
+  ));
+}
+
+}
+
+
+/// Adds pattern-matching-related methods to [CatalogOptions].
+extension CatalogOptionsPatterns on CatalogOptions {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _CatalogOptions value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _CatalogOptions() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _CatalogOptions value)  $default,){
+final _that = this;
+switch (_that) {
+case _CatalogOptions():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _CatalogOptions value)?  $default,){
+final _that = this;
+switch (_that) {
+case _CatalogOptions() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int creatorId,  VideoOrder order,  int duration)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _CatalogOptions() when $default != null:
+return $default(_that.creatorId,_that.order,_that.duration);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int creatorId,  VideoOrder order,  int duration)  $default,) {final _that = this;
+switch (_that) {
+case _CatalogOptions():
+return $default(_that.creatorId,_that.order,_that.duration);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int creatorId,  VideoOrder order,  int duration)?  $default,) {final _that = this;
+switch (_that) {
+case _CatalogOptions() when $default != null:
+return $default(_that.creatorId,_that.order,_that.duration);case _:
+  return null;
+
+}
+}
+
+}
+
+/// @nodoc
+
+
+class _CatalogOptions implements CatalogOptions {
+  const _CatalogOptions({this.creatorId = 0, this.order = VideoOrder.relevance, this.duration = 0});
+  
+
+@override@JsonKey() final  int creatorId;
+@override@JsonKey() final  VideoOrder order;
+@override@JsonKey() final  int duration;
+
+/// Create a copy of CatalogOptions
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$CatalogOptionsCopyWith<_CatalogOptions> get copyWith => __$CatalogOptionsCopyWithImpl<_CatalogOptions>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _CatalogOptions&&(identical(other.creatorId, creatorId) || other.creatorId == creatorId)&&(identical(other.order, order) || other.order == order)&&(identical(other.duration, duration) || other.duration == duration));
+}
+
+
+@override
+int get hashCode {
+    return Object.hash(runtimeType,creatorId,order,duration);
+}
+
+@override
+String toString() {
+    return 'CatalogOptions(creatorId: $creatorId, order: $order, duration: $duration)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$CatalogOptionsCopyWith<$Res> implements $CatalogOptionsCopyWith<$Res> {
+  factory _$CatalogOptionsCopyWith(_CatalogOptions value, $Res Function(_CatalogOptions) _then) = __$CatalogOptionsCopyWithImpl;
+@override @useResult
+$Res call({
+ int creatorId, VideoOrder order, int duration
+});
+
+
+
+
+}
+/// @nodoc
+class __$CatalogOptionsCopyWithImpl<$Res>
+    implements _$CatalogOptionsCopyWith<$Res> {
+  __$CatalogOptionsCopyWithImpl(this._self, this._then);
+
+  final _CatalogOptions _self;
+  final $Res Function(_CatalogOptions) _then;
+
+/// Create a copy of CatalogOptions
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? creatorId = null,Object? order = null,Object? duration = null,}) {
+  return _then(_CatalogOptions(
+creatorId: null == creatorId ? _self.creatorId : creatorId // ignore: cast_nullable_to_non_nullable
+as int,order: null == order ? _self.order : order // ignore: cast_nullable_to_non_nullable
+as VideoOrder,duration: null == duration ? _self.duration : duration // ignore: cast_nullable_to_non_nullable
+as int,
+  ));
+}
+
+
+}
+
+/// @nodoc
 mixin _$Session {
 
  String get ownerKey; String? get displayName; SessionStatus get status; int get generation; String? get notice;
@@ -291,7 +561,7 @@ as String?,
 /// @nodoc
 mixin _$VideoSummary {
 
- String get id; String get title; String get creator; int get durationSeconds; int get viewCount; String? get coverUrl;
+ String get id; String get title; String get creator; int get durationSeconds; int get viewCount; String? get coverUrl; String? get creatorAvatarUrl;
 /// Create a copy of VideoSummary
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -303,20 +573,20 @@ $VideoSummaryCopyWith<VideoSummary> get copyWith => _$VideoSummaryCopyWithImpl<V
 @override
 bool operator ==(Object other) {
   final _this = this as VideoSummary;
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is VideoSummary&&(identical(other.id, _this.id) || other.id == _this.id)&&(identical(other.title, _this.title) || other.title == _this.title)&&(identical(other.creator, _this.creator) || other.creator == _this.creator)&&(identical(other.durationSeconds, _this.durationSeconds) || other.durationSeconds == _this.durationSeconds)&&(identical(other.viewCount, _this.viewCount) || other.viewCount == _this.viewCount)&&(identical(other.coverUrl, _this.coverUrl) || other.coverUrl == _this.coverUrl));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is VideoSummary&&(identical(other.id, _this.id) || other.id == _this.id)&&(identical(other.title, _this.title) || other.title == _this.title)&&(identical(other.creator, _this.creator) || other.creator == _this.creator)&&(identical(other.durationSeconds, _this.durationSeconds) || other.durationSeconds == _this.durationSeconds)&&(identical(other.viewCount, _this.viewCount) || other.viewCount == _this.viewCount)&&(identical(other.coverUrl, _this.coverUrl) || other.coverUrl == _this.coverUrl)&&(identical(other.creatorAvatarUrl, _this.creatorAvatarUrl) || other.creatorAvatarUrl == _this.creatorAvatarUrl));
 }
 
 
 @override
 int get hashCode {
   final _this = this as VideoSummary;
-  return Object.hash(runtimeType,_this.id,_this.title,_this.creator,_this.durationSeconds,_this.viewCount,_this.coverUrl);
+  return Object.hash(runtimeType,_this.id,_this.title,_this.creator,_this.durationSeconds,_this.viewCount,_this.coverUrl,_this.creatorAvatarUrl);
 }
 
 @override
 String toString() {
   final _this = this as VideoSummary;
-  return 'VideoSummary(id: ${_this.id}, title: ${_this.title}, creator: ${_this.creator}, durationSeconds: ${_this.durationSeconds}, viewCount: ${_this.viewCount}, coverUrl: ${_this.coverUrl})';
+  return 'VideoSummary(id: ${_this.id}, title: ${_this.title}, creator: ${_this.creator}, durationSeconds: ${_this.durationSeconds}, viewCount: ${_this.viewCount}, coverUrl: ${_this.coverUrl}, creatorAvatarUrl: ${_this.creatorAvatarUrl})';
 }
 
 
@@ -327,7 +597,7 @@ abstract mixin class $VideoSummaryCopyWith<$Res>  {
   factory $VideoSummaryCopyWith(VideoSummary value, $Res Function(VideoSummary) _then) = _$VideoSummaryCopyWithImpl;
 @useResult
 $Res call({
- String id, String title, String creator, int durationSeconds, int viewCount, String? coverUrl
+ String id, String title, String creator, int durationSeconds, int viewCount, String? coverUrl, String? creatorAvatarUrl
 });
 
 
@@ -344,7 +614,7 @@ class _$VideoSummaryCopyWithImpl<$Res>
 
 /// Create a copy of VideoSummary
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? title = null,Object? creator = null,Object? durationSeconds = null,Object? viewCount = null,Object? coverUrl = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? title = null,Object? creator = null,Object? durationSeconds = null,Object? viewCount = null,Object? coverUrl = freezed,Object? creatorAvatarUrl = freezed,}) {
   return _then(VideoSummary(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
@@ -352,6 +622,7 @@ as String,creator: null == creator ? _self.creator : creator // ignore: cast_nul
 as String,durationSeconds: null == durationSeconds ? _self.durationSeconds : durationSeconds // ignore: cast_nullable_to_non_nullable
 as int,viewCount: null == viewCount ? _self.viewCount : viewCount // ignore: cast_nullable_to_non_nullable
 as int,coverUrl: freezed == coverUrl ? _self.coverUrl : coverUrl // ignore: cast_nullable_to_non_nullable
+as String?,creatorAvatarUrl: freezed == creatorAvatarUrl ? _self.creatorAvatarUrl : creatorAvatarUrl // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }
@@ -437,10 +708,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String title,  String creator,  int durationSeconds,  int viewCount,  String? coverUrl)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String title,  String creator,  int durationSeconds,  int viewCount,  String? coverUrl,  String? creatorAvatarUrl)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _VideoSummary() when $default != null:
-return $default(_that.id,_that.title,_that.creator,_that.durationSeconds,_that.viewCount,_that.coverUrl);case _:
+return $default(_that.id,_that.title,_that.creator,_that.durationSeconds,_that.viewCount,_that.coverUrl,_that.creatorAvatarUrl);case _:
   return orElse();
 
 }
@@ -458,10 +729,10 @@ return $default(_that.id,_that.title,_that.creator,_that.durationSeconds,_that.v
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String title,  String creator,  int durationSeconds,  int viewCount,  String? coverUrl)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String title,  String creator,  int durationSeconds,  int viewCount,  String? coverUrl,  String? creatorAvatarUrl)  $default,) {final _that = this;
 switch (_that) {
 case _VideoSummary():
-return $default(_that.id,_that.title,_that.creator,_that.durationSeconds,_that.viewCount,_that.coverUrl);case _:
+return $default(_that.id,_that.title,_that.creator,_that.durationSeconds,_that.viewCount,_that.coverUrl,_that.creatorAvatarUrl);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -478,10 +749,10 @@ return $default(_that.id,_that.title,_that.creator,_that.durationSeconds,_that.v
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String title,  String creator,  int durationSeconds,  int viewCount,  String? coverUrl)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String title,  String creator,  int durationSeconds,  int viewCount,  String? coverUrl,  String? creatorAvatarUrl)?  $default,) {final _that = this;
 switch (_that) {
 case _VideoSummary() when $default != null:
-return $default(_that.id,_that.title,_that.creator,_that.durationSeconds,_that.viewCount,_that.coverUrl);case _:
+return $default(_that.id,_that.title,_that.creator,_that.durationSeconds,_that.viewCount,_that.coverUrl,_that.creatorAvatarUrl);case _:
   return null;
 
 }
@@ -493,7 +764,7 @@ return $default(_that.id,_that.title,_that.creator,_that.durationSeconds,_that.v
 
 
 class _VideoSummary implements VideoSummary {
-  const _VideoSummary({required this.id, required this.title, required this.creator, required this.durationSeconds, required this.viewCount, this.coverUrl});
+  const _VideoSummary({required this.id, required this.title, required this.creator, required this.durationSeconds, required this.viewCount, this.coverUrl, this.creatorAvatarUrl});
   
 
 @override final  String id;
@@ -502,6 +773,7 @@ class _VideoSummary implements VideoSummary {
 @override final  int durationSeconds;
 @override final  int viewCount;
 @override final  String? coverUrl;
+@override final  String? creatorAvatarUrl;
 
 /// Create a copy of VideoSummary
 /// with the given fields replaced by the non-null parameter values.
@@ -513,18 +785,18 @@ _$VideoSummaryCopyWith<_VideoSummary> get copyWith => __$VideoSummaryCopyWithImp
 
 @override
 bool operator ==(Object other) {
-    return identical(this, other) || (other.runtimeType == runtimeType&&other is _VideoSummary&&(identical(other.id, id) || other.id == id)&&(identical(other.title, title) || other.title == title)&&(identical(other.creator, creator) || other.creator == creator)&&(identical(other.durationSeconds, durationSeconds) || other.durationSeconds == durationSeconds)&&(identical(other.viewCount, viewCount) || other.viewCount == viewCount)&&(identical(other.coverUrl, coverUrl) || other.coverUrl == coverUrl));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _VideoSummary&&(identical(other.id, id) || other.id == id)&&(identical(other.title, title) || other.title == title)&&(identical(other.creator, creator) || other.creator == creator)&&(identical(other.durationSeconds, durationSeconds) || other.durationSeconds == durationSeconds)&&(identical(other.viewCount, viewCount) || other.viewCount == viewCount)&&(identical(other.coverUrl, coverUrl) || other.coverUrl == coverUrl)&&(identical(other.creatorAvatarUrl, creatorAvatarUrl) || other.creatorAvatarUrl == creatorAvatarUrl));
 }
 
 
 @override
 int get hashCode {
-    return Object.hash(runtimeType,id,title,creator,durationSeconds,viewCount,coverUrl);
+    return Object.hash(runtimeType,id,title,creator,durationSeconds,viewCount,coverUrl,creatorAvatarUrl);
 }
 
 @override
 String toString() {
-    return 'VideoSummary(id: $id, title: $title, creator: $creator, durationSeconds: $durationSeconds, viewCount: $viewCount, coverUrl: $coverUrl)';
+    return 'VideoSummary(id: $id, title: $title, creator: $creator, durationSeconds: $durationSeconds, viewCount: $viewCount, coverUrl: $coverUrl, creatorAvatarUrl: $creatorAvatarUrl)';
 }
 
 
@@ -535,7 +807,7 @@ abstract mixin class _$VideoSummaryCopyWith<$Res> implements $VideoSummaryCopyWi
   factory _$VideoSummaryCopyWith(_VideoSummary value, $Res Function(_VideoSummary) _then) = __$VideoSummaryCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String title, String creator, int durationSeconds, int viewCount, String? coverUrl
+ String id, String title, String creator, int durationSeconds, int viewCount, String? coverUrl, String? creatorAvatarUrl
 });
 
 
@@ -552,7 +824,7 @@ class __$VideoSummaryCopyWithImpl<$Res>
 
 /// Create a copy of VideoSummary
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? title = null,Object? creator = null,Object? durationSeconds = null,Object? viewCount = null,Object? coverUrl = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? title = null,Object? creator = null,Object? durationSeconds = null,Object? viewCount = null,Object? coverUrl = freezed,Object? creatorAvatarUrl = freezed,}) {
   return _then(_VideoSummary(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
@@ -560,6 +832,7 @@ as String,creator: null == creator ? _self.creator : creator // ignore: cast_nul
 as String,durationSeconds: null == durationSeconds ? _self.durationSeconds : durationSeconds // ignore: cast_nullable_to_non_nullable
 as int,viewCount: null == viewCount ? _self.viewCount : viewCount // ignore: cast_nullable_to_non_nullable
 as int,coverUrl: freezed == coverUrl ? _self.coverUrl : coverUrl // ignore: cast_nullable_to_non_nullable
+as String?,creatorAvatarUrl: freezed == creatorAvatarUrl ? _self.creatorAvatarUrl : creatorAvatarUrl // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }
@@ -1140,7 +1413,7 @@ $VideoSummaryCopyWith<$Res> get video {
 /// @nodoc
 mixin _$AppSettings {
 
- bool get reducedMotion; bool get resumePlayback; double get defaultRate; int get defaultQuality; bool get autoNext; bool get syncHistory;
+ bool get reducedMotion; bool get resumePlayback; double get defaultRate; int get defaultQuality; bool get autoNext; bool get syncHistory; AppTheme get theme;
 /// Create a copy of AppSettings
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -1152,20 +1425,20 @@ $AppSettingsCopyWith<AppSettings> get copyWith => _$AppSettingsCopyWithImpl<AppS
 @override
 bool operator ==(Object other) {
   final _this = this as AppSettings;
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AppSettings&&(identical(other.reducedMotion, _this.reducedMotion) || other.reducedMotion == _this.reducedMotion)&&(identical(other.resumePlayback, _this.resumePlayback) || other.resumePlayback == _this.resumePlayback)&&(identical(other.defaultRate, _this.defaultRate) || other.defaultRate == _this.defaultRate)&&(identical(other.defaultQuality, _this.defaultQuality) || other.defaultQuality == _this.defaultQuality)&&(identical(other.autoNext, _this.autoNext) || other.autoNext == _this.autoNext)&&(identical(other.syncHistory, _this.syncHistory) || other.syncHistory == _this.syncHistory));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AppSettings&&(identical(other.reducedMotion, _this.reducedMotion) || other.reducedMotion == _this.reducedMotion)&&(identical(other.resumePlayback, _this.resumePlayback) || other.resumePlayback == _this.resumePlayback)&&(identical(other.defaultRate, _this.defaultRate) || other.defaultRate == _this.defaultRate)&&(identical(other.defaultQuality, _this.defaultQuality) || other.defaultQuality == _this.defaultQuality)&&(identical(other.autoNext, _this.autoNext) || other.autoNext == _this.autoNext)&&(identical(other.syncHistory, _this.syncHistory) || other.syncHistory == _this.syncHistory)&&(identical(other.theme, _this.theme) || other.theme == _this.theme));
 }
 
 
 @override
 int get hashCode {
   final _this = this as AppSettings;
-  return Object.hash(runtimeType,_this.reducedMotion,_this.resumePlayback,_this.defaultRate,_this.defaultQuality,_this.autoNext,_this.syncHistory);
+  return Object.hash(runtimeType,_this.reducedMotion,_this.resumePlayback,_this.defaultRate,_this.defaultQuality,_this.autoNext,_this.syncHistory,_this.theme);
 }
 
 @override
 String toString() {
   final _this = this as AppSettings;
-  return 'AppSettings(reducedMotion: ${_this.reducedMotion}, resumePlayback: ${_this.resumePlayback}, defaultRate: ${_this.defaultRate}, defaultQuality: ${_this.defaultQuality}, autoNext: ${_this.autoNext}, syncHistory: ${_this.syncHistory})';
+  return 'AppSettings(reducedMotion: ${_this.reducedMotion}, resumePlayback: ${_this.resumePlayback}, defaultRate: ${_this.defaultRate}, defaultQuality: ${_this.defaultQuality}, autoNext: ${_this.autoNext}, syncHistory: ${_this.syncHistory}, theme: ${_this.theme})';
 }
 
 
@@ -1176,7 +1449,7 @@ abstract mixin class $AppSettingsCopyWith<$Res>  {
   factory $AppSettingsCopyWith(AppSettings value, $Res Function(AppSettings) _then) = _$AppSettingsCopyWithImpl;
 @useResult
 $Res call({
- bool reducedMotion, bool resumePlayback, double defaultRate, int defaultQuality, bool autoNext, bool syncHistory
+ bool reducedMotion, bool resumePlayback, double defaultRate, int defaultQuality, bool autoNext, bool syncHistory, AppTheme theme
 });
 
 
@@ -1193,7 +1466,7 @@ class _$AppSettingsCopyWithImpl<$Res>
 
 /// Create a copy of AppSettings
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? reducedMotion = null,Object? resumePlayback = null,Object? defaultRate = null,Object? defaultQuality = null,Object? autoNext = null,Object? syncHistory = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? reducedMotion = null,Object? resumePlayback = null,Object? defaultRate = null,Object? defaultQuality = null,Object? autoNext = null,Object? syncHistory = null,Object? theme = null,}) {
   return _then(AppSettings(
 reducedMotion: null == reducedMotion ? _self.reducedMotion : reducedMotion // ignore: cast_nullable_to_non_nullable
 as bool,resumePlayback: null == resumePlayback ? _self.resumePlayback : resumePlayback // ignore: cast_nullable_to_non_nullable
@@ -1201,7 +1474,8 @@ as bool,defaultRate: null == defaultRate ? _self.defaultRate : defaultRate // ig
 as double,defaultQuality: null == defaultQuality ? _self.defaultQuality : defaultQuality // ignore: cast_nullable_to_non_nullable
 as int,autoNext: null == autoNext ? _self.autoNext : autoNext // ignore: cast_nullable_to_non_nullable
 as bool,syncHistory: null == syncHistory ? _self.syncHistory : syncHistory // ignore: cast_nullable_to_non_nullable
-as bool,
+as bool,theme: null == theme ? _self.theme : theme // ignore: cast_nullable_to_non_nullable
+as AppTheme,
   ));
 }
 
@@ -1286,10 +1560,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool reducedMotion,  bool resumePlayback,  double defaultRate,  int defaultQuality,  bool autoNext,  bool syncHistory)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool reducedMotion,  bool resumePlayback,  double defaultRate,  int defaultQuality,  bool autoNext,  bool syncHistory,  AppTheme theme)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _AppSettings() when $default != null:
-return $default(_that.reducedMotion,_that.resumePlayback,_that.defaultRate,_that.defaultQuality,_that.autoNext,_that.syncHistory);case _:
+return $default(_that.reducedMotion,_that.resumePlayback,_that.defaultRate,_that.defaultQuality,_that.autoNext,_that.syncHistory,_that.theme);case _:
   return orElse();
 
 }
@@ -1307,10 +1581,10 @@ return $default(_that.reducedMotion,_that.resumePlayback,_that.defaultRate,_that
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool reducedMotion,  bool resumePlayback,  double defaultRate,  int defaultQuality,  bool autoNext,  bool syncHistory)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool reducedMotion,  bool resumePlayback,  double defaultRate,  int defaultQuality,  bool autoNext,  bool syncHistory,  AppTheme theme)  $default,) {final _that = this;
 switch (_that) {
 case _AppSettings():
-return $default(_that.reducedMotion,_that.resumePlayback,_that.defaultRate,_that.defaultQuality,_that.autoNext,_that.syncHistory);case _:
+return $default(_that.reducedMotion,_that.resumePlayback,_that.defaultRate,_that.defaultQuality,_that.autoNext,_that.syncHistory,_that.theme);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -1327,10 +1601,10 @@ return $default(_that.reducedMotion,_that.resumePlayback,_that.defaultRate,_that
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool reducedMotion,  bool resumePlayback,  double defaultRate,  int defaultQuality,  bool autoNext,  bool syncHistory)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool reducedMotion,  bool resumePlayback,  double defaultRate,  int defaultQuality,  bool autoNext,  bool syncHistory,  AppTheme theme)?  $default,) {final _that = this;
 switch (_that) {
 case _AppSettings() when $default != null:
-return $default(_that.reducedMotion,_that.resumePlayback,_that.defaultRate,_that.defaultQuality,_that.autoNext,_that.syncHistory);case _:
+return $default(_that.reducedMotion,_that.resumePlayback,_that.defaultRate,_that.defaultQuality,_that.autoNext,_that.syncHistory,_that.theme);case _:
   return null;
 
 }
@@ -1342,7 +1616,7 @@ return $default(_that.reducedMotion,_that.resumePlayback,_that.defaultRate,_that
 
 
 class _AppSettings implements AppSettings {
-  const _AppSettings({this.reducedMotion = false, this.resumePlayback = true, this.defaultRate = 1.0, this.defaultQuality = 0, this.autoNext = false, this.syncHistory = false});
+  const _AppSettings({this.reducedMotion = false, this.resumePlayback = true, this.defaultRate = 1.0, this.defaultQuality = 0, this.autoNext = false, this.syncHistory = false, this.theme = AppTheme.dark});
   
 
 @override@JsonKey() final  bool reducedMotion;
@@ -1351,6 +1625,7 @@ class _AppSettings implements AppSettings {
 @override@JsonKey() final  int defaultQuality;
 @override@JsonKey() final  bool autoNext;
 @override@JsonKey() final  bool syncHistory;
+@override@JsonKey() final  AppTheme theme;
 
 /// Create a copy of AppSettings
 /// with the given fields replaced by the non-null parameter values.
@@ -1362,18 +1637,18 @@ _$AppSettingsCopyWith<_AppSettings> get copyWith => __$AppSettingsCopyWithImpl<_
 
 @override
 bool operator ==(Object other) {
-    return identical(this, other) || (other.runtimeType == runtimeType&&other is _AppSettings&&(identical(other.reducedMotion, reducedMotion) || other.reducedMotion == reducedMotion)&&(identical(other.resumePlayback, resumePlayback) || other.resumePlayback == resumePlayback)&&(identical(other.defaultRate, defaultRate) || other.defaultRate == defaultRate)&&(identical(other.defaultQuality, defaultQuality) || other.defaultQuality == defaultQuality)&&(identical(other.autoNext, autoNext) || other.autoNext == autoNext)&&(identical(other.syncHistory, syncHistory) || other.syncHistory == syncHistory));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _AppSettings&&(identical(other.reducedMotion, reducedMotion) || other.reducedMotion == reducedMotion)&&(identical(other.resumePlayback, resumePlayback) || other.resumePlayback == resumePlayback)&&(identical(other.defaultRate, defaultRate) || other.defaultRate == defaultRate)&&(identical(other.defaultQuality, defaultQuality) || other.defaultQuality == defaultQuality)&&(identical(other.autoNext, autoNext) || other.autoNext == autoNext)&&(identical(other.syncHistory, syncHistory) || other.syncHistory == syncHistory)&&(identical(other.theme, theme) || other.theme == theme));
 }
 
 
 @override
 int get hashCode {
-    return Object.hash(runtimeType,reducedMotion,resumePlayback,defaultRate,defaultQuality,autoNext,syncHistory);
+    return Object.hash(runtimeType,reducedMotion,resumePlayback,defaultRate,defaultQuality,autoNext,syncHistory,theme);
 }
 
 @override
 String toString() {
-    return 'AppSettings(reducedMotion: $reducedMotion, resumePlayback: $resumePlayback, defaultRate: $defaultRate, defaultQuality: $defaultQuality, autoNext: $autoNext, syncHistory: $syncHistory)';
+    return 'AppSettings(reducedMotion: $reducedMotion, resumePlayback: $resumePlayback, defaultRate: $defaultRate, defaultQuality: $defaultQuality, autoNext: $autoNext, syncHistory: $syncHistory, theme: $theme)';
 }
 
 
@@ -1384,7 +1659,7 @@ abstract mixin class _$AppSettingsCopyWith<$Res> implements $AppSettingsCopyWith
   factory _$AppSettingsCopyWith(_AppSettings value, $Res Function(_AppSettings) _then) = __$AppSettingsCopyWithImpl;
 @override @useResult
 $Res call({
- bool reducedMotion, bool resumePlayback, double defaultRate, int defaultQuality, bool autoNext, bool syncHistory
+ bool reducedMotion, bool resumePlayback, double defaultRate, int defaultQuality, bool autoNext, bool syncHistory, AppTheme theme
 });
 
 
@@ -1401,7 +1676,7 @@ class __$AppSettingsCopyWithImpl<$Res>
 
 /// Create a copy of AppSettings
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? reducedMotion = null,Object? resumePlayback = null,Object? defaultRate = null,Object? defaultQuality = null,Object? autoNext = null,Object? syncHistory = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? reducedMotion = null,Object? resumePlayback = null,Object? defaultRate = null,Object? defaultQuality = null,Object? autoNext = null,Object? syncHistory = null,Object? theme = null,}) {
   return _then(_AppSettings(
 reducedMotion: null == reducedMotion ? _self.reducedMotion : reducedMotion // ignore: cast_nullable_to_non_nullable
 as bool,resumePlayback: null == resumePlayback ? _self.resumePlayback : resumePlayback // ignore: cast_nullable_to_non_nullable
@@ -1409,7 +1684,8 @@ as bool,defaultRate: null == defaultRate ? _self.defaultRate : defaultRate // ig
 as double,defaultQuality: null == defaultQuality ? _self.defaultQuality : defaultQuality // ignore: cast_nullable_to_non_nullable
 as int,autoNext: null == autoNext ? _self.autoNext : autoNext // ignore: cast_nullable_to_non_nullable
 as bool,syncHistory: null == syncHistory ? _self.syncHistory : syncHistory // ignore: cast_nullable_to_non_nullable
-as bool,
+as bool,theme: null == theme ? _self.theme : theme // ignore: cast_nullable_to_non_nullable
+as AppTheme,
   ));
 }
 

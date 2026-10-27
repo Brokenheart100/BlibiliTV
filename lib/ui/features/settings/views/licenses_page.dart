@@ -90,9 +90,9 @@ class _LicensesPageState extends ConsumerState<LicensesPage> {
                 ],
               ),
               const SizedBox(height: 12),
-              const Text(
+              Text(
                 '上下选择组件，确认或向右阅读；阅读时上下滚动，向左返回列表。',
-                style: TextStyle(color: TvColors.muted),
+                style: TextStyle(color: context.tvColors.muted),
               ),
               const SizedBox(height: 18),
               Expanded(
@@ -203,9 +203,11 @@ class _LicensesPageState extends ConsumerState<LicensesPage> {
                             child: Container(
                               padding: const EdgeInsets.all(18),
                               decoration: BoxDecoration(
-                                color: TvColors.surface,
+                                color: context.tvColors.surface,
                                 border: Border.all(
-                                  color: reading ? Colors.white : TvColors.line,
+                                  color: reading
+                                      ? context.tvColors.accent
+                                      : context.tvColors.line,
                                   width: 2,
                                 ),
                                 borderRadius: BorderRadius.circular(16),

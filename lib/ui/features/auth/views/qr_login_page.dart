@@ -154,12 +154,12 @@ class _QrLoginPageState extends ConsumerState<QrLoginPage> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const Text(
+                                  Text(
                                     'MAMBA TV  /  BILIBILI',
                                     style: TextStyle(
                                       fontSize: 11,
                                       letterSpacing: 2,
-                                      color: TvColors.accent,
+                                      color: context.tvColors.accent,
                                     ),
                                   ),
                                   const SizedBox(height: 16),
@@ -171,11 +171,11 @@ class _QrLoginPageState extends ConsumerState<QrLoginPage> {
                                         .headlineMedium,
                                   ),
                                   const SizedBox(height: 14),
-                                  const Text(
+                                  Text(
                                     '打开哔哩哔哩手机端扫一扫，\n在手机上确认后即可登录。',
                                     style: TextStyle(
                                       height: 1.7,
-                                      color: TvColors.muted,
+                                      color: context.tvColors.muted,
                                     ),
                                   ),
                                   const SizedBox(height: 12),
@@ -183,9 +183,9 @@ class _QrLoginPageState extends ConsumerState<QrLoginPage> {
                                     Text(
                                       '${result.remainingSeconds} 秒后过期',
                                       key: const Key('login-countdown'),
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                         fontSize: 12,
-                                        color: TvColors.accent,
+                                        color: context.tvColors.accent,
                                       ),
                                     ),
                                   if (result.failure != null)

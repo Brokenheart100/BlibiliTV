@@ -1,0 +1,9 @@
+{
+  "hostRecordedAtUtc": "2026-10-26T08:25:38.967502+00:00",
+  "status": "passed",
+  "generatedFileCount": 37,
+  "changedFiles": [],
+  "protoc": "36.2",
+  "protocPlugin": "25.0.0",
+  "scope": "Repeat generation hash comparison; source remains uncommitted"
+}

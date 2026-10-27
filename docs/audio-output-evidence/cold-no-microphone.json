@@ -1,0 +1,21 @@
+{
+  "status": "diagnostic",
+  "platform": "Android",
+  "readOnly": true,
+  "variants": [
+    {
+      "variant": "opensles",
+      "requestedBackend": "opensles",
+      "actualBackend": "opensles",
+      "inputFormat": "floatp",
+      "inputSampleRate": "44100",
+      "inputChannels": "stereo",
+      "outputFormat": "float",
+      "outputSampleRate": "44100",
+      "outputChannels": "stereo",
+      "maximumAvsyncSeconds": 0.00217,
+      "errors": []
+    }
+  ],
+  "manualNoiseFreeVerified": false
+}

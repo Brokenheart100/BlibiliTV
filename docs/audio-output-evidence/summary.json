@@ -1,0 +1,47 @@
+{
+  "scope": "Windows host HDMI output and Mamba_TV_API36 API36 x86_64 emulator; same public AAC excerpt",
+  "emulatorVersion": "37.2.12.0 build 16428233",
+  "device": "emulator-5556",
+  "productionAudioBackendChanged": false,
+  "playerAudioBackend": "opensles",
+  "hostOutputDevice": "G7u (NVIDIA High Definition Audio)",
+  "windowsDirectPlayback": {
+    "manualFeedback": "Windows 直接播放很干净",
+    "manualNoiseFreeVerified": true
+  },
+  "silentBefore": {
+    "manualFeedback": "还是听不到",
+    "hostSessionMuted": false,
+    "hostSessionVolumePercent": 100,
+    "processPeakSamples": 100,
+    "nonzeroSamples": 0,
+    "maximumPeak": 0.0,
+    "guestAudioFlingerSignalPowerNonzero": true
+  },
+  "directSoundAfter": {
+    "launchArgument": "-audio dsound",
+    "coldBoot": true,
+    "processPeakSamples": 100,
+    "nonzeroSamples": 100,
+    "maximumPeak": 0.05499284714460373,
+    "automatedPlaybackSeconds": 90,
+    "maximumAvsyncSeconds": 0.000925,
+    "nativeErrors": [],
+    "automatedReport": "host-dsound.json",
+    "manualFeedback": "能听到，声音干净",
+    "manualNoiseFreeVerified": true
+  },
+  "verification": {
+    "diagnosticDartFilesAnalysis": "No errors",
+    "diagnosticDartFormat": "3 files checked; no further changes",
+    "startupScript": "PowerShell syntax and -WhatIf passed",
+    "ordinaryAppRestored": true,
+    "flutterMcpHotReload": "succeeded",
+    "flutterMcpRuntimeErrors": 0
+  },
+  "limitations": [
+    "Host backend selection and cold restart changed together; exact backend defect is not established.",
+    "Short same-excerpt listening acceptance only; physical TV and long-duration audio remain unverified.",
+    "Raw automated diagnostics cannot confirm audibility or noise quality."
+  ]
+}

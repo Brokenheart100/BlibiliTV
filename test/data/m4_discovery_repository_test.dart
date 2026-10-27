@@ -6,6 +6,32 @@ import 'package:mambatv/data/services/bilibili/bilibili_api.dart';
 import 'package:mambatv/data/services/bilibili/bilibili_dto.dart';
 
 void main() {
+  test('creator images support search rows and reject malformed images', () {
+    expect(
+      avatarUrl('http://example.invalid/avatar.jpg'),
+      'https://example.invalid/avatar.jpg',
+    );
+    for (final raw in [
+      null,
+      '',
+      5,
+      'file:///avatar',
+      'https://name:secret@example.invalid/a.jpg',
+      'invalid',
+    ]) {
+      expect(avatarUrl(raw), isNull);
+    }
+    final dto = BiliVideoDto.fromJson({
+      'bvid': 'BVtest',
+      'title': '标题',
+      'pic': '',
+      'author': '作者',
+      'upic': '//example.invalid/search.jpg',
+      'duration': 10,
+      'play': 1,
+    });
+    expect(dto.creatorAvatarUrl, 'https://example.invalid/search.jpg');
+  });
   test('recommendation HTTP covers are upgraded without enabling cleartext traffic', () {
     expect(
       coverUrl('http://i0.hdslb.com/synthetic.jpg'),
@@ -23,7 +49,7 @@ void main() {
     'bvid': 'BVsynthetic',
     'title': '中文 &amp; TV',
     'pic': '//example.invalid/a.jpg',
-    'owner': {'name': '作者', 'mid': 1},
+    'owner': {'name': '作者', 'mid': 1, 'face': '//example.invalid/author.jpg'},
     'duration': 60,
     'stat': {'view': 10},
   };
@@ -82,10 +108,104 @@ void main() {
         cancellation: CancellationSignal(),
       )).valueOrThrow;
       expect(page.items.single.title, '中文 & TV');
+      expect(
+        page.items.single.creatorAvatarUrl,
+        'https://example.invalid/author.jpg',
+      );
       expect(page.nextCursor, 'recommend:2');
       expect(calls.last.queryParameters['fresh_idx'], '1');
       expect(calls.last.queryParameters.containsKey('w_rid'), isTrue);
       expect(calls.last.headers.containsKey('Cookie'), isFalse);
+    },
+  );
+  test(
+    'weekly pagination pins its issue and signs the reference API parameters',
+    () async {
+      reply(
+        (options) => {
+          'code': 0,
+          'data': {
+            'list': options.path.endsWith('/series/list')
+                ? [
+                    {'number': 7},
+                    {'number': 9},
+                    {'number': 8},
+                  ]
+                : [
+                    for (var i = 0; i < 18; i++)
+                      {...video, 'bvid': 'BVsynthetic$i'},
+                  ],
+          },
+        },
+      );
+      final first = (await repository.fetchVideos(
+        section: 'weekly',
+        ownerKey: 'guest',
+        cancellation: CancellationSignal(),
+      )).valueOrThrow;
+      expect(first.items, hasLength(12));
+      expect(first.nextCursor, 'weekly:9:12');
+      expect(calls.last.queryParameters['number'], '9');
+      expect(calls.last.queryParameters.containsKey('w_rid'), isTrue);
+      final next = (await repository.fetchVideos(
+        section: 'weekly',
+        ownerKey: 'guest',
+        cursor: first.nextCursor,
+        cancellation: CancellationSignal(),
+      )).valueOrThrow;
+      expect(next.items, hasLength(6));
+      expect(next.nextCursor, isNull);
+      expect(
+        next.items.any((item) => first.items.any((old) => old.id == item.id)),
+        isFalse,
+      );
+      expect(
+        calls.where((call) => call.path.endsWith('/series/list')),
+        hasLength(1),
+      );
+      expect(calls.last.queryParameters['number'], '9');
+    },
+  );
+  test(
+    'ranking uses the whole-site API and rejects cross-feed cursors',
+    () async {
+      reply(
+        (_) => {
+          'code': 0,
+          'data': {
+            'list': [video],
+          },
+        },
+      );
+      final page = (await repository.fetchVideos(
+        section: 'ranking',
+        ownerKey: 'guest',
+        cancellation: CancellationSignal(),
+      )).valueOrThrow;
+      expect(page.items.single.id, 'BVsynthetic');
+      expect(page.nextCursor, isNull);
+      expect(calls.last.path, endsWith('/ranking/v2'));
+      expect(calls.last.queryParameters['rid'], '0');
+      expect(calls.last.queryParameters['type'], 'all');
+      final before = calls.length;
+      expect(
+        await repository.fetchVideos(
+          section: 'ranking',
+          ownerKey: 'guest',
+          cursor: 'weekly:9:12',
+          cancellation: CancellationSignal(),
+        ),
+        isA<ResultFailure<Object?>>(),
+      );
+      expect(
+        await repository.fetchVideos(
+          section: 'live',
+          ownerKey: 'guest',
+          cancellation: CancellationSignal(),
+        ),
+        isA<ResultFailure<Object?>>(),
+      );
+      expect(calls, hasLength(before));
     },
   );
   test(
@@ -205,6 +325,7 @@ void main() {
           'data': {
             ...video,
             'desc': '',
+            'owner': {'name': '作者', 'mid': 1},
             'pages': empty
                 ? <Object?>[]
                 : [

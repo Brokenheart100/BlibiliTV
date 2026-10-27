@@ -7,15 +7,24 @@ M4 已完成首页推荐／热门、中文搜索与本地历史、去重分页�
 M5 播放器控制与受限恢复已实现：画质／AAC 音轨、倍速／音量、选集／连播、按键优先级和焦点／后台恢复。152 项本机测试、TV 模拟器 30 分钟连续播放及各 10 次 Home／休眠循环通过；人工音画同步与物理 TV 验证待补充，见 [M5 验收](docs/m5-validation.md)。
 
 - [设计原则与架构](docs/tv-bilibili-architecture.md)
+- [纯图标侧栏、深浅主题与六项首页 Tabs](docs/appearance-and-home-tabs.md)
+- [我的头像、投稿、收藏、追番／追剧与历史记录](docs/personal-home.md)
+- [TV 诊断日志与 Riverpod 状态记录](docs/diagnostics-logging.md)
 - [详细开发计划与验收标准](docs/development-plan.md)
+- [M8／M9 详细规划：字幕、弹幕、内容扩展与独立能力](docs/development-plan.md#11-m8m9详细开发计划)
 - [M0 验收记录与运行方式](docs/m0-validation.md)
 - [M1 验收记录与证据](docs/m1-validation.md)
 - [M2 游客播放与 iOS 风格验收](docs/m2-validation.md)
 - [M3 登录、会话与账号隔离验收](docs/m3-validation.md)
 - [M4 内容发现、中文搜索与分 P 验收](docs/m4-validation.md)
 - [M5 播放控制、恢复与长时验收](docs/m5-validation.md)
+- [音画就绪与连续快进／快退修复](docs/playback-seek-sync-fix.md)
+- [播放器真实缓冲进度条](docs/playback-buffer.md)
+- [Better Player／Media3 Android 试用与回退](docs/better-player-trial.md)
+- [Windows TV 模拟器杂音／无声处理](docs/emulator-audio.md)
 - [M6 观看记录、个人列表与设置验收](docs/m6-validation.md)
 - [M7 发布准备、15 分钟与签名升级验收](docs/m7-validation.md)
+- [M8 字幕、只读弹幕、UP／关注与筛选验收](docs/m8-validation.md)
 - [安装／升级与发布包说明](docs/release/installation.md)
 - [Talker 日志约定](docs/logging.md)
 - [CI/CD、签名与标签发布](docs/ci-cd.md)
@@ -24,11 +33,13 @@ M6 本机 176 项测试及 TV 模拟器集成验证通过；真实扫码后的�
 
 M7 已完成本机／模拟器发布准备：179 项回归、15 分钟 profile、20 次进出与自动连播、三 ABI Debug／测试签名 Release 和隔离升级；补齐品牌图标、TV banner、开源许可与随包材料。真实 TV 及人工音画尚未验收；原生 avsync 波动与全部边界见 [M7](docs/m7-validation.md)。
 
+M8 必交功能已实现：字幕轨道与样式／偏移、默认关闭的只读基础弹幕、UP 视频页、关注分页和基础搜索筛选，沿用 iOS 风格与遥控器焦点。202 项回归、真实账号只读及 20 次资源释放检查通过，远端写入为 0；**持续弹幕性能未通过，M8 尚未完成验收**，详见 [M8 验收](docs/m8-validation.md)。点赞／投币独立延期，M9 未开始。
+
 ## CI/CD
 
 GitHub Actions 在 PR／推送 `master` 时检查工作流、依赖锁定、生成代码、格式、分析、测试，并构建三个 ABI 的 Debug APK。推送与 `pubspec.yaml` 一致的 `v*` tag 后，完整重跑 CI、使用正式密钥签名、验证 APK／SHA256 并发布 GitHub Release。公开 Release 提供 `arm64-v8a` 和 `armeabi-v7a`；`x86_64` 留在 CI Debug artifacts 供模拟器验证。
 
-仓库为 `Brokenheart100/BlibiliTV`；历史托管 CI 见[验收记录](docs/ci-cd-validation.json)，当前发布结果以对应 Actions 运行与 Release 为准。长期[正式签名](docs/release/signing.md)和四项 Secrets 已配置。当前 `1.0.0+1` 对应 `v1.0.0`，详见 [CI/CD 说明](docs/ci-cd.md)。
+仓库为 `Brokenheart100/BlibiliTV`；历史托管 CI 见[验收记录](docs/ci-cd-validation.json)，当前发布结果以对应 Actions 运行与 Release 为准。长期[正式签名](docs/release/signing.md)和四项 Secrets 已配置。已发布的 `1.0.0+1` 对应 `v1.0.0`；本轮源码 `1.1.0+2` 是 M8 本地候选，尚未创建新标签／托管运行，详见 [CI/CD 说明](docs/ci-cd.md)。
 
 ## 运行
 

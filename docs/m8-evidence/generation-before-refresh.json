@@ -1,0 +1,11 @@
+{
+  "hostRecordedAtUtc": "2026-10-26T07:16:15.685201+00:00",
+  "status": "failed",
+  "generatedFileCount": 37,
+  "changedFiles": [
+    "lib/ui/features/player/view_models/overlay_view_models.g.dart"
+  ],
+  "protoc": "36.2",
+  "protocPlugin": "25.0.0",
+  "scope": "Repeat generation and hash comparison in uncommitted working tree; remote check-generated gate still requires committing sources"
+}

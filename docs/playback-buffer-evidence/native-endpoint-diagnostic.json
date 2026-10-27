@@ -1,0 +1,100 @@
+{
+  "status": "failed",
+  "readOnly": true,
+  "bufferSource": "mpv demuxer-cache-time via media_kit buffer stream",
+  "samples": [],
+  "observations": [
+    {
+      "elapsedSeconds": 0,
+      "bufferSeconds": 0.0,
+      "positionSeconds": 0.0,
+      "nativeBuffer": "",
+      "playing": false
+    },
+    {
+      "elapsedSeconds": 5,
+      "bufferSeconds": 54.9,
+      "positionSeconds": 61.933,
+      "nativeBuffer": "54.900000",
+      "playing": true
+    },
+    {
+      "elapsedSeconds": 10,
+      "bufferSeconds": 54.9,
+      "positionSeconds": 66.966,
+      "nativeBuffer": "54.900000",
+      "playing": true
+    },
+    {
+      "elapsedSeconds": 15,
+      "bufferSeconds": 54.9,
+      "positionSeconds": 71.966,
+      "nativeBuffer": "54.900000",
+      "playing": true
+    },
+    {
+      "elapsedSeconds": 20,
+      "bufferSeconds": 54.9,
+      "positionSeconds": 76.866,
+      "nativeBuffer": "54.900000",
+      "playing": true
+    },
+    {
+      "elapsedSeconds": 25,
+      "bufferSeconds": 54.9,
+      "positionSeconds": 81.9,
+      "nativeBuffer": "54.900000",
+      "playing": true
+    },
+    {
+      "elapsedSeconds": 30,
+      "bufferSeconds": 54.9,
+      "positionSeconds": 86.9,
+      "nativeBuffer": "54.900000",
+      "playing": true
+    },
+    {
+      "elapsedSeconds": 35,
+      "bufferSeconds": 54.9,
+      "positionSeconds": 91.933,
+      "nativeBuffer": "54.900000",
+      "playing": true
+    },
+    {
+      "elapsedSeconds": 40,
+      "bufferSeconds": 54.9,
+      "positionSeconds": 96.933,
+      "nativeBuffer": "54.900000",
+      "playing": true
+    },
+    {
+      "elapsedSeconds": 45,
+      "bufferSeconds": 54.9,
+      "positionSeconds": 101.966,
+      "nativeBuffer": "54.900000",
+      "playing": true
+    },
+    {
+      "elapsedSeconds": 50,
+      "bufferSeconds": 54.9,
+      "positionSeconds": 106.966,
+      "nativeBuffer": "54.900000",
+      "playing": true
+    },
+    {
+      "elapsedSeconds": 55,
+      "bufferSeconds": 54.9,
+      "positionSeconds": 111.866,
+      "nativeBuffer": "54.900000",
+      "playing": true
+    },
+    {
+      "elapsedSeconds": 60,
+      "bufferSeconds": 54.9,
+      "positionSeconds": 116.966,
+      "nativeBuffer": "54.900000",
+      "playing": true
+    }
+  ],
+  "recordedAtUtc": "2026-10-26T16:52:09.806939Z"
+}

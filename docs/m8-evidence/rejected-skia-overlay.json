@@ -1,0 +1,104 @@
+{
+  "status": "failed",
+  "requestedSeconds": 60,
+  "physicalTv": false,
+  "manualLipSyncVerified": false,
+  "comparisonWindows": [
+    {
+      "mode": "off",
+      "elapsedMs": 10032,
+      "frameCount": 574,
+      "buildP95Ms": 0.882,
+      "rasterP95Ms": 11.14,
+      "rasterP99Ms": 18.602,
+      "overBudgetRatio": 0.0156794425087108,
+      "clockSamples": 0,
+      "disabledTransitions": 0,
+      "canvasFps": 60,
+      "density": 40
+    },
+    {
+      "mode": "subtitles",
+      "elapsedMs": 10052,
+      "frameCount": 575,
+      "buildP95Ms": 1.11,
+      "rasterP95Ms": 14.101,
+      "rasterP99Ms": 17.465,
+      "overBudgetRatio": 0.019130434782608695,
+      "clockSamples": 201,
+      "disabledTransitions": 0,
+      "canvasFps": 0,
+      "density": 40
+    },
+    {
+      "mode": "both",
+      "elapsedMs": 10028,
+      "frameCount": 575,
+      "buildP95Ms": 1.094,
+      "rasterP95Ms": 16.162,
+      "rasterP99Ms": 17.884,
+      "overBudgetRatio": 0.029565217391304348,
+      "clockSamples": 201,
+      "disabledTransitions": 1,
+      "canvasFps": 30,
+      "density": 20
+    }
+  ],
+  "subtitleTimingSamples": [],
+  "overlayMetrics": {
+    "created": 4,
+    "disposed": 4,
+    "active": 0,
+    "maximum": 1,
+    "clockSamples": 920,
+    "captionChanges": 63,
+    "admittedDanmaku": 116,
+    "cleared": 8,
+    "maximumDanmaku": 40,
+    "activeSchedulers": 0,
+    "lowLoadTransitions": 1,
+    "disabledTransitions": 1,
+    "canvasFps": 30,
+    "density": 20,
+    "slowFramePercent": 28,
+    "canvasDrawTickMs": 0,
+    "renderedDanmaku": 0,
+    "maximumRenderedDanmaku": 23,
+    "loadWindows": [
+      {
+        "atMs": 26484,
+        "fps": 60,
+        "density": 40,
+        "slowPercent": 21.666666666666668,
+        "items": 14431,
+        "rendered": 21
+      },
+      {
+        "atMs": 28521,
+        "fps": 60,
+        "density": 40,
+        "slowPercent": 22.5,
+        "items": 14431,
+        "rendered": 16
+      },
+      {
+        "atMs": 32436,
+        "fps": 30,
+        "density": 20,
+        "slowPercent": 24.166666666666668,
+        "items": 14431,
+        "rendered": 12
+      },
+      {
+        "atMs": 34537,
+        "fps": 30,
+        "density": 20,
+        "slowPercent": 27.500000000000004,
+        "items": 14431,
+        "rendered": 9
+      }
+    ]
+  },
+  "hostRecordedAtUtc": "2026-10-26T07:04:17.550832Z",
+  "hostDriverElapsedMs": 76259
+}

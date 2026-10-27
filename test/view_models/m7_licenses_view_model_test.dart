@@ -13,7 +13,16 @@ void main() {
       addTearDown(c.dispose);
       c.listen(licenseNoticesProvider, (_, _) {});
       final notices = await c.read(licenseNoticesProvider.future);
-      expect(notices, hasLength(13));
+      expect(notices, hasLength(14));
+      expect(
+        notices.any(
+          (n) =>
+              n.packages == 'AndroidX Media3 1.11.0' &&
+              n.text.contains('Apache License') &&
+              n.text.contains('END OF TERMS AND CONDITIONS'),
+        ),
+        true,
+      );
       expect(
         notices.any(
           (n) =>

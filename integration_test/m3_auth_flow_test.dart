@@ -95,6 +95,7 @@ void main() {
       await tester.pumpAndSettle();
       await key(LogicalKeyboardKey.arrowDown);
       await key(LogicalKeyboardKey.arrowDown);
+      await key(LogicalKeyboardKey.arrowDown);
       await key(LogicalKeyboardKey.select);
       await key(LogicalKeyboardKey.arrowRight);
       expect(FocusManager.instance.primaryFocus?.debugLabel, 'account-primary');

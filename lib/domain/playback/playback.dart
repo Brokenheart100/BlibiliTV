@@ -18,6 +18,8 @@ final class PlaybackSource {
     this.audioId = 0,
     this.videoBackups = const [],
     this.audioBackups = const [],
+    this.videoDash,
+    this.audioDash,
   });
   final String videoUrl, audioUrl, codec;
   final Duration duration;
@@ -25,6 +27,7 @@ final class PlaybackSource {
   final int audioId;
   final List<PlaybackOption> qualities, audioTracks;
   final List<String> videoBackups, audioBackups;
+  final DashRepresentation? videoDash, audioDash;
   PlaybackSource? get alternate => videoBackups.isEmpty || audioBackups.isEmpty
       ? null
       : PlaybackSource(
@@ -36,10 +39,28 @@ final class PlaybackSource {
           qualities: qualities,
           audioTracks: audioTracks,
           audioId: audioId,
+          videoDash: videoDash,
+          audioDash: audioDash,
         );
   @override
   String toString() =>
       'PlaybackSource(quality: $quality, codec: $codec, urls: redacted)';
+}
+
+/// Metadata for one on-demand DASH representation; signed URLs stay in source.
+final class DashRepresentation {
+  const DashRepresentation({
+    required this.codecs,
+    required this.mimeType,
+    required this.bandwidth,
+    required this.initializationRange,
+    required this.indexRange,
+    this.width = 0,
+    this.height = 0,
+    this.audioSamplingRate = 0,
+  });
+  final String codecs, mimeType, initializationRange, indexRange;
+  final int bandwidth, width, height, audioSamplingRate;
 }
 
 final class PlaybackOption {
@@ -90,6 +111,9 @@ abstract class EngineSnapshot with _$EngineSnapshot {
     @Default(false) bool completed,
     @Default(Duration.zero) Duration position,
     @Default(Duration.zero) Duration duration,
+
+    /// Absolute timeline endpoint reported by the native demuxer cache.
+    @Default(Duration.zero) Duration bufferedPosition,
     @Default(0) int width,
     @Default(0) int height,
     @Default(0) int audioSampleRate,
@@ -109,6 +133,9 @@ abstract interface class PlaybackEngine {
   });
   Future<void> play();
   Future<void> pause();
+
+  /// Completes when the target and native output have settled, or fails with a
+  /// bounded timeout so the caller can replace a stalled playback session.
   Future<void> seek(Duration position);
   Future<void> setRate(double rate);
   Future<void> setVolume(double volume);

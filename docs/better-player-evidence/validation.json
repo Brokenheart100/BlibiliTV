@@ -1,0 +1,24 @@
+{
+  "recordedAtUtc": "2026-10-27T05:20:26.5731832Z",
+  "flutterTests": 220,
+  "flutterTestsStatus": "passed",
+  "staticAnalysis": "No errors (Flutter MCP)",
+  "hotReload": "succeeded",
+  "runtimeErrors": 0,
+  "android": {
+    "device": "emulator-5554",
+    "api": 36,
+    "abi": "x86_64",
+    "backend": "Better Player 1.29.0 / Android 1.9.0 / Media3 1.11.0",
+    "nativePlayback": "passed",
+    "pausedSeeks": 2,
+    "playingSeeks": 6,
+    "bufferProgress": "native ranges checked against UI",
+    "nativeDisposal": "passed"
+  },
+  "hearingAcceptance": "deferred_by_user",
+  "userDecision": "Keep the current Better Player version; defer listening acceptance.",
+  "physicalTvAcceptance": "pending",
+  "armAcceptance": "pending",
+  "releasePublished": false
+}

@@ -1,0 +1,21 @@
+{
+  "status": "failed",
+  "requestedSeconds": 60,
+  "physicalTv": false,
+  "manualLipSyncVerified": false,
+  "overlayMetrics": {
+    "created": 1,
+    "disposed": 1,
+    "active": 0,
+    "maximum": 1,
+    "clockSamples": 10,
+    "captionChanges": 1,
+    "admittedDanmaku": 9,
+    "cleared": 1,
+    "maximumDanmaku": 9,
+    "activeSchedulers": 0,
+    "lowLoadTransitions": 0,
+    "disabledTransitions": 0
+  },
+  "hostRecordedAtUtc": "2026-10-26T06:12:32.489372Z"
+}

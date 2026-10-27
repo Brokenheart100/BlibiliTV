@@ -1,0 +1,10 @@
+{
+  "hostRecordedAtUtc": "2026-10-26T08:27:21.958467+00:00",
+  "hotRestart": "passed",
+  "runtimeErrorsAfterRestartAndReadonlyProbe": 0,
+  "readOnlyCompileFlag": true,
+  "debugTarget": "tool/m8_app.dart",
+  "package": "app.mamba.mambatv",
+  "device": "emulator-5554",
+  "scope": "Final Dart source including retained-canvas cap; existing debug native installation, not candidate APK"
+}

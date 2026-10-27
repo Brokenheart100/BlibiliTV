@@ -1,0 +1,68 @@
+{
+  "status": "passed",
+  "readOnly": true,
+  "bufferSource": "mpv demuxer-cache-state seekable-ranges at current position",
+  "samples": [
+    {
+      "stage": "initial",
+      "positionSeconds": 0.433,
+      "bufferSeconds": 99.966688,
+      "nativeBufferSeconds": 99.966688,
+      "nativeRanges": [
+        {
+          "start": 0.0,
+          "end": 99.966688
+        }
+      ],
+      "legacyCacheTime": -0.1,
+      "durationSeconds": 436.166,
+      "bufferFraction": 0.22919255512809344,
+      "playedFraction": 0.000992741295745198
+    },
+    {
+      "stage": "forward",
+      "positionSeconds": 60.433,
+      "bufferSeconds": 99.966688,
+      "nativeBufferSeconds": 99.966688,
+      "nativeRanges": [
+        {
+          "start": 0.0,
+          "end": 99.966688
+        }
+      ],
+      "legacyCacheTime": -0.1,
+      "durationSeconds": 436.166,
+      "bufferFraction": 0.22919255512809344,
+      "playedFraction": 0.13855504555604975
+    },
+    {
+      "stage": "backward",
+      "positionSeconds": 15.433,
+      "bufferSeconds": 99.966688,
+      "nativeBufferSeconds": 99.966688,
+      "nativeRanges": [
+        {
+          "start": 0.0,
+          "end": 99.966688
+        }
+      ],
+      "legacyCacheTime": -0.1,
+      "durationSeconds": 436.166,
+      "bufferFraction": 0.22919255512809344,
+      "playedFraction": 0.035383317360821336
+    }
+  ],
+  "observations": [
+    {
+      "elapsedSeconds": 0,
+      "bufferSeconds": 0.0,
+      "positionSeconds": 0.0,
+      "nativeBuffer": "",
+      "playing": false,
+      "durationSeconds": 0.0,
+      "nativeCacheState": ""
+    }
+  ],
+  "bufferResets": 6,
+  "recordedAtUtc": "2026-10-26T16:57:00.815722Z"
+}

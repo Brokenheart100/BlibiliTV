@@ -21,3 +21,6 @@ Android 原生媒体包装层为 media_kit_libs_android_video 1.3.8，其实际 
 包装层及构建仓库自身许可不替代被链接原生组件许可。本记录提供来源和许可文本，不宣称已完成所有成品分发材料审核；正式发布前应对实际二进制、对应源码／补丁、可重建与适用许可材料做最后复核。此项目本身没有在本轮被擅自指定开源许可证。
 
 TV 图标与 banner 为本项目自制几何路径，无外部图片或字体；源文件在 assets/brand，重现脚本为 tool/release/brand_assets.py（PNG 生成需要 Pillow）。Android TV 品牌规格依据 [官方检查清单](https://developer.android.com/training/tv/publishing/checklist)。
+
+
+M8 弹幕采用 pub.dev 托管的官方 canvas_danmaku 0.3.3（MIT）。原始官方归档 SHA256 为 `1ff071d027b1cf3320d4b58ff1aee6811de51ce39b5b5773c2e0d7693e02d401`；`third_party/canvas_danmaku/` 保存先前未通过持续压力的本地调度试验来源与差异，仅用于历史核查，不参与当前构建。protobuf／fixnum 的 BSD 原文和版本由本批依赖清单汇集；protoc 与 Dart 生成器是开发工具，不把开发工具二进制附入 APK。

@@ -5,6 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../ui/core/theme/tv_theme.dart';
+import '../domain/entities/app_models.dart';
+import '../ui/features/settings/view_models/settings_view_model.dart';
 import '../ui/core/widgets/tv_button.dart';
 import '../ui/core/widgets/glass_panel.dart';
 import 'bootstrap.dart';
@@ -33,10 +35,19 @@ class MambaApp extends ConsumerWidget {
     });
     final startup = ref.watch(appStartupProvider);
     final router = ref.watch(appRouterProvider);
+    final theme =
+        ref.watch(settingsViewModelProvider).value?.settings.theme ??
+        AppTheme.dark;
     return MaterialApp.router(
       title: 'MambaTV',
       debugShowCheckedModeBanner: false,
-      theme: tvTheme(),
+      theme: tvTheme(brightness: Brightness.light),
+      darkTheme: tvTheme(),
+      themeMode: switch (theme) {
+        AppTheme.dark => ThemeMode.dark,
+        AppTheme.light => ThemeMode.light,
+        AppTheme.system => ThemeMode.system,
+      },
       routerConfig: router,
       builder: (context, child) => LifecycleBridge(
         child: Shortcuts(
@@ -73,7 +84,7 @@ class MambaApp extends ConsumerWidget {
                         bottom: 12,
                         right: 24,
                         child: Material(
-                          color: TvColors.surface,
+                          color: context.tvColors.surface,
                           child: TvButton(
                             label: '本地服务暂不可用 · 重试',
                             onPressed: () => ref.invalidate(appStartupProvider),

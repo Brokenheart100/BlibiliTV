@@ -72,7 +72,7 @@ def verify_toolchain():
 
 
 def check_generated():
-    patterns = ("*.g.dart", "*.freezed.dart")
+    patterns = ("*.g.dart", "*.freezed.dart", "*.pb.dart", "*.pbenum.dart", "*.pbjson.dart")
     subprocess.run(
         ("git", "diff", "--exit-code", "--", *patterns), cwd=ROOT, check=True
     )

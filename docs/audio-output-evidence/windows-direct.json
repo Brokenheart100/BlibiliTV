@@ -1,0 +1,10 @@
+{
+  "readOnly": true,
+  "source": "same public AAC; seconds 35-55",
+  "audioOutput": "wasapi",
+  "inputSampleRate": "44100",
+  "outputSampleRate": "48000",
+  "outputFormat": "float",
+  "volume": 60,
+  "manualNoiseFreeVerified": false
+}

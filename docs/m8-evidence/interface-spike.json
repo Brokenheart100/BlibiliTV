@@ -1,0 +1,101 @@
+{
+  "readOnly": true,
+  "account": "guest",
+  "samples": [
+    {
+      "videoId": "BV1wR4Xz6EqG",
+      "cid": 40027950776,
+      "mid": 37974444,
+      "subtitleCount": 0,
+      "subtitleFields": [
+        "allow_submit",
+        "lan",
+        "lan_doc",
+        "subtitles",
+        "subtitle_position",
+        "font_size_type"
+      ],
+      "dmviewBytes": 1388,
+      "segmentSize": 360000,
+      "segmentCount": 2,
+      "dmsegBytes": 3344,
+      "danmakuCount": 29,
+      "modes": [
+        1,
+        5
+      ]
+    },
+    {
+      "videoId": "BV19wnQ6sExk",
+      "cid": 43053026889,
+      "mid": 50329118,
+      "subtitleCount": 0,
+      "subtitleFields": [
+        "allow_submit",
+        "lan",
+        "lan_doc",
+        "subtitles",
+        "subtitle_position",
+        "font_size_type"
+      ],
+      "dmviewBytes": 492,
+      "segmentSize": 360000,
+      "segmentCount": 9,
+      "dmsegBytes": 86072,
+      "danmakuCount": 774,
+      "modes": [
+        5,
+        1,
+        4
+      ]
+    },
+    {
+      "videoId": "BV19bHK6AEBD",
+      "cid": 43048305628,
+      "mid": 652239032,
+      "subtitleCount": 0,
+      "subtitleFields": [
+        "allow_submit",
+        "lan",
+        "lan_doc",
+        "subtitles",
+        "subtitle_position",
+        "font_size_type"
+      ],
+      "dmviewBytes": 309,
+      "segmentSize": 360000,
+      "segmentCount": 2,
+      "dmsegBytes": 59786,
+      "danmakuCount": 517,
+      "modes": [
+        1,
+        5,
+        4
+      ]
+    },
+    {
+      "videoId": "BV1RJHV6pECP",
+      "cid": 43033758430,
+      "mid": 540084505,
+      "subtitleCount": 0,
+      "subtitleFields": [
+        "allow_submit",
+        "lan",
+        "lan_doc",
+        "subtitles",
+        "subtitle_position",
+        "font_size_type"
+      ],
+      "dmviewBytes": 743,
+      "segmentSize": 360000,
+      "segmentCount": 1,
+      "dmsegBytes": 20195,
+      "danmakuCount": 176,
+      "modes": [
+        1,
+        5
+      ]
+    }
+  ],
+  "remoteWrites": 0
+}

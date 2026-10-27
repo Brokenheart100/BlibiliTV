@@ -1,0 +1,50 @@
+{
+  "authenticated": true,
+  "readOnly": true,
+  "profileStatus": "passed",
+  "hasAvatar": true,
+  "collections": {
+    "submissions": {
+      "status": "passed",
+      "count": 30,
+      "hasMore": true,
+      "nextStatus": "passed",
+      "nextCount": 30,
+      "pageOverlap": 0
+    },
+    "folders": {
+      "status": "passed",
+      "count": 17,
+      "hasMore": false,
+      "folderContentsStatus": "passed",
+      "folderContentsCount": 4
+    },
+    "bangumi": {
+      "status": "passed",
+      "count": 15,
+      "hasMore": true,
+      "nextStatus": "passed",
+      "nextCount": 15,
+      "pageOverlap": 0
+    },
+    "drama": {
+      "status": "passed",
+      "count": 15,
+      "hasMore": true,
+      "nextStatus": "passed",
+      "nextCount": 15,
+      "pageOverlap": 0
+    },
+    "watchLater": {
+      "status": "passed",
+      "count": 0,
+      "hasMore": false
+    }
+  },
+  "history": {
+    "status": "passed",
+    "count": 24
+  },
+  "remoteWrites": 0,
+  "recordedAtUtc": "2026-10-27T06:57:19.391484Z"
+}

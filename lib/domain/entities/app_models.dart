@@ -2,6 +2,17 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'app_models.freezed.dart';
 
+enum VideoOrder { relevance, newest, mostViewed }
+
+@freezed
+abstract class CatalogOptions with _$CatalogOptions {
+  const factory CatalogOptions({
+    @Default(0) int creatorId,
+    @Default(VideoOrder.relevance) VideoOrder order,
+    @Default(0) int duration,
+  }) = _CatalogOptions;
+}
+
 enum SessionStatus {
   anonymous,
   restoring,
@@ -35,6 +46,7 @@ abstract class VideoSummary with _$VideoSummary {
     required int durationSeconds,
     required int viewCount,
     String? coverUrl,
+    String? creatorAvatarUrl,
   }) = _VideoSummary;
 }
 
@@ -67,5 +79,8 @@ abstract class AppSettings with _$AppSettings {
     @Default(0) int defaultQuality,
     @Default(false) bool autoNext,
     @Default(false) bool syncHistory,
+    @Default(AppTheme.dark) AppTheme theme,
   }) = _AppSettings;
 }
+
+enum AppTheme { dark, light, system }

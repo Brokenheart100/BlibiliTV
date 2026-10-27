@@ -15,6 +15,9 @@ import '../../../core/theme/tv_theme.dart';
 import '../../../core/widgets/glass_panel.dart';
 import '../../../core/widgets/tv_button.dart';
 import '../view_models/player_view_model.dart';
+import '../view_models/overlay_view_models.dart';
+import 'playback_overlays.dart';
+import 'overlay_settings_dialog.dart';
 
 class PlayerPage extends ConsumerStatefulWidget {
   const PlayerPage({
@@ -33,7 +36,7 @@ class PlayerPage extends ConsumerStatefulWidget {
 
 class _PlayerPageState extends ConsumerState<PlayerPage> {
   final nodes = List.generate(
-    12,
+    13,
     (i) => FocusNode(debugLabel: 'player-control-$i'),
   );
   final screen = FocusNode(debugLabel: 'player-surface');
@@ -108,6 +111,7 @@ class _PlayerPageState extends ConsumerState<PlayerPage> {
     _hideTimer?.cancel();
     if (_provider == null ||
         ref.read(provider).phase != PlayerPhase.playing ||
+        ref.read(provider).seekTarget != null ||
         menuOpen) {
       return;
     }
@@ -162,8 +166,8 @@ class _PlayerPageState extends ConsumerState<PlayerPage> {
       case LogicalKeyboardKey.arrowRight:
         nodes[index == 3
                 ? 3
-                : index >= 11
-                ? 11
+                : index >= 12
+                ? 12
                 : index + 1]
             .requestFocus();
       default:
@@ -226,6 +230,23 @@ class _PlayerPageState extends ConsumerState<PlayerPage> {
     );
     _show();
     nodes[trigger].requestFocus();
+  }
+
+  Future<void> _enhancements(PlayerState state) async {
+    _hideTimer?.cancel();
+    menuOpen = true;
+    await showDialog<void>(
+      context: context,
+      builder: (_) => OverlaySettingsDialog(
+        videoId: widget.videoId,
+        partId: state.partId,
+        scopeKey: routeScope ?? routeOwner ?? 'guest',
+      ),
+    );
+    menuOpen = false;
+    if (!mounted || leaving) return;
+    _show();
+    nodes[12].requestFocus();
   }
 
   void _openMenu(int kind) {
@@ -373,12 +394,28 @@ class _PlayerPageState extends ConsumerState<PlayerPage> {
         });
       }
     });
+    ref.listen(provider.select((s) => s.seekTarget != null), (_, seeking) {
+      if (seeking) {
+        _hideTimer?.cancel();
+      } else if (controls && !leaving) {
+        _arm();
+      }
+    });
     final busy =
         state.phase == PlayerPhase.resolving ||
         state.phase == PlayerPhase.opening;
     final retry =
         state.phase == PlayerPhase.failed || state.phase == PlayerPhase.idle;
     final engine = identityChanged ? null : vm.engine;
+    if (!identityChanged && !leaving && state.partId.isNotEmpty) {
+      ref.watch(
+        subtitleChoiceProvider(
+          videoId: widget.videoId,
+          partId: state.partId,
+          scopeKey: routeScope ?? routeOwner ?? 'guest',
+        ).select((_) => null),
+      );
+    }
     final label = switch (state.phase) {
       PlayerPhase.idle => '准备播放',
       PlayerPhase.resolving => '正在获取播放资源',
@@ -428,6 +465,17 @@ class _PlayerPageState extends ConsumerState<PlayerPage> {
                   KeyedSubtree(
                     key: ValueKey(state.surfaceGeneration),
                     child: ref.watch(playbackAdapterProvider).surface(engine),
+                  ),
+                if (engine != null &&
+                    state.partId.isNotEmpty &&
+                    !retry &&
+                    !busy)
+                  PlaybackOverlays(
+                    engine: engine,
+                    videoId: widget.videoId,
+                    partId: state.partId,
+                    scopeKey: routeScope ?? routeOwner ?? 'guest',
+                    controlsVisible: controls,
                   ),
                 if (controls || busy || retry) ...[
                   const IgnorePointer(
@@ -675,6 +723,12 @@ class _PlayerPageState extends ConsumerState<PlayerPage> {
                                         '下一集',
                                         () => unawaited(vm.nextPart()),
                                       ),
+                                      button(
+                                        12,
+                                        'player-enhancements',
+                                        '字幕与弹幕',
+                                        () => unawaited(_enhancements(state)),
+                                      ),
                                     ],
                                   ),
                                   if (state.notice != null)
@@ -712,27 +766,56 @@ class _PlayerProgress extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final snapshot = ref.watch(
-      provider.select((s) => (s.snapshot.position, s.snapshot.duration)),
+      provider.select(
+        (s) => (
+          s.seekTarget ?? s.snapshot.position,
+          s.snapshot.duration,
+          s.seekTarget != null,
+          s.snapshot.bufferedPosition,
+        ),
+      ),
     );
     return Column(
       children: [
-        LinearProgressIndicator(
-          minHeight: 3,
-          backgroundColor: Colors.white12,
-          color: Colors.white,
-          value: snapshot.$2.inMilliseconds > 0
-              ? (snapshot.$1.inMilliseconds / snapshot.$2.inMilliseconds).clamp(
-                  0,
-                  1,
-                )
-              : 0,
+        ClipRRect(
+          borderRadius: BorderRadius.circular(2),
+          child: Stack(
+            children: [
+              LinearProgressIndicator(
+                key: const Key('player-buffer-progress'),
+                minHeight: 4,
+                backgroundColor: Colors.white12,
+                color: Colors.white38,
+                value: !snapshot.$3 && snapshot.$2.inMilliseconds > 0
+                    ? (snapshot.$4.inMilliseconds / snapshot.$2.inMilliseconds)
+                          .clamp(0, 1)
+                    : 0,
+                semanticsLabel: snapshot.$3 || snapshot.$4 <= Duration.zero
+                    ? '缓冲进度，等待缓冲位置'
+                    : '缓冲进度，已缓冲至 ${playbackTime(snapshot.$4)}',
+              ),
+              LinearProgressIndicator(
+                key: const Key('player-played-progress'),
+                minHeight: 4,
+                backgroundColor: Colors.transparent,
+                color: Colors.white,
+                value: snapshot.$2.inMilliseconds > 0
+                    ? (snapshot.$1.inMilliseconds / snapshot.$2.inMilliseconds)
+                          .clamp(0, 1)
+                    : 0,
+                semanticsLabel: '播放进度',
+              ),
+            ],
+          ),
         ),
         const SizedBox(height: 6),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              playbackTime(snapshot.$1),
+              snapshot.$3
+                  ? '跳转至 ${playbackTime(snapshot.$1)}'
+                  : playbackTime(snapshot.$1),
               key: const Key('player-position'),
               style: const TextStyle(
                 fontSize: 12,

@@ -30,6 +30,7 @@ class _VideoDetailPageState extends ConsumerState<VideoDetailPage> {
   final back = FocusNode(debugLabel: 'detail-back');
   final play = FocusNode(debugLabel: 'detail-play');
   final personal = FocusNode(debugLabel: 'detail-personal');
+  final creator = FocusNode(debugLabel: 'detail-creator');
   final descriptionFocus = FocusNode(debugLabel: 'detail-description');
   final relatedRetry = FocusNode(debugLabel: 'related-retry');
   final partsScroll = ScrollController();
@@ -48,6 +49,7 @@ class _VideoDetailPageState extends ConsumerState<VideoDetailPage> {
   @override
   void dispose() {
     back.dispose();
+    creator.dispose();
     play.dispose();
     personal.dispose();
     descriptionFocus.dispose();
@@ -198,7 +200,10 @@ class _VideoDetailPageState extends ConsumerState<VideoDetailPage> {
                   const Spacer(),
                   Text(
                     widget.id.startsWith('demo-') ? '演示内容' : 'BILIBILI · 视频详情',
-                    style: const TextStyle(color: TvColors.muted, fontSize: 12),
+                    style: TextStyle(
+                      color: context.tvColors.muted,
+                      fontSize: 12,
+                    ),
                   ),
                 ],
               ),
@@ -246,9 +251,9 @@ class _VideoDetailPageState extends ConsumerState<VideoDetailPage> {
                                 width: 32,
                                 height: 32,
                                 child: detail.creatorAvatarUrl == null
-                                    ? const Icon(
+                                    ? Icon(
                                         CupertinoIcons.person_crop_circle,
-                                        color: TvColors.accent,
+                                        color: context.tvColors.accent,
                                       )
                                     : CachedNetworkImage(
                                         imageUrl: detail.creatorAvatarUrl!,
@@ -256,20 +261,47 @@ class _VideoDetailPageState extends ConsumerState<VideoDetailPage> {
                                         memCacheWidth: 96,
                                         memCacheHeight: 96,
                                         fit: BoxFit.cover,
-                                        errorWidget: (_, _, _) => const Icon(
+                                        errorWidget: (_, _, _) => Icon(
                                           CupertinoIcons.person_crop_circle,
-                                          color: TvColors.accent,
+                                          color: context.tvColors.accent,
                                         ),
                                       ),
                               ),
                             ),
                             const SizedBox(width: 10),
                             Expanded(
-                              child: Text(
-                                'UP · ${detail.video.creator}',
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(color: TvColors.accent),
+                              child: TvButton(
+                                key: const Key('detail-creator'),
+                                label: 'UP · ${detail.video.creator}',
+                                focusNode: creator,
+                                compact: true,
+                                onPressed: () async {
+                                  if (detail.creatorId <= 0) return;
+                                  await context.push<void>(
+                                    '/creator/${detail.creatorId}',
+                                    extra: {
+                                      'name': detail.video.creator,
+                                      'avatar': detail.creatorAvatarUrl,
+                                    },
+                                  );
+                                  if (mounted) creator.requestFocus();
+                                },
+                                onKeyEvent: (event) {
+                                  if (!isDirectionEvent(event)) {
+                                    return KeyEventResult.ignored;
+                                  }
+                                  if (event.logicalKey ==
+                                      LogicalKeyboardKey.arrowDown) {
+                                    play.requestFocus();
+                                    return KeyEventResult.handled;
+                                  }
+                                  if (event.logicalKey ==
+                                      LogicalKeyboardKey.arrowUp) {
+                                    back.requestFocus();
+                                    return KeyEventResult.handled;
+                                  }
+                                  return KeyEventResult.ignored;
+                                },
                               ),
                             ),
                           ],
@@ -277,9 +309,9 @@ class _VideoDetailPageState extends ConsumerState<VideoDetailPage> {
                         const SizedBox(height: 10),
                         Text(
                           '${detail.video.viewCount} 次观看 · ${parts.length} 个分集',
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 11,
-                            color: TvColors.muted,
+                            color: context.tvColors.muted,
                           ),
                         ),
                         const SizedBox(height: 12),
@@ -320,7 +352,11 @@ class _VideoDetailPageState extends ConsumerState<VideoDetailPage> {
                                         LogicalKeyboardKey.arrowUp ||
                                     e.logicalKey ==
                                         LogicalKeyboardKey.arrowLeft) {
-                                  _showNode(back);
+                                  _showNode(
+                                    e.logicalKey == LogicalKeyboardKey.arrowUp
+                                        ? creator
+                                        : back,
+                                  );
                                 } else if (e.logicalKey ==
                                     LogicalKeyboardKey.arrowRight) {
                                   _showNode(personal);
@@ -364,8 +400,8 @@ class _VideoDetailPageState extends ConsumerState<VideoDetailPage> {
                             padding: const EdgeInsets.only(top: 8),
                             child: Text(
                               state.notice!,
-                              style: const TextStyle(
-                                color: TvColors.muted,
+                              style: TextStyle(
+                                color: context.tvColors.muted,
                                 fontSize: 11,
                               ),
                             ),
@@ -417,10 +453,10 @@ class _VideoDetailPageState extends ConsumerState<VideoDetailPage> {
                                   overflow: expanded
                                       ? TextOverflow.visible
                                       : TextOverflow.ellipsis,
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontSize: 12,
                                     height: 1.6,
-                                    color: TvColors.muted,
+                                    color: context.tvColors.muted,
                                   ),
                                 ),
                                 if (detail.description.length > 100)
@@ -534,10 +570,10 @@ class _VideoDetailPageState extends ConsumerState<VideoDetailPage> {
             ),
             error: (_, _) => Row(
               children: [
-                const Expanded(
+                Expanded(
                   child: Text(
                     '相关视频暂不可用，仍可播放当前视频',
-                    style: TextStyle(color: TvColors.muted),
+                    style: TextStyle(color: context.tvColors.muted),
                   ),
                 ),
                 TvButton(
@@ -560,9 +596,9 @@ class _VideoDetailPageState extends ConsumerState<VideoDetailPage> {
             data: (items) {
               related = items;
               if (items.isEmpty) {
-                return const Text(
+                return Text(
                   '暂时没有相关视频',
-                  style: TextStyle(color: TvColors.muted),
+                  style: TextStyle(color: context.tvColors.muted),
                 );
               }
               return SizedBox(

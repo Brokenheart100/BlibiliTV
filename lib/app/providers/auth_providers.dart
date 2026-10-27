@@ -18,6 +18,7 @@ QrTiming qrTiming(Ref ref) => const QrTiming();
 String safeLoginReturn(String? raw) {
   if (raw == null) return '/library';
   final uri = Uri.tryParse(raw);
+  if (raw == '/home?feed=following') return raw;
   if (uri == null ||
       uri.hasScheme ||
       uri.hasAuthority ||
@@ -30,6 +31,7 @@ String safeLoginReturn(String? raw) {
     '/search',
     '/library',
     '/library/records',
+    '/history',
     '/settings',
   ].contains(uri.path)) {
     return uri.path;

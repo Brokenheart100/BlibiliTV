@@ -5,6 +5,8 @@ import '../../../domain/entities/app_models.dart';
 import '../theme/tv_theme.dart';
 import '../images/tv_image_cache.dart';
 import 'tv_button.dart';
+import 'creator_avatar.dart';
+import 'liquid_glass_card.dart';
 
 class TvArtwork extends StatelessWidget {
   const TvArtwork({required this.video, super.key});
@@ -107,7 +109,10 @@ class TvArtwork extends StatelessWidget {
                   color: Colors.black.withValues(alpha: .24),
                   borderRadius: BorderRadius.circular(6),
                 ),
-                child: const Text('演示', style: TextStyle(fontSize: 10)),
+                child: const Text(
+                  '演示',
+                  style: TextStyle(fontSize: 10, color: Colors.white),
+                ),
               ),
             ),
           Positioned(
@@ -121,7 +126,7 @@ class TvArtwork extends StatelessWidget {
               ),
               child: Text(
                 '${video.durationSeconds ~/ 60}:${(video.durationSeconds % 60).toString().padLeft(2, '0')}',
-                style: const TextStyle(fontSize: 11),
+                style: const TextStyle(fontSize: 11, color: Colors.white),
               ),
             ),
           ),
@@ -175,19 +180,8 @@ class _TvVideoCardState extends State<TvVideoCard> {
     child: AnimatedScale(
       scale: focused && !widget.reducedMotion ? 1.015 : 1,
       duration: Duration(milliseconds: widget.reducedMotion ? 0 : 100),
-      child: AnimatedContainer(
-        duration: Duration(milliseconds: widget.reducedMotion ? 0 : 100),
-        padding: const EdgeInsets.all(3),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          color: focused
-              ? Colors.white.withValues(alpha: .12)
-              : Colors.white.withValues(alpha: .035),
-          border: Border.all(
-            color: focused ? Colors.white : Colors.transparent,
-            width: 2,
-          ),
-        ),
+      child: LiquidGlassCard(
+        focused: focused,
         child: Material(
           color: Colors.transparent,
           child: InkWell(
@@ -212,21 +206,38 @@ class _TvVideoCardState extends State<TvVideoCard> {
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
-                      color: focused ? TvColors.accent : Colors.white,
+                      color: focused
+                          ? context.tvColors.accent
+                          : context.tvColors.text,
                     ),
                   ),
                 ),
-                const SizedBox(height: 5),
+                const SizedBox(height: 4),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 3),
-                  child: Text(
-                    '${widget.video.creator}  ·  ${(widget.video.viewCount / 10000).toStringAsFixed(1)}万次观看',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(fontSize: 11, color: TvColors.muted),
+                  child: Row(
+                    children: [
+                      CreatorAvatar(
+                        key: ValueKey('creator-avatar-${widget.video.id}'),
+                        name: widget.video.creator,
+                        url: widget.video.creatorAvatarUrl,
+                      ),
+                      const SizedBox(width: 6),
+                      Expanded(
+                        child: Text(
+                          '${widget.video.creator}  ·  ${(widget.video.viewCount / 10000).toStringAsFixed(1)}万次观看',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: 11,
+                            color: context.tvColors.muted,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                const SizedBox(height: 5),
+                const SizedBox(height: 4),
               ],
             ),
           ),

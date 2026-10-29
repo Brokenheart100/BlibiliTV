@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
-import 'package:media_kit/media_kit.dart' hide PlayerState;
 import 'package:mambatv/app/app.dart';
 import 'package:mambatv/app/bootstrap.dart';
 import 'package:mambatv/app/providers/infrastructure_providers.dart';
@@ -18,7 +17,6 @@ import 'package:mambatv/ui/features/player/views/player_page.dart';
 void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
   binding.framePolicy = LiveTestWidgetsFlutterBindingFramePolicy.fullyLive;
-  MediaKit.ensureInitialized();
   testWidgets('Better Player native DASH, buffer, seek and disposal', (
     tester,
   ) async {

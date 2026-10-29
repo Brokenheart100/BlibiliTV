@@ -45,9 +45,6 @@ dependencies:
   drift_flutter: 0.3.1
   shared_preferences: 2.5.6
   flutter_secure_storage: 11.2.0
-  media_kit: 1.2.6
-  media_kit_video: 2.0.1
-  media_kit_libs_video: 1.0.7
   pretty_qr_code: 3.6.0
   cached_network_image: 4.0.5
   pointycastle: 4.0.0

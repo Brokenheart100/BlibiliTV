@@ -8,7 +8,7 @@ Future<void> main() => integrationDriver(
   timeout: const Duration(minutes: 20),
   responseDataCallback: (data) async {
     if (data == null) return;
-    await Directory('docs/playback-fix-evidence').create(recursive: true);
+    await Directory('docs/media-backend-evidence').create(recursive: true);
     final variants = data['variants'] as List? ?? [];
     final soak = variants.isEmpty
         ? 0
@@ -21,7 +21,7 @@ Future<void> main() => integrationDriver(
         ? 'seek-validation'
         : 'seek-smoke';
     data['recordedAtUtc'] = DateTime.now().toUtc().toIso8601String();
-    await File('docs/playback-fix-evidence/$name.json')
+    await File('docs/media-backend-evidence/$name.json')
         .writeAsString('${const JsonEncoder.withIndent('  ').convert(data)}\n');
   },
 );

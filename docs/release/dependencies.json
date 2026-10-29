@@ -1,9 +1,9 @@
 {
-  "pubspecLockSha256": "0e68272d6cb437533132bacd3b8081a53ece7bd11dcae0abb7a49b45d1b8d15f",
-  "lockCanonicalSha256": "0e68272d6cb437533132bacd3b8081a53ece7bd11dcae0abb7a49b45d1b8d15f",
-  "nativeNoticesSha256": "1dd2eac304b0754ef4ac9bdfd3e05192b611ac9c16546bbd42fbe4f395da6a0b",
-  "runtimePackageCount": 159,
-  "allDependencyCount": 203,
+  "pubspecLockSha256": "b026493d33d6dbd1a8924fb09f7eacb7489d880c04982a69823a65b82aefec9e",
+  "lockCanonicalSha256": "b026493d33d6dbd1a8924fb09f7eacb7489d880c04982a69823a65b82aefec9e",
+  "nativeNoticesSha256": "89d39bfdb8e11d3dad636ee78adcda831e05dc4e011ea2f2bec1bce4516783e2",
+  "runtimePackageCount": 145,
+  "allDependencyCount": 189,
   "packages": [
     {
       "package": "_fe_analyzer_shared",
@@ -40,15 +40,6 @@
       "source": "https://github.com/google/ansicolor-dart",
       "licenseFile": "LICENSE",
       "licenseSha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
-    },
-    {
-      "package": "archive",
-      "version": "4.5.2",
-      "kind": "transitive",
-      "runtimeGraph": true,
-      "source": "https://github.com/brendan-duncan/archive",
-      "licenseFile": "LICENSE",
-      "licenseSha256": "32f97d332eae7453ec4079858e6f1d74be85beeb6d3881068b47d02a379cccea"
     },
     {
       "package": "args",
@@ -726,15 +717,6 @@
       "licenseSha256": "3c32b53167c7dae9190c38dab5dd9fe1789c53623ebc7d1babcb29914c5b3f16"
     },
     {
-      "package": "image",
-      "version": "4.12.0",
-      "kind": "transitive",
-      "runtimeGraph": true,
-      "source": "https://github.com/brendan-duncan/image",
-      "licenseFile": "LICENSE",
-      "licenseSha256": "f3c17da84e0780e1c334325c73098257c32221d62498ed55ef3c1361904925aa"
-    },
-    {
       "package": "integration_test",
       "version": "0.0.0",
       "kind": "dev",
@@ -886,78 +868,6 @@
       "source": "https://github.com/flutter/packages/tree/main/packages/material_ui",
       "licenseFile": "LICENSE",
       "licenseSha256": "420f7739f169097f0aad1242045169cd643c8f1d94e62866fad265ae4c369b7d"
-    },
-    {
-      "package": "media_kit",
-      "version": "1.2.6",
-      "kind": "direct",
-      "runtimeGraph": true,
-      "source": "https://github.com/media-kit/media-kit",
-      "licenseFile": "LICENSE",
-      "licenseSha256": "2e3000f38718f050869d57540c288c661a446f64df1ba4ea4764df552b04a331"
-    },
-    {
-      "package": "media_kit_libs_android_video",
-      "version": "1.3.8",
-      "kind": "transitive",
-      "runtimeGraph": true,
-      "source": "https://github.com/media-kit/media-kit.git",
-      "licenseFile": "LICENSE",
-      "licenseSha256": "2e3000f38718f050869d57540c288c661a446f64df1ba4ea4764df552b04a331"
-    },
-    {
-      "package": "media_kit_libs_ios_video",
-      "version": "1.1.4",
-      "kind": "transitive",
-      "runtimeGraph": true,
-      "source": "https://github.com/media-kit/media-kit.git",
-      "licenseFile": "LICENSE",
-      "licenseSha256": "a78baa721ad6f5c0b2d8fb0c6cfff835ad8ed90393cac0087a90e8813490f2bd"
-    },
-    {
-      "package": "media_kit_libs_linux",
-      "version": "1.2.1",
-      "kind": "transitive",
-      "runtimeGraph": true,
-      "source": "https://github.com/media-kit/media-kit.git",
-      "licenseFile": "LICENSE",
-      "licenseSha256": "2e3000f38718f050869d57540c288c661a446f64df1ba4ea4764df552b04a331"
-    },
-    {
-      "package": "media_kit_libs_macos_video",
-      "version": "1.1.4",
-      "kind": "transitive",
-      "runtimeGraph": true,
-      "source": "https://github.com/media-kit/media-kit.git",
-      "licenseFile": "LICENSE",
-      "licenseSha256": "a78baa721ad6f5c0b2d8fb0c6cfff835ad8ed90393cac0087a90e8813490f2bd"
-    },
-    {
-      "package": "media_kit_libs_video",
-      "version": "1.0.7",
-      "kind": "direct",
-      "runtimeGraph": true,
-      "source": "https://github.com/media-kit/media-kit.git",
-      "licenseFile": "LICENSE",
-      "licenseSha256": "2e3000f38718f050869d57540c288c661a446f64df1ba4ea4764df552b04a331"
-    },
-    {
-      "package": "media_kit_libs_windows_video",
-      "version": "1.0.11",
-      "kind": "transitive",
-      "runtimeGraph": true,
-      "source": "https://github.com/media-kit/media-kit.git",
-      "licenseFile": "LICENSE",
-      "licenseSha256": "2e3000f38718f050869d57540c288c661a446f64df1ba4ea4764df552b04a331"
-    },
-    {
-      "package": "media_kit_video",
-      "version": "2.0.1",
-      "kind": "direct",
-      "runtimeGraph": true,
-      "source": "https://github.com/media-kit/media-kit",
-      "licenseFile": "LICENSE",
-      "licenseSha256": "2e3000f38718f050869d57540c288c661a446f64df1ba4ea4764df552b04a331"
     },
     {
       "package": "meta",
@@ -1149,15 +1059,6 @@
       "licenseSha256": "3c32b53167c7dae9190c38dab5dd9fe1789c53623ebc7d1babcb29914c5b3f16"
     },
     {
-      "package": "posix",
-      "version": "6.5.2",
-      "kind": "transitive",
-      "runtimeGraph": true,
-      "source": "https://github.com/onepub-dev/dart_posix",
-      "licenseFile": "LICENSE",
-      "licenseSha256": "aaf6271abd048deb3125828613f1797b7556472de6c7acd7103bd43e9cb6a84b"
-    },
-    {
       "package": "pretty_qr_code",
       "version": "3.6.0",
       "kind": "direct",
@@ -1282,15 +1183,6 @@
       "source": "https://github.com/ReactiveX/rxdart",
       "licenseFile": "LICENSE",
       "licenseSha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
-    },
-    {
-      "package": "safe_local_storage",
-      "version": "2.0.6",
-      "kind": "transitive",
-      "runtimeGraph": true,
-      "source": "https://github.com/alexmercerind/safe_local_storage.git",
-      "licenseFile": "LICENSE",
-      "licenseSha256": "d4cfdb498601b2872c7a09d06c62f92f5c751261bdb6fc4ce436940c7ccac78a"
     },
     {
       "package": "share_plus",
@@ -1633,24 +1525,6 @@
       "source": "https://github.com/dart-lang/core/tree/main/pkgs/typed_data",
       "licenseFile": "LICENSE",
       "licenseSha256": "ff15faa32a2e638107b7789592b14426162a75ba620044ee2340a20ec6ce5e73"
-    },
-    {
-      "package": "universal_platform",
-      "version": "1.1.0",
-      "kind": "transitive",
-      "runtimeGraph": true,
-      "source": "https://github.com/gskinnerTeam/flutter-universal-platform",
-      "licenseFile": "LICENSE",
-      "licenseSha256": "8a135e09d6288f03171b04f07f00eb5ee04e54f2f5e9c9b952f6adbd1de48c3f"
-    },
-    {
-      "package": "uri_parser",
-      "version": "3.0.2",
-      "kind": "transitive",
-      "runtimeGraph": true,
-      "source": "https://github.com/alexmercerind/uri_parser",
-      "licenseFile": "LICENSE",
-      "licenseSha256": "2e3000f38718f050869d57540c288c661a446f64df1ba4ea4764df552b04a331"
     },
     {
       "package": "url_launcher_linux",

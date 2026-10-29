@@ -1,0 +1,69 @@
+{
+  "status": "passed",
+  "readOnly": true,
+  "bufferSource": "Better Player native buffered duration ranges containing current position",
+  "samples": [
+    {
+      "stage": "initial",
+      "positionSeconds": 0.0,
+      "bufferSeconds": 15.0,
+      "nativeBufferSeconds": 15.0,
+      "nativeRanges": [
+        {
+          "startMs": 0,
+          "endMs": 15000
+        }
+      ],
+      "durationSeconds": 436.187,
+      "bufferFraction": 0.03438892034838269,
+      "playedFraction": 0.0
+    },
+    {
+      "stage": "forward",
+      "positionSeconds": 60.0,
+      "bufferSeconds": 70.0,
+      "nativeBufferSeconds": 70.0,
+      "nativeRanges": [
+        {
+          "startMs": 0,
+          "endMs": 70000
+        }
+      ],
+      "durationSeconds": 436.187,
+      "bufferFraction": 0.16048162829245255,
+      "playedFraction": 0.13755568139353075
+    },
+    {
+      "stage": "backward",
+      "positionSeconds": 15.0,
+      "bufferSeconds": 25.0,
+      "nativeBufferSeconds": 25.0,
+      "nativeRanges": [
+        {
+          "startMs": 0,
+          "endMs": 25000
+        }
+      ],
+      "durationSeconds": 436.187,
+      "bufferFraction": 0.05731486724730448,
+      "playedFraction": 0.03438892034838269
+    }
+  ],
+  "observations": [
+    {
+      "elapsedSeconds": 0,
+      "bufferSeconds": 0.0,
+      "positionSeconds": 0.0,
+      "nativeBufferedRanges": [
+        {
+          "startMs": 0,
+          "endMs": 0
+        }
+      ],
+      "playing": false,
+      "durationSeconds": 0.0
+    }
+  ],
+  "bufferResets": 6,
+  "recordedAtUtc": "2026-10-29T04:05:08.669779Z"
+}

@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_driver/driver_extension.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:media_kit/media_kit.dart';
 import 'package:mambatv/app/app.dart';
 import 'package:mambatv/app/bootstrap.dart';
 import 'package:mambatv/app/providers/repository_providers.dart';
@@ -102,7 +101,6 @@ void main() {
   );
   container = ProviderContainer(retry: (_, _) => null);
   TvImageCache.configure();
-  MediaKit.ensureInitialized();
   runApp(
     UncontrolledProviderScope(container: container, child: const MambaApp()),
   );

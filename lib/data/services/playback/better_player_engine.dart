@@ -8,7 +8,7 @@ import '../../../domain/playback/playback.dart';
 import '../bilibili/bilibili_api.dart';
 import 'dash_manifest.dart';
 import 'loopback_dash_manifest.dart';
-import 'media_kit_engine.dart' show classifyNativePlaybackFailure;
+import 'native_playback_failure.dart';
 
 /// Uses Better Player's exported engine API with our existing TV controls.
 class BetterPlayerEngine implements PlaybackEngine {

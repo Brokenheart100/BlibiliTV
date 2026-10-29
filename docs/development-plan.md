@@ -1,5 +1,7 @@
 # MambaTV：TV 端 B 站客户端详细开发计划
 
+2026-10-29 播放后端清理：用户确认移除 media_kit；所有入口统一 Better Player，Android 仍使用 Media3。旧构建回退和 mpv 专用实验工具删除，仍有用的集成测试迁到当前后端。Windows Better Player 本身需外部 libmpv DLL，详见 [清理与验证](media-backend-cleanup.md)。
+
 2026-10-29 详情增量：视频“接着发现”改为纵向网格并自动续载；首页／搜索／我的 Tabs 点击刷新首屏；番剧按参考图改为封面资料区、真实统计、分组选集网格和配音／制作区。用户确认长短评后续再做，见 [详情记录](detail-layout-and-refresh.md)。
 
 2026-10-29 搜索增量：扩展现有搜索的番剧／影视／直播类型，与视频共用胶囊 Tabs；首页／我的／搜索 Tabs 和侧栏统一玻璃效果。状态隔离、协议和验证见 [搜索记录](search-types-and-glass.md)。影视索引完整分类与直播推荐 -352 问题仍单列，不以关键词搜索代替这些验收。
@@ -284,7 +286,7 @@ M4 后续补充（2026-10-25）：已完成白名单 HTTP 内存缓存、主动�
 | 发布 | v1.0.0，源码提交 `7eef332cc19caad9759b760a05bcd1bd4011be38` | 后续从该基线增量演进，不回退到原规划的 v0.1.0／v0.2.0 编号 |
 | 托管验证 | [CI](https://github.com/Brokenheart100/BlibiliTV/actions/runs/40210596029) 与 [发布流水线](https://github.com/Brokenheart100/BlibiliTV/actions/runs/40210598808) 成功；179 项 Flutter 测试、13 项流水线守卫 | 新功能增加有意义的回归；测试数量不是验收目标 |
 | 发布平台 | Android API 24 起；Release 为 armeabi-v7a／arm64-v8a，x86_64 留在 CI Debug artifacts | 不因新增功能放弃 ARM32；平台最低版本变化需单独决策 |
-| 技术栈 | Flutter、Riverpod Notifier／AsyncNotifier、Freezed、Dio、Drift、Android Better Player／Media3 与 media_kit 回退 | 沿用 MVVM／整洁架构，不切换状态管理或重复引入播放器 |
+| 技术栈 | Flutter、Riverpod Notifier／AsyncNotifier、Freezed、Dio、Drift、Better Player，Android 使用 Media3 | 沿用 MVVM／整洁架构，不切换状态管理或重复引入播放器 |
 | 播放 | 当前是普通 UGC，`PlaybackRepository.resolve(videoId, partId)`；唯一引擎由 `PlaybackCoordinator` 管理 | M8 复用播放会话；M9 扩展类型化目标，不能把 roomId／episodeId 塞进 BVID |
 | 验证设备 | API 36 x86_64 TV 模拟器；M7 15 分钟／20 次进出／自然下一 P | 不把模拟器结果写成物理 ARM 电视通过；不恢复成 2 小时循环 |
 | 未完成验证 | 物理 TV、人工音画同步、真实账号写入、自然凭据续期；M7 存在单点 avsync 约 14.3 秒后恢复 | 纳入前置诊断与发布说明，不能用新增字幕／弹幕掩盖播放器时钟问题 |
@@ -383,7 +385,7 @@ flowchart TD
 1. 为当前播放会话暴露只读时间轴，包含媒体位置、倍速、playing／buffering、内容／会话代次及 seek／换 P 事件；Domain 不依赖 Flutter ticker。
 2. Repository 将元数据映射为轨道 ID、语言、名称、可用状态及 AI 标识（仅在来源提供时展示）；正文资源定位与必要请求头留在数据层。
 3. 首批只实现已实测的 B 站 JSON 字幕。使用整数时间单位、排序与范围校验，兼容空白／重叠 cue；不把正文当 HTML 执行。SRT／WebVTT 导入不进入必交范围。
-4. 优先采用 Flutter 字幕覆盖层，以复用 TV 样式和弹幕避让。media_kit 已有 `setSubtitleTrack`，但当前 Domain 端口未暴露；若 spike 显示 Flutter 合成不可行，需记录 ADR 后评估原生字幕适配，不同时渲染两套字幕。
+4. 优先采用 Flutter 字幕覆盖层，以复用 TV 样式和弹幕避让。当前 PlaybackEngine 端口不暴露原生字幕；若 spike 显示 Flutter 合成不可行，需记录 ADR 后评估原生字幕适配，不同时渲染两套字幕。
 5. 按系统／用户语言匹配已提供轨道，用户可以关闭或切换。默认偏好为“有可用字幕时按语言自动选择”，无字幕时保持视频播放。
 6. 大小提供小／标准／大档位，支持安全区、描边或半透明底板；默认不超过两行，长文本截分规则写入测试。偏移提供 -5 至 +5 秒、每步 0.1 秒的初始方案，并明确“正值延后显示”。
 7. 暂停／缓冲冻结，seek 立即重定位 cue；换 P 清空旧轨，换画质保留同内容的用户选择；旧请求迟到不能覆盖新轨。恢复位置在用户操作完成后由真实媒体事件校准。
@@ -552,7 +554,7 @@ Drift 实施时已是 v3（头像列），本次升级 **v4**：旧 UGC 回填 c
 
 | 能力 | 初始方案 | 定版门槛 |
 | --- | --- | --- |
-| 播放 | Android Better Player 1.29.0／Media3 1.11.0；media_kit 保留 Windows／构建回退，版本以 lock 为准 | 现有 UGC 不退化；新增传输、原生字幕或本地双轨需 spike |
+| 播放 | Android Better Player 1.29.0／Media3 1.11.0；已移除 media_kit 包和构建回退，版本以 lock 为准 | 现有 UGC 不退化；新增传输、原生字幕或本地双轨需 spike |
 | 字幕 | 首批复用 Dart JSON／集合及 Flutter 文本渲染，不新建通用字幕 SDK | 已实测 JSON 足以满足需求；额外格式出现再选成熟解析库 |
 | protobuf | 候选 [protobuf 6.1.0](https://pub.dev/packages/protobuf/versions/6.1.0) 与匹配 protoc_plugin／protoc | 协议确实需要、来源／许可明确、Dart 兼容、生成可重复；不手写二进制解码器 |
 | 弹幕画布 | 优先评测 [canvas_danmaku](https://pub.dev/packages/canvas_danmaku)，本次查阅版本 0.3.3，候选而非定版 | 真实视频合成、暂停／清空／seek／倍速、资源释放、性能预算及维护情况通过；UI 适配端口可替换 |

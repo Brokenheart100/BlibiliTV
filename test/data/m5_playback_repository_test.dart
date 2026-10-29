@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mambatv/core/result.dart';
 import 'package:mambatv/data/repositories/bilibili_playback_repository.dart';
 import 'package:mambatv/data/services/bilibili/bilibili_api.dart';
-import 'package:mambatv/data/services/playback/media_kit_engine.dart';
+import 'package:mambatv/data/services/playback/native_playback_failure.dart';
 import 'package:mambatv/domain/playback/playback.dart';
 
 void main() {

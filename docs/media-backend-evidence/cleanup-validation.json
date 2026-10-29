@@ -1,0 +1,185 @@
+{
+  "clientDate": "2026-10-29",
+  "workspaceOnly": true,
+  "committed": false,
+  "pushed": false,
+  "released": false,
+  "backend": "Better Player 1.29.0",
+  "androidBackend": "better_player_android 1.9.0 / Media3 1.11.0",
+  "removedPackages": [
+    "archive",
+    "image",
+    "media_kit",
+    "media_kit_libs_android_video",
+    "media_kit_libs_ios_video",
+    "media_kit_libs_linux",
+    "media_kit_libs_macos_video",
+    "media_kit_libs_video",
+    "media_kit_libs_windows_video",
+    "media_kit_video",
+    "posix",
+    "safe_local_storage",
+    "universal_platform",
+    "uri_parser"
+  ],
+  "checks": {
+    "tests": {
+      "passed": 304,
+      "failed": 0,
+      "previousCount": 307,
+      "removedObsoleteMpvRangeTests": 3
+    },
+    "staticAnalysis": {
+      "status": "passed",
+      "issues": 0
+    },
+    "formatting": {
+      "files": 295,
+      "changed": 0
+    },
+    "codeGeneration": "passed",
+    "pipelineGuards": {
+      "passed": 13,
+      "failed": 0
+    },
+    "licenseInventory": "current"
+  },
+  "native": {
+    "device": "emulator-5554",
+    "avd": "Mamba_TV_API36",
+    "api": 36,
+    "abi": "x86_64",
+    "owner": "guest",
+    "readOnly": true,
+    "remoteWrites": 0,
+    "applicationId": "app.mamba.mambatv.validation",
+    "mode": "debug",
+    "productionUiRestart": "hot restart succeeded",
+    "reports": [
+      {
+        "file": "native-validation.json",
+        "status": "passed",
+        "samples": 9
+      },
+      {
+        "file": "buffer-validation.json",
+        "status": "passed",
+        "samples": 3
+      },
+      {
+        "file": "seek-smoke.json",
+        "status": "passed",
+        "samples": 13
+      }
+    ],
+    "runtimeErrors": []
+  },
+  "apkAudit": {
+    "armProductEntry": [
+      {
+        "abi": "armeabi-v7a",
+        "file": "build\\app\\outputs\\flutter-apk\\app-armeabi-v7a-debug.apk",
+        "bytes": 92934819,
+        "sha256": "9af5517ce14d5303fcffe80d4072bbdf43e5a5354741c0101d49fc6b505cdc89",
+        "nativeLibraries": [
+          "lib/armeabi-v7a/libdartjni.so",
+          "lib/armeabi-v7a/libdatastore_shared_counter.so",
+          "lib/armeabi-v7a/libflutter.so",
+          "lib/armeabi-v7a/libsqlite3.so"
+        ],
+        "forbiddenLibraries": [],
+        "mode": "debug",
+        "entrypoint": "lib/main.dart"
+      },
+      {
+        "abi": "arm64-v8a",
+        "file": "build\\app\\outputs\\flutter-apk\\app-arm64-v8a-debug.apk",
+        "bytes": 113905251,
+        "sha256": "e8ca8a80fd9b10d3fc0596686fc4abbb6d2337e80783bff28db8604e8ffc08d0",
+        "nativeLibraries": [
+          "lib/arm64-v8a/libVkLayer_khronos_validation.so",
+          "lib/arm64-v8a/libdartjni.so",
+          "lib/arm64-v8a/libdatastore_shared_counter.so",
+          "lib/arm64-v8a/libflutter.so",
+          "lib/arm64-v8a/libsqlite3.so"
+        ],
+        "forbiddenLibraries": [],
+        "mode": "debug",
+        "entrypoint": "lib/main.dart"
+      }
+    ],
+    "emulator": {
+      "apk": "build\\app\\outputs\\flutter-apk\\app-debug.apk",
+      "bytes": 100134801,
+      "sha256": "0176f7c32688c06d853f2bf30395d0081617670bbab9e9ff604046c78ed6da14",
+      "native": [
+        {
+          "path": "lib/arm64-v8a/libdartjni.so",
+          "bytes": 97920,
+          "compressedBytes": 97920
+        },
+        {
+          "path": "lib/arm64-v8a/libdatastore_shared_counter.so",
+          "bytes": 7784,
+          "compressedBytes": 7784
+        },
+        {
+          "path": "lib/armeabi-v7a/libdartjni.so",
+          "bytes": 57572,
+          "compressedBytes": 57572
+        },
+        {
+          "path": "lib/armeabi-v7a/libdatastore_shared_counter.so",
+          "bytes": 5916,
+          "compressedBytes": 5916
+        },
+        {
+          "path": "lib/x86_64/libdartjni.so",
+          "bytes": 99936,
+          "compressedBytes": 99936
+        },
+        {
+          "path": "lib/x86_64/libdatastore_shared_counter.so",
+          "bytes": 7336,
+          "compressedBytes": 7336
+        },
+        {
+          "path": "lib/x86_64/libflutter.so",
+          "bytes": 40083280,
+          "compressedBytes": 40083280
+        },
+        {
+          "path": "lib/x86_64/libsqlite3.so",
+          "bytes": 1725992,
+          "compressedBytes": 1725992
+        }
+      ],
+      "forbiddenLibraries": [],
+      "mediaKitPackages": [],
+      "oldMpvLibraries": [
+        {
+          "path": "lib/arm64-v8a/libmpv.so",
+          "bytes": 12369680,
+          "compressedBytes": 12369680
+        },
+        {
+          "path": "lib/armeabi-v7a/libmpv.so",
+          "bytes": 11746532,
+          "compressedBytes": 11746532
+        },
+        {
+          "path": "lib/x86_64/libmpv.so",
+          "bytes": 15816336,
+          "compressedBytes": 15816336
+        }
+      ],
+      "baselineNote": "Before APK and current test APK differ in entrypoint and may differ in ABI selection; total APK sizes are not a controlled comparison."
+    }
+  },
+  "limitations": [
+    "Native API does not expose separate audio PTS or audible noise measurements.",
+    "Windows Better Player needs an external libmpv DLL; none downloaded or distributed in this change.",
+    "Migrated M0/M2-M7 full native suites not rerun.",
+    "No physical ARM device, new soak, M8 performance, remote CI or release acceptance."
+  ]
+}

@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
-import 'package:media_kit/media_kit.dart' hide PlayerState;
 import 'package:mambatv/app/app.dart';
 import 'package:mambatv/app/bootstrap.dart';
 import 'package:mambatv/app/logging/app_container.dart';
@@ -20,7 +19,6 @@ import 'm8_stability_test.dart' show M8Tracker;
 void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
   binding.framePolicy = LiveTestWidgetsFlutterBindingFramePolicy.fullyLive;
-  MediaKit.ensureInitialized();
   testWidgets('M9 real live quality and lifecycle release', (tester) async {
     expect(const bool.fromEnvironment('MAMBA_VALIDATION_APP'), isTrue);
     expect(const bool.fromEnvironment('MAMBA_READ_ONLY_VALIDATION'), isTrue);

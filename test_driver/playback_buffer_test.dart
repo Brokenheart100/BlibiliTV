@@ -9,8 +9,8 @@ Future<void> main() => integrationDriver(
   responseDataCallback: (data) async {
     if (data == null) return;
     data['recordedAtUtc'] = DateTime.now().toUtc().toIso8601String();
-    await Directory('docs/playback-buffer-evidence').create(recursive: true);
-    await File('docs/playback-buffer-evidence/native-validation.json')
+    await Directory('docs/media-backend-evidence').create(recursive: true);
+    await File('docs/media-backend-evidence/buffer-validation.json')
         .writeAsString('${const JsonEncoder.withIndent('  ').convert(data)}\n');
   },
 );

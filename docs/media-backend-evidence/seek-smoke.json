@@ -1,0 +1,115 @@
+{
+  "status": "passed",
+  "backend": "better_player",
+  "readOnly": true,
+  "samples": [
+    {
+      "targetSeconds": 35,
+      "seekMs": 313,
+      "positionMs": 35015,
+      "bufferMs": 60000,
+      "playing": true,
+      "rate": 1.0
+    },
+    {
+      "targetSeconds": 85,
+      "seekMs": 352,
+      "positionMs": 85064,
+      "bufferMs": 90000,
+      "playing": true,
+      "rate": 1.0
+    },
+    {
+      "targetSeconds": 25,
+      "seekMs": 525,
+      "positionMs": 25077,
+      "bufferMs": 35000,
+      "playing": true,
+      "rate": 1.0
+    },
+    {
+      "targetSeconds": 120,
+      "seekMs": 611,
+      "positionMs": 120100,
+      "bufferMs": 135000,
+      "playing": true,
+      "rate": 1.0
+    },
+    {
+      "targetSeconds": 15,
+      "seekMs": 507,
+      "positionMs": 15045,
+      "bufferMs": 25000,
+      "playing": true,
+      "rate": 1.0
+    },
+    {
+      "targetSeconds": 180,
+      "seekMs": 538,
+      "positionMs": 180046,
+      "bufferMs": 190000,
+      "playing": true,
+      "rate": 1.0
+    },
+    {
+      "targetSeconds": 40,
+      "seekMs": 542,
+      "positionMs": 40132,
+      "bufferMs": 45000,
+      "playing": true,
+      "rate": 1.0
+    },
+    {
+      "targetSeconds": 210,
+      "seekMs": 603,
+      "positionMs": 210107,
+      "bufferMs": 215000,
+      "playing": true,
+      "rate": 1.0
+    },
+    {
+      "targetSeconds": 10,
+      "seekMs": 525,
+      "positionMs": 10067,
+      "bufferMs": 20000,
+      "playing": true,
+      "rate": 1.0
+    },
+    {
+      "targetSeconds": 0,
+      "seekMs": 594,
+      "positionMs": 49,
+      "bufferMs": 10000,
+      "playing": true,
+      "rate": 1.0
+    },
+    {
+      "targetSeconds": 60,
+      "seekMs": 550,
+      "positionMs": 60000,
+      "bufferMs": 70000,
+      "playing": false,
+      "rate": 1.0
+    },
+    {
+      "targetSeconds": 10,
+      "seekMs": 635,
+      "positionMs": 10000,
+      "bufferMs": 20000,
+      "playing": false,
+      "rate": 1.0
+    },
+    {
+      "targetSeconds": 35,
+      "seekMs": 545,
+      "positionMs": 35065,
+      "bufferMs": 45000,
+      "playing": true,
+      "rate": 1.5
+    }
+  ],
+  "errors": [],
+  "audioVideoSyncMeasured": false,
+  "limitation": "Native position and buffered readiness do not measure audio PTS or audible noise.",
+  "recordedAtUtc": "2026-10-29T04:06:01.866551Z"
+}

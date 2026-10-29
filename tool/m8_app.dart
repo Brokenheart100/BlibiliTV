@@ -6,7 +6,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_driver/driver_extension.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:media_kit/media_kit.dart';
 import 'package:mambatv/app/app.dart';
 import 'package:mambatv/app/logging/app_container.dart';
 import 'package:mambatv/app/bootstrap.dart';
@@ -247,7 +246,6 @@ void main() {
     },
   );
   WidgetsFlutterBinding.ensureInitialized();
-  MediaKit.ensureInitialized();
   TvImageCache.configure();
   container = createAppContainer();
   runApp(

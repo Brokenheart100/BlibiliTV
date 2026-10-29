@@ -9,8 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
-import 'package:media_kit/media_kit.dart' hide PlayerState;
-import 'package:media_kit_video/media_kit_video.dart';
 import 'package:mambatv/app/app.dart';
 import 'package:mambatv/app/bootstrap.dart';
 import 'package:mambatv/app/router.dart';
@@ -23,7 +21,7 @@ import 'package:mambatv/data/repositories/memory_session_repository.dart';
 import 'package:mambatv/data/repositories/bilibili_playback_repository.dart';
 import 'package:mambatv/data/services/local/app_database.dart';
 import 'package:mambatv/data/services/playback/audio_session_focus.dart';
-import 'package:mambatv/data/services/playback/media_kit_engine.dart';
+import 'package:mambatv/data/services/playback/better_player_engine.dart';
 import 'package:mambatv/domain/playback/playback.dart';
 import 'package:mambatv/ui/features/player/view_models/player_view_model.dart';
 import 'package:mambatv/ui/features/player/views/player_page.dart';
@@ -34,18 +32,12 @@ class M5Tracker {
   PlaybackAdapter get adapter => PlaybackAdapter(
     focus: focus,
     create: () => M5Engine(this),
-    surface: (engine) => Video(
-      controller: (engine as MediaKitEngine).controller,
-      controls: null,
-      pauseUponEnteringBackgroundMode: false,
-      resumeUponEnteringForegroundMode: false,
-    ),
+    surface: (engine) => BetterPlayerSurface(engine as BetterPlayerEngine),
   );
 }
 
-class M5Engine extends MediaKitEngine {
-  M5Engine(this.tracker)
-    : super(onOpenStage: (stage) => debugPrint('M5_OPEN_$stage')) {
+class M5Engine extends BetterPlayerEngine {
+  M5Engine(this.tracker) {
     tracker.created++;
     tracker.active++;
     if (tracker.active > tracker.maximum) tracker.maximum = tracker.active;
@@ -100,6 +92,10 @@ class ExpiryProbe implements PlaybackRepository {
             qualities: value.qualities,
             audioTracks: value.audioTracks,
             audioId: value.audioId,
+            videoDash: value.videoDash,
+            audioDash: value.audioDash,
+            transport: value.transport,
+            headers: value.headers,
             videoBackups: const bool.fromEnvironment('M5_TEST_BACKUP')
                 ? value.videoBackups
                 : const [],
@@ -116,7 +112,6 @@ class ExpiryProbe implements PlaybackRepository {
 
 void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
-  MediaKit.ensureInitialized();
   testWidgets(
     'M5 native controls, recovery, lifecycle and continuous profile playback',
     (tester) async {
@@ -197,7 +192,7 @@ void main() {
             state().phase == PlayerPhase.playing &&
             state().snapshot.position.inSeconds >= 3,
       );
-      expect(state().snapshot.audioSampleRate, greaterThan(0));
+      expect(state().snapshot.width, greaterThan(0));
       await tester.runAsync(() => vm().togglePause());
       await tester.runAsync(() => vm().seekBy(const Duration(seconds: 12)));
       await tester.runAsync(() => vm().setRate(1.25));
@@ -330,33 +325,25 @@ void main() {
         await tester.pump(const Duration(milliseconds: 500));
         expect(state().phase, PlayerPhase.playing);
         if (clock.elapsed.inSeconds >= nextSample) {
-          final engine = vm().engine! as MediaKitEngine;
-          final native = engine.player.platform! as NativePlayer;
-          String? avSync;
-          try {
-            avSync = await tester.runAsync(() => native.getProperty('avsync'));
-          } catch (_) {}
+          final engine = vm().engine! as BetterPlayerEngine;
           final sample = <String, Object?>{
             'elapsedSeconds': clock.elapsed.inSeconds,
             'positionMs': state().snapshot.position.inMilliseconds,
             'durationMs': state().snapshot.duration.inMilliseconds,
             'rate': state().snapshot.rate,
-            'nativeSpeed': await tester.runAsync(
-              () => native.getProperty('speed'),
-            ),
-            'audioOutput': await tester.runAsync(
-              () => native.getProperty('current-ao'),
-            ),
-            'audioSpeedCorrection': await tester.runAsync(
-              () => native.getProperty('audio-speed-correction'),
-            ),
-            'videoSync': await tester.runAsync(
-              () => native.getProperty('video-sync'),
-            ),
-            'audioSampleRate': state().snapshot.audioSampleRate,
+            'nativeSpeed': engine.controller.value.speed,
+            'nativePositionMs': (await tester.runAsync(
+              () => engine.controller.position,
+            ))?.inMilliseconds,
+            'backend': 'better_player',
+            'audioOutput': null,
+            'audioSpeedCorrection': null,
+            'videoSync': null,
+            'audioSampleRate':
+                null, // Not exposed by the Better Player engine API.
             'width': state().snapshot.width,
             'height': state().snapshot.height,
-            'avSyncSeconds': double.tryParse(avSync ?? ''),
+            'avSyncSeconds': null, // No separate audio PTS available.
           };
           samples.add(sample);
           debugPrint('M5_SAMPLE ${jsonEncode(sample)}');

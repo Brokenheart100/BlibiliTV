@@ -2,12 +2,10 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:media_kit/media_kit.dart';
-import 'package:media_kit_video/media_kit_video.dart';
 import 'package:pretty_qr_code/pretty_qr_code.dart';
 
-import '../data/bilibili_probe_service.dart';
-import '../data/playback_configuration.dart';
+import '../../data/services/playback/better_player_engine.dart';
+import '../../domain/playback/playback.dart';
 import '../domain/probe_models.dart';
 import 'probe_view_model.dart';
 
@@ -149,37 +147,25 @@ class ProbePlayerPage extends StatefulWidget {
 
 class _ProbePlayerPageState extends State<ProbePlayerPage>
     with WidgetsBindingObserver {
-  late final Player player = Player();
-  late final VideoController controller = VideoController(
-    player,
-    configuration: probeVideoConfiguration(),
-  );
+  final engine = BetterPlayerEngine();
   String status = '正在打开独立视频与音轨';
-  StreamSubscription<String>? errors;
+  StreamSubscription<EngineSnapshot>? errors;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    errors = player.stream.error.listen((_) {
-      if (mounted) setState(() => status = '媒体引擎报告错误（地址已隐藏）');
+    errors = engine.snapshots.listen((snapshot) {
+      if (mounted && snapshot.failure != null) {
+        setState(() => status = '媒体引擎报告错误（地址已隐藏）');
+      }
     });
     unawaited(_open());
   }
 
   Future<void> _open() async {
     try {
-      await player.open(
-        Media(
-          widget.media.videoUrl,
-          httpHeaders: BilibiliProbeService.mediaHeaders,
-        ),
-        play: false,
-      );
-      if (!mounted) return;
-      await player.setAudioTrack(AudioTrack.uri(widget.media.audioUrl));
-      if (!mounted) return;
-      await player.play();
+      await engine.open(widget.media.source, startAt: Duration.zero);
       if (mounted) setState(() => status = '已提交播放；需验证视频首帧、音轨和 seek');
     } catch (_) {
       if (mounted) setState(() => status = '打开失败（地址已隐藏）');
@@ -188,14 +174,14 @@ class _ProbePlayerPageState extends State<ProbePlayerPage>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state != AppLifecycleState.resumed) unawaited(player.pause());
+    if (state != AppLifecycleState.resumed) unawaited(engine.pause());
   }
 
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     unawaited(errors?.cancel());
-    unawaited(player.dispose());
+    unawaited(engine.dispose());
     super.dispose();
   }
 
@@ -206,12 +192,12 @@ class _ProbePlayerPageState extends State<ProbePlayerPage>
     ),
     body: Column(
       children: [
-        Expanded(child: Video(controller: controller, controls: null)),
+        Expanded(child: BetterPlayerSurface(engine)),
         Text(status),
-        StreamBuilder<Duration>(
-          stream: player.stream.position,
+        StreamBuilder<EngineSnapshot>(
+          stream: engine.snapshots,
           builder: (context, snapshot) => Text(
-            '播放位置：${snapshot.data?.inSeconds ?? 0} 秒',
+            '播放位置：${snapshot.data?.position.inSeconds ?? 0} 秒',
             key: const Key('play-position'),
           ),
         ),
@@ -221,12 +207,13 @@ class _ProbePlayerPageState extends State<ProbePlayerPage>
             FilledButton(
               key: const Key('play-pause'),
               autofocus: true,
-              onPressed: player.playOrPause,
+              onPressed: () =>
+                  engine.snapshot.playing ? engine.pause() : engine.play(),
               child: const Text('播放 / 暂停'),
             ),
             FilledButton(
               key: const Key('seek-10'),
-              onPressed: () => player.seek(const Duration(seconds: 10)),
+              onPressed: () => engine.seek(const Duration(seconds: 10)),
               child: const Text('跳转至 10 秒'),
             ),
             OutlinedButton(

@@ -1,11 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/widgets.dart';
-import 'package:flutter/foundation.dart';
-import 'package:media_kit_video/media_kit_video.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../data/services/playback/media_kit_engine.dart';
 import '../../data/services/playback/audio_session_focus.dart';
 import '../../data/services/playback/better_player_engine.dart';
 import '../../domain/playback/playback.dart';
@@ -31,29 +28,10 @@ class PlaybackAdapter {
 PlaybackAdapter playbackAdapter(Ref ref) {
   final focus = AudioSessionFocus();
   ref.onDispose(() => unawaited(focus.dispose()));
-  const backend = String.fromEnvironment(
-    'MAMBA_PLAYBACK_ENGINE',
-    defaultValue: 'better_player',
-  );
-  if (!kIsWeb &&
-      defaultTargetPlatform == TargetPlatform.android &&
-      backend == 'better_player') {
-    return PlaybackAdapter(
-      focus: focus,
-      create: BetterPlayerEngine.new,
-      surface: (engine) => BetterPlayerSurface(engine as BetterPlayerEngine),
-    );
-  }
   return PlaybackAdapter(
     focus: focus,
-    create: MediaKitEngine.new,
-    surface: (engine) => Video(
-      controller: (engine as MediaKitEngine).controller,
-      controls: null,
-      fit: BoxFit.contain,
-      pauseUponEnteringBackgroundMode: false,
-      resumeUponEnteringForegroundMode: false,
-    ),
+    create: BetterPlayerEngine.new,
+    surface: (engine) => BetterPlayerSurface(engine as BetterPlayerEngine),
   );
 }
 

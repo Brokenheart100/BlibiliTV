@@ -86,7 +86,7 @@ M5（2026-10-25）已实现播放器控制、串行切换与限次恢复。新�
 | 结构化本地数据 | Drift / SQLite | 确定；历史、续播、缓存和迁移由 Repository 管理 |
 | 简单设置 | `shared_preferences` 的异步接口 | 确定；仅保存可恢复的偏好，不能存账号秘密或关键观看进度 |
 | 凭据 | `flutter_secure_storage` 封装的 CredentialStore | 确定；实际 Android 版本、备份恢复和设备兼容性在 M0 验证 |
-| 播放 | Android：`better_player`／Media3；Windows 与构建时回退：`media_kit` 系列 | 2026-10-27 起 Android 默认试用 Better Player；保留 PlaybackEngine 边界，见 [试用与回退](better-player-trial.md)。历史 M0–M7 结果仅适用于当时的 media_kit，真机验证待补 |
+| 播放 | 统一 `better_player`，Android 使用 Media3；已移除 `media_kit` 包和构建回退 | 保留 PlaybackEngine 边界，见 [后端清理](media-backend-cleanup.md)。Windows 插件仍需外部 libmpv DLL，历史 M0–M7 结果不代替当前后端或物理电视验证 |
 | 播放替代 | Android Media3 适配器 | 备选；仅在候选引擎关键能力失败后评估，不并行维护两套引擎 |
 | 图片／二维码 | 成熟的缓存图片组件与二维码渲染组件 | M1 选定；限制解码尺寸，不自写图片缓存或二维码编码 |
 | 测试 | `flutter_test`、`integration_test`、独立 ProviderContainer／ProviderScope overrides、手写 Fake | 确定；重点覆盖状态机、Provider 生命周期、请求竞态、焦点与真实播放 |

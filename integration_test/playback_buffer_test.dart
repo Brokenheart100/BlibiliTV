@@ -1,12 +1,8 @@
-import 'dart:convert';
-
 import 'package:drift_flutter/drift_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
-import 'package:media_kit/media_kit.dart' hide PlayerState;
-import 'package:media_kit_video/media_kit_video.dart';
 import 'package:mambatv/app/app.dart';
 import 'package:mambatv/app/bootstrap.dart';
 import 'package:mambatv/app/providers/infrastructure_providers.dart';
@@ -15,14 +11,13 @@ import 'package:mambatv/app/providers/repository_providers.dart';
 import 'package:mambatv/app/router.dart';
 import 'package:mambatv/data/repositories/memory_session_repository.dart';
 import 'package:mambatv/data/services/local/app_database.dart';
-import 'package:mambatv/data/services/playback/media_kit_engine.dart';
+import 'package:mambatv/data/services/playback/better_player_engine.dart';
 import 'package:mambatv/ui/features/player/view_models/player_view_model.dart';
 import 'package:mambatv/ui/features/player/views/player_page.dart';
 
 void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
   binding.framePolicy = LiveTestWidgetsFlutterBindingFramePolicy.fullyLive;
-  MediaKit.ensureInitialized();
   testWidgets(
     'TV buffer bar follows native DASH cache before and after seeks',
     (tester) async {
@@ -32,7 +27,7 @@ void main() {
         driftDatabase(name: 'mambatv_buffer_validation'),
       );
       final sessions = MemorySessionRepository();
-      MediaKitEngine? engine;
+      BetterPlayerEngine? engine;
       PlayerViewModel? activeVm;
       final container = ProviderContainer(
         retry: (_, _) => null,
@@ -41,15 +36,9 @@ void main() {
           appDatabaseProvider.overrideWithValue(database),
           playbackAdapterProvider.overrideWithValue(
             PlaybackAdapter(
-              create: () => engine = MediaKitEngine(
-                onOpenStage: (stage) => debugPrint('BUFFER_OPEN $stage'),
-              ),
-              surface: (engine) => Video(
-                controller: (engine as MediaKitEngine).controller,
-                controls: null,
-                pauseUponEnteringBackgroundMode: false,
-                resumeUponEnteringForegroundMode: false,
-              ),
+              create: () => engine = BetterPlayerEngine(),
+              surface: (engine) =>
+                  BetterPlayerSurface(engine as BetterPlayerEngine),
             ),
           ),
         ],
@@ -59,8 +48,7 @@ void main() {
       binding.reportData = {
         'status': 'running',
         'readOnly': true,
-        'bufferSource':
-            'mpv demuxer-cache-state seekable-ranges at current position',
+        'bufferSource': 'Better Player native buffered duration ranges containing current position',
         'samples': samples,
         'observations': observations,
       };
@@ -85,28 +73,23 @@ void main() {
           if (engine != null &&
               clock.elapsed.inSeconds >= lastObservation + 5) {
             lastObservation = clock.elapsed.inSeconds;
-            final native = engine!.player.platform! as NativePlayer;
-            final nativeBuffer = await tester.runAsync(() async {
-              try {
-                return await native.getProperty('demuxer-cache-time');
-              } catch (_) {
-                return 'unavailable';
-              }
-            });
             final value = {
               'elapsedSeconds': clock.elapsed.inSeconds,
               'bufferSeconds':
                   engine!.snapshot.bufferedPosition.inMilliseconds / 1000,
               'positionSeconds':
                   engine!.snapshot.position.inMilliseconds / 1000,
-              'nativeBuffer': nativeBuffer,
+              'nativeBufferedRanges': [
+                for (final range in engine!.controller.value.buffered)
+                  {
+                    'startMs': range.start.inMilliseconds,
+                    'endMs': range.end.inMilliseconds,
+                  },
+              ],
               'playing': engine!.snapshot.playing,
               'durationSeconds':
                   engine!.snapshot.duration.inMilliseconds / 1000,
             };
-            value['nativeCacheState'] = await tester.runAsync(
-              () => native.getProperty('demuxer-cache-state'),
-            );
             observations.add(value);
             debugPrint('BUFFER_OBSERVATION $value');
           }
@@ -158,22 +141,15 @@ void main() {
         final played = tester.widget<LinearProgressIndicator>(
           find.byKey(const Key('player-played-progress')),
         );
-        final native = engine!.player.platform! as NativePlayer;
-        final nativeState = jsonDecode(
-          (await tester.runAsync(
-            () => native.getProperty('demuxer-cache-state'),
-          ))!,
-        ) as Map<String, dynamic>;
-        final ranges = nativeState['seekable-ranges'] as List<dynamic>;
-        final position = snapshot.position.inMicroseconds / 1000000;
-        final currentRanges = ranges.cast<Map<String, dynamic>>().where(
+        final ranges = engine!.controller.value.buffered;
+        final currentRanges = ranges.where(
           (range) =>
-              (range['start'] as num) <= position &&
-              position <= (range['end'] as num),
+              range.start <= snapshot.position &&
+              snapshot.position <= range.end,
         );
         expect(currentRanges, isNotEmpty);
         final nativeSeconds = currentRanges
-            .map((range) => (range['end'] as num).toDouble())
+            .map((range) => range.end.inMicroseconds / 1000000)
             .reduce((a, b) => a > b ? a : b);
         final duration = snapshot.duration.inMilliseconds / 1000;
         final buffer = snapshot.bufferedPosition.inMicroseconds / 1000000;
@@ -185,8 +161,13 @@ void main() {
           'positionSeconds': snapshot.position.inMilliseconds / 1000,
           'bufferSeconds': buffer,
           'nativeBufferSeconds': nativeSeconds,
-          'nativeRanges': ranges,
-          'legacyCacheTime': nativeState['cache-end'],
+          'nativeRanges': [
+            for (final range in ranges)
+              {
+                'startMs': range.start.inMilliseconds,
+                'endMs': range.end.inMilliseconds,
+              },
+          ],
           'durationSeconds': duration,
           'bufferFraction': bar.value,
           'playedFraction': played.value,

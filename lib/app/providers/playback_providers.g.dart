@@ -49,7 +49,7 @@ final class PlaybackAdapterProvider
   }
 }
 
-String _$playbackAdapterHash() => r'5ebe90d29e90882cc522e88377975871bc2805b9';
+String _$playbackAdapterHash() => r'25855e9a77a39884bfbeae27b8ea0c0ee5fb0395';
 
 @ProviderFor(playbackCoordinator)
 final playbackCoordinatorProvider = PlaybackCoordinatorProvider._();

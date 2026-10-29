@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
-import 'package:media_kit/media_kit.dart' hide PlayerState;
 import 'package:mambatv/app/app.dart';
 import 'package:mambatv/app/bootstrap.dart';
 import 'package:mambatv/app/logging/app_container.dart';
@@ -34,7 +33,6 @@ const liveSeconds = int.fromEnvironment('M9_LIVE_SECONDS', defaultValue: 900);
 void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
   binding.framePolicy = LiveTestWidgetsFlutterBindingFramePolicy.fullyLive;
-  MediaKit.ensureInitialized();
   testWidgets('M9 typed PGC and live real read-only native playback', (
     tester,
   ) async {

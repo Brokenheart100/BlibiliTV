@@ -6,7 +6,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
-import 'package:media_kit/media_kit.dart';
 import 'package:mambatv/app/app.dart';
 import 'package:mambatv/app/bootstrap.dart';
 import 'package:mambatv/app/providers/infrastructure_providers.dart';
@@ -23,7 +22,7 @@ import 'package:mambatv/ui/features/player/view_models/player_view_model.dart';
 import 'package:mambatv/ui/features/player/views/player_page.dart';
 import 'package:mambatv/ui/features/video_detail/video_detail_page.dart';
 import 'package:mambatv/ui/features/video_detail/view_models/video_detail_view_model.dart';
-import 'package:mambatv/data/services/playback/media_kit_engine.dart';
+import 'package:mambatv/data/services/playback/better_player_engine.dart';
 
 import 'm2_playback_flow_test.dart' show NativeEngineTracker;
 
@@ -33,20 +32,13 @@ class M4EngineTracker extends NativeEngineTracker {
     final delegate = super.adapter;
     return PlaybackAdapter(
       create: () {
-        final engine = delegate.create() as MediaKitEngine;
-        engine.player.stream.error.listen((message) {
-          final category = message.contains('403')
-              ? 'http403'
-              : message.contains('404')
-              ? 'http404'
-              : message.toLowerCase().contains('decoder')
-              ? 'decoder'
-              : message.toLowerCase().contains('audio')
-              ? 'audio'
-              : message.toLowerCase().contains('open')
-              ? 'open'
-              : 'other';
-          debugPrint('M4 native error category: $category');
+        final engine = delegate.create() as BetterPlayerEngine;
+        engine.snapshots.listen((snapshot) {
+          if (snapshot.failure != null) {
+            debugPrint(
+              'M4 native error category: ${snapshot.failure!.kind.name}',
+            );
+          }
         });
         return engine;
       },
@@ -57,7 +49,6 @@ class M4EngineTracker extends NativeEngineTracker {
 
 void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
-  MediaKit.ensureInitialized();
   TvImageCache.configure();
   testWidgets(
     'M4 real guest pages, Chinese results, history, related and P2 playback',
@@ -225,7 +216,7 @@ void main() {
         return state.phase == PlayerPhase.playing &&
             state.snapshot.position.inSeconds >= 3 &&
             state.snapshot.width > 0 &&
-            state.snapshot.audioSampleRate > 0;
+            state.snapshot.duration > Duration.zero;
       });
       final snapshot = container.read(player).snapshot;
       expect(container.read(player).partTitle, detail.parts[1].title);
@@ -278,7 +269,7 @@ void main() {
         'playedPart': 2,
         'width': snapshot.width,
         'height': snapshot.height,
-        'audioSampleRate': snapshot.audioSampleRate,
+        'audioSampleRate': null, // Not exposed by the Better Player engine API.
         'relatedCount': relatedCount,
         'resumeLabelAfterReturn': true,
         'partFocusRestored': true,

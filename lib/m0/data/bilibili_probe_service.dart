@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 
+import '../../data/repositories/bilibili_playback_repository.dart';
 import '../domain/probe_models.dart';
 import 'wbi_signer.dart';
 
@@ -159,16 +160,14 @@ class BilibiliProbeService {
         videos.sort(
           (a, b) => (a['bandwidth']! as num).compareTo(b['bandwidth']! as num),
         );
-        final audio = objectMap((dash['audio']! as List<Object?>).first);
         final video = videos.first;
         media = ProbeMedia(
           bvid: bvid,
           cid: cid,
-          videoUrl: (video['baseUrl'] ?? video['base_url'])! as String,
-          audioUrl: (audio['baseUrl'] ?? audio['base_url'])! as String,
-          quality: (video['id']! as num).toInt(),
-          codec: video['codecs']! as String,
-          durationSeconds: (data['timelength']! as num).toInt() ~/ 1000,
+          source: decodeDashPlayback(
+            data,
+            quality: (video['id']! as num).toInt(),
+          ),
         );
         return 'bvid=$bvid; cid=$cid; video=${videos.length}; audio=${(dash['audio']! as List<Object?>).length}; codec=${media!.codec}; quality=${media!.quality}';
       });

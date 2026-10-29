@@ -22,7 +22,8 @@ M5 播放器控制与受限恢复已实现：画质／AAC 音轨、倍速／音�
 - [M5 播放控制、恢复与长时验收](docs/m5-validation.md)
 - [音画就绪与连续快进／快退修复](docs/playback-seek-sync-fix.md)
 - [播放器真实缓冲进度条](docs/playback-buffer.md)
-- [Better Player／Media3 Android 试用与回退](docs/better-player-trial.md)
+- [统一 Better Player 与移除 media_kit](docs/media-backend-cleanup.md)
+- [Better Player／Media3 历史试用记录](docs/better-player-trial.md)
 - [Windows TV 模拟器杂音／无声处理](docs/emulator-audio.md)
 - [M6 观看记录、个人列表与设置验收](docs/m6-validation.md)
 - [M7 发布准备、15 分钟与签名升级验收](docs/m7-validation.md)
@@ -86,7 +87,7 @@ flutter drive --keep-app-running --no-uninstall-first --dart-define=MAMBA_VALIDA
 
 - `app/`：Riverpod 装配、启动、路由和生命周期。
 - `core/`、`domain/`：纯 Dart 结果类型、不可变业务模型、仓储接口。
-- `data/`：Web/WBI 与 PGC／直播、本地偏好／续播、安全存储、Drift v4（保留 v1／v2／v3 迁移）、Dio 脱敏日志、Better Player／media_kit 适配器；Fake 用于自动测试。
+- `data/`：Web/WBI 与 PGC／直播、本地偏好／续播、安全存储、Drift v4（保留 v1／v2／v3 迁移）、Dio 脱敏日志、Better Player 适配器；Fake 用于自动测试。
 - `ui/`：TV 组件与焦点、页面、生成的 Riverpod ViewModel。
 
 依赖以 `pubspec.lock` 为准；生成文件随源码保留。正式签名、发布和完整业务能力按开发计划继续推进。

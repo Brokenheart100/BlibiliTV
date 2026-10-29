@@ -6,8 +6,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
-import 'package:media_kit/media_kit.dart';
-import 'package:media_kit_video/media_kit_video.dart';
 import 'package:mambatv/app/app.dart';
 import 'package:mambatv/app/bootstrap.dart';
 import 'package:mambatv/app/providers/infrastructure_providers.dart';
@@ -16,7 +14,7 @@ import 'package:mambatv/app/providers/repository_providers.dart';
 import 'package:mambatv/app/router.dart';
 import 'package:mambatv/data/services/local/app_database.dart';
 import 'package:mambatv/data/repositories/memory_session_repository.dart';
-import 'package:mambatv/data/services/playback/media_kit_engine.dart';
+import 'package:mambatv/data/services/playback/better_player_engine.dart';
 import 'package:mambatv/ui/features/catalog/view_models/catalog_view_model.dart';
 import 'package:mambatv/ui/features/player/view_models/player_view_model.dart';
 import 'package:mambatv/ui/features/player/views/player_page.dart';
@@ -25,14 +23,11 @@ class NativeEngineTracker {
   int active = 0, maximum = 0, created = 0, released = 0;
   PlaybackAdapter get adapter => PlaybackAdapter(
     create: () => TrackedNativeEngine(this),
-    surface: (engine) => Video(
-      controller: (engine as MediaKitEngine).controller,
-      controls: null,
-    ),
+    surface: (engine) => BetterPlayerSurface(engine as BetterPlayerEngine),
   );
 }
 
-class TrackedNativeEngine extends MediaKitEngine {
+class TrackedNativeEngine extends BetterPlayerEngine {
   TrackedNativeEngine(this.tracker) {
     tracker.created++;
     tracker.active++;
@@ -55,7 +50,6 @@ class TrackedNativeEngine extends MediaKitEngine {
 
 void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
-  MediaKit.ensureInitialized();
   testWidgets(
     'M2 guest TV flow, audio/video, seek, SQLite resume and 20 switches',
     (tester) async {
@@ -150,7 +144,7 @@ void main() {
         return value.phase == PlayerPhase.playing &&
             value.snapshot.position.inSeconds >= 3 &&
             value.snapshot.width > 0 &&
-            value.snapshot.audioSampleRate > 0;
+            value.snapshot.duration > Duration.zero;
       });
       final firstSnapshot = container.read(first).snapshot;
       await key(LogicalKeyboardKey.select);
@@ -214,7 +208,7 @@ void main() {
           final value = container.read(provider);
           return value.phase == PlayerPhase.playing &&
               value.snapshot.width > 0 &&
-              value.snapshot.audioSampleRate > 0;
+              value.snapshot.duration > Duration.zero;
         });
         expect(tracker.active, 1);
         switched.add(selected.id);
@@ -231,7 +225,7 @@ void main() {
         'partId': part,
         'width': firstSnapshot.width,
         'height': firstSnapshot.height,
-        'audioSampleRate': firstSnapshot.audioSampleRate,
+        'audioSampleRate': null, // Not exposed by the Better Player engine API.
         'pausedAtMs': paused.inMilliseconds,
         'seekedToMs': sought.inMilliseconds,
         'savedAtMs': saved.position.inMilliseconds,

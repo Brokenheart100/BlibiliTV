@@ -1,0 +1,81 @@
+{
+  "status": "passed",
+  "backend": "Better Player / Media3",
+  "readOnly": true,
+  "samples": [
+    {
+      "stage": "initial",
+      "positionMs": 2134,
+      "bufferMs": 55000,
+      "playing": true,
+      "width": 640,
+      "height": 360
+    },
+    {
+      "stage": "paused-forward",
+      "positionMs": 62250,
+      "bufferMs": 75000,
+      "playing": false,
+      "width": 640,
+      "height": 360
+    },
+    {
+      "stage": "paused-backward",
+      "positionMs": 17250,
+      "bufferMs": 30000,
+      "playing": false,
+      "width": 640,
+      "height": 360
+    },
+    {
+      "stage": "playing-seek-240",
+      "positionMs": 257398,
+      "bufferMs": 270000,
+      "playing": true,
+      "width": 640,
+      "height": 360
+    },
+    {
+      "stage": "playing-seek--180",
+      "positionMs": 78553,
+      "bufferMs": 95000,
+      "playing": true,
+      "width": 640,
+      "height": 360
+    },
+    {
+      "stage": "playing-seek-60",
+      "positionMs": 139689,
+      "bufferMs": 160000,
+      "playing": true,
+      "width": 640,
+      "height": 360
+    },
+    {
+      "stage": "playing-seek--30",
+      "positionMs": 110846,
+      "bufferMs": 120000,
+      "playing": true,
+      "width": 640,
+      "height": 360
+    },
+    {
+      "stage": "playing-seek-120",
+      "positionMs": 232116,
+      "bufferMs": 245000,
+      "playing": true,
+      "width": 640,
+      "height": 360
+    },
+    {
+      "stage": "playing-seek--90",
+      "positionMs": 143347,
+      "bufferMs": 155000,
+      "playing": true,
+      "width": 640,
+      "height": 360
+    }
+  ],
+  "hearingAcceptance": "pending",
+  "recordedAtUtc": "2026-10-29T04:03:05.416140Z"
+}

@@ -1,5 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../../domain/playback/playback.dart';
+
 part 'probe_models.freezed.dart';
 
 /// Sanitized evidence only: never include credentials or signed media URLs.
@@ -30,20 +32,16 @@ class ProbeMedia {
   const ProbeMedia({
     required this.bvid,
     required this.cid,
-    required this.videoUrl,
-    required this.audioUrl,
-    required this.quality,
-    required this.codec,
-    required this.durationSeconds,
+    required this.source,
   });
-
   final String bvid;
   final int cid;
-  final String videoUrl;
-  final String audioUrl;
-  final int quality;
-  final String codec;
-  final int durationSeconds;
+  final PlaybackSource source;
+  String get videoUrl => source.videoUrl;
+  String get audioUrl => source.audioUrl;
+  int get quality => source.quality;
+  String get codec => source.codec;
+  int get durationSeconds => source.duration.inSeconds;
 }
 
 class QrChallenge {

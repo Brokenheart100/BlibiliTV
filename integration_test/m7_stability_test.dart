@@ -9,8 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
-import 'package:media_kit/media_kit.dart' hide PlayerState;
-import 'package:media_kit_video/media_kit_video.dart';
 import 'package:mambatv/app/app.dart';
 import 'package:mambatv/app/bootstrap.dart';
 import 'package:mambatv/app/providers/infrastructure_providers.dart';
@@ -18,10 +16,11 @@ import 'package:mambatv/app/providers/repository_providers.dart';
 import 'package:mambatv/app/providers/playback_providers.dart';
 import 'package:mambatv/app/router.dart';
 import 'package:mambatv/core/result.dart';
+import 'package:mambatv/domain/playback/playback.dart';
 import 'package:mambatv/data/repositories/local_settings_repository.dart';
 import 'package:mambatv/data/repositories/memory_session_repository.dart';
 import 'package:mambatv/data/services/local/app_database.dart';
-import 'package:mambatv/data/services/playback/media_kit_engine.dart';
+import 'package:mambatv/data/services/playback/better_player_engine.dart';
 import 'package:mambatv/domain/entities/app_models.dart';
 import 'package:mambatv/ui/core/images/tv_image_cache.dart';
 import 'package:mambatv/ui/features/player/views/player_page.dart';
@@ -36,65 +35,20 @@ class M7Tracker extends M5Tracker {
   PlaybackAdapter get adapter => PlaybackAdapter(
     focus: focus,
     create: () => M7Engine(this),
-    surface: (engine) => Video(
-      controller: (engine as MediaKitEngine).controller,
-      controls: null,
-      pauseUponEnteringBackgroundMode: false,
-      resumeUponEnteringForegroundMode: false,
-    ),
+    surface: (engine) => BetterPlayerSurface(engine as BetterPlayerEngine),
   );
 }
 
 class M7Engine extends M5Engine {
   M7Engine(M7Tracker tracker) : super(tracker) {
-    subscription = player.stream.error.listen((message) {
-      final lower = message.toLowerCase();
-      const phrases = [
-        'partial file',
-        'input/output error',
-        'i/o error',
-        'error reading',
-        'invalid data',
-        'error while decoding',
-        'audio device',
-        'underrun',
-        'failed to open',
-        'error opening',
-        'connection',
-        'timed out',
-        'end of file',
-        'http',
-        '403',
-        '404',
-        '410',
-        '500',
-        '502',
-        '503',
-        '504',
-        'demux',
-        'ffmpeg',
-        'tls',
-        'read error',
-        'stream',
-        'avcodec',
-        'could not',
-        'seek failed',
-        'reconnect',
-        'failed',
-        'network',
-      ];
-      final item = <String, Object?>{
-        'kind': classifyNativePlaybackFailure(message).kind.name,
-        'tokens': [
-          for (final phrase in phrases)
-            if (lower.contains(phrase)) phrase,
-        ],
-      };
+    subscription = snapshots.listen((snapshot) {
+      if (snapshot.failure == null) return;
+      final item = <String, Object?>{'kind': snapshot.failure!.kind.name};
       if (tracker.errors.length < 100) tracker.errors.add(item);
       debugPrint('M7_NATIVE_ERROR ${jsonEncode(item)}');
     });
   }
-  late final StreamSubscription<String> subscription;
+  late final StreamSubscription<EngineSnapshot> subscription;
   @override
   Future<void> dispose() async {
     await subscription.cancel();
@@ -105,7 +59,6 @@ class M7Engine extends M5Engine {
 const soakSeconds = int.fromEnvironment('M7_SOAK_SECONDS', defaultValue: 900);
 void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
-  MediaKit.ensureInitialized();
   TvImageCache.configure();
   testWidgets('M7 profile resource cycles and continuous UGC playlist', (
     tester,
@@ -267,8 +220,7 @@ void main() {
           state().phase == PlayerPhase.playing &&
           vm().engine != null) {
         final timeline = advanced + previousPosition;
-        final engine = vm().engine! as MediaKitEngine;
-        final native = engine.player.platform! as NativePlayer;
+        final engine = vm().engine! as BetterPlayerEngine;
         final sample = {
           'elapsedSeconds': clock.elapsed.inSeconds,
           'partId': state().partId,
@@ -276,29 +228,23 @@ void main() {
           'cumulativeMediaMs': timeline.inMilliseconds,
           'rate': state().snapshot.rate,
           'durationMs': state().snapshot.duration.inMilliseconds,
-          'nativeSpeed': await tester.runAsync(
-            () => native.getProperty('speed'),
-          ),
-          'nativePosition': await tester.runAsync(
-            () => native.getProperty('time-pos'),
-          ),
-          'audioOutput': await tester.runAsync(
-            () => native.getProperty('current-ao'),
-          ),
-          'audioSpeedCorrection': await tester.runAsync(
-            () => native.getProperty('audio-speed-correction'),
-          ),
+          'nativeSpeed': engine.controller.value.speed,
+          'nativePositionMs': (await tester.runAsync(
+            () => engine.controller.position,
+          ))?.inMilliseconds,
+          'backend': 'better_player',
+          'audioOutput': null,
+          'audioSpeedCorrection': null,
           'phase': state().phase.name,
-          'audioSampleRate': state().snapshot.audioSampleRate,
+          'audioSampleRate':
+              null, // Not exposed by the Better Player engine API.
           'rssBytes': ProcessInfo.currentRss,
           'imageCacheBytes':
               PaintingBinding.instance.imageCache.currentSizeBytes,
           'liveEngines': tracker.active,
-          'avSyncSeconds': double.tryParse(
-            await tester.runAsync(() => native.getProperty('avsync')) ?? '',
-          ),
+          'avSyncSeconds': null, // No separate audio PTS available.
         };
-        expect(state().snapshot.audioSampleRate, greaterThan(0));
+        expect(state().snapshot.width, greaterThan(0));
         samples.add(sample);
         debugPrint('M7_SAMPLE ${jsonEncode(sample)}');
         expect(

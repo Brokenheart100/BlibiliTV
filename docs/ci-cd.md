@@ -1,5 +1,7 @@
 # CI/CD：GitHub Actions 与 Android APK 发布
 
+2026-10-29 本轮：修复移除 media_kit 后原生许可测试的旧断言，候选版本采用 `1.1.0-rc.1+3`／`v1.1.0-rc.1`。先通过 master 的托管 CI，再推送同一已通过提交的标签，由现有流程重新检查、签名并发布 Pre-release。签名身份保持不变；物理电视与人工播放验收边界不因 CI 通过而改变。
+
 日期：2026-10-25。仓库 `Brokenheart100/BlibiliTV`，默认分支 `master`；仓库 ID 与原 `Brokenheart100/mambatv` 相同，本地远端已更新为新地址。应用与工作流提交 `c7f0c9226376e49c083f15af17daa9a47936a5f9` 的[首次托管 CI](https://github.com/Brokenheart100/BlibiliTV/actions/runs/40179970843)已通过：工作流检查、质量检查和 Android APK 构建全部成功，覆盖率与三架构 Debug APK 已上传。本次没有创建 tag 或 Release；自动打包不等同于 M7 真机／正式发布验收。验证结果见 [ci-cd-validation.json](ci-cd-validation.json)。
 
 ## 流程与触发
@@ -75,14 +77,13 @@ gh secret set ANDROID_KEY_PASSWORD --repo Brokenheart100/BlibiliTV
 
 ## 版本与首次运行
 
-当前 `pubspec.yaml` 是 `1.0.0+1`，对应 tag 为 **`v1.0.0`**；`+1` 是基础 versionCode。支持 `1.0.1-rc.1+2` 对应 `v1.0.1-rc.1`，此类版本自动标为 prerelease。拆分 APK 的实际 versionCode 由 Flutter 按 ABI 生成，逐包记录在构建信息中，不伪称它们都等于基础 buildNumber。
+当前 `pubspec.yaml` 是 `1.1.0-rc.1+3`，对应标签 **`v1.1.0-rc.1`**；`+3` 是基础 build number。预发布版本自动标为 prerelease。拆分 APK 的实际 versionCode 由 Flutter 按 ABI 生成，逐包记录；本批 ARM32／ARM64 预期为 1003／2003。
 
-首次应用提交已包含 M5、HTTP 缓存、生成代码和 CI 配置，并已通过托管 CI。后续版本同样应先提交推送完整代码，不能只推送一个脱离应用代码的版本标签。正式发布前配置上述签名 Secrets，并由维护者推送版本标签。例如确认当前版本就是要发布的版本后：
+先提交完整代码并确认该提交的 CI 通过，再创建标签。以下命令会触发签名与公开候选发布；不覆盖已有标签或 Release：
 
 ```powershell
-git push origin master
-git tag -a v1.0.0 -m 'MambaTV v1.0.0'
-git push origin refs/tags/v1.0.0
+git tag -a v1.1.0-rc.1 -m 'MambaTV v1.1.0-rc.1'
+git push origin refs/tags/v1.1.0-rc.1
 ```
 
 仅在本地创建 tag 不触发 CD；普通分支 push 只做 CI。使用完整 `refs/tags/...` 避免同名分支造成歧义。版本不符、tag 不存在或不属于 master 历史都会在预检阶段失败。GitHub Actions 页面可手动运行 `Release Android` 并填写已有 tag，以复测失败运行。

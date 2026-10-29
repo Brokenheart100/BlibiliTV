@@ -25,7 +25,7 @@ adb -s <device> install -r <apk-path>
 
 `-r` 保留应用数据；要求同包名和兼容签名；正式发行递增 versionCode，开发期可以同版本覆盖测试。遇到签名不一致，先核对现有安装与新包的来源和证书，不使用卸载作为自动修复；卸载会清除本机观看记录、偏好和账号。
 
-当前源版本为 M8 本地候选 `1.1.0+2`，已发布版本仍为 v1.0.0。本轮未创建 v1.1.0 标签或公共 Release。先前签名的 M8 ARM 候选构建于切回官方弹幕包之前，已与当前源码不一致，不应安装为本轮最新构建。后续正式发布统一更新 pubspec 版本并递增 build number，标签精确匹配版本名；不要反复沿用相同 versionCode。先前 ARM 候选的实际 code 分别为 1002（armeabi-v7a）和 2002（arm64-v8a）；既有 v1.0.0 为 1001／2001；以同批构建元数据为准。开发用 x86_64 的偏移为 4000 加基础 build number。
+当前源版本为候选 `1.1.0-rc.1+3`，对应标签 `v1.1.0-rc.1`；正式稳定版仍为 v1.0.0，候选发布状态以 GitHub Releases 为准。候选沿用正式签名并递增 build number，ARM32／ARM64 的预期 versionCode 分别为 1003／2003；以同批构建元数据和 APK 检查为准。后续正式版继续递增 build number。先前 1.1.0+2 本机候选已过时，不作为本批安装包；开发用 x86_64 仅在 CI Debug artifacts，偏移为 4000 加基础 build number。
 
 主应用与验证包分开安装。原生测试需要同时加 `MAMBA_VALIDATION_APP=true`、`--no-uninstall-first` 和 `--keep-app-running`；不得因 drive 的默认卸载行为破坏主应用数据。
 

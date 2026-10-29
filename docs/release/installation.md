@@ -25,7 +25,7 @@ adb -s <device> install -r <apk-path>
 
 `-r` 保留应用数据；要求同包名和兼容签名；正式发行递增 versionCode，开发期可以同版本覆盖测试。遇到签名不一致，先核对现有安装与新包的来源和证书，不使用卸载作为自动修复；卸载会清除本机观看记录、偏好和账号。
 
-当前源版本为候选 `1.1.0-rc.1+3`，对应标签 `v1.1.0-rc.1`；正式稳定版仍为 v1.0.0，候选发布状态以 GitHub Releases 为准。候选沿用正式签名并递增 build number，ARM32／ARM64 的预期 versionCode 分别为 1003／2003；以同批构建元数据和 APK 检查为准。后续正式版继续递增 build number。先前 1.1.0+2 本机候选已过时，不作为本批安装包；开发用 x86_64 仅在 CI Debug artifacts，偏移为 4000 加基础 build number。
+当前源版本为候选 `1.1.0-rc.2+4`，对应标签 `v1.1.0-rc.2`；正式稳定版仍为 v1.0.0，候选发布状态以 GitHub Releases 为准。候选沿用正式签名并递增 build number，ARM32／ARM64 的预期 versionCode 分别为 1004／2004；以同批构建元数据和 APK 检查为准。后续正式版继续递增 build number。先前 1.1.0+2 本机候选已过时，不作为本批安装包；开发用 x86_64 仅在 CI Debug artifacts，偏移为 4000 加基础 build number。
 
 主应用与验证包分开安装。原生测试需要同时加 `MAMBA_VALIDATION_APP=true`、`--no-uninstall-first` 和 `--keep-app-running`；不得因 drive 的默认卸载行为破坏主应用数据。
 

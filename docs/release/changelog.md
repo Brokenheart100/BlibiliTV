@@ -1,4 +1,6 @@
-# MambaTV 1.1.0-rc.1（候选版本，build 3）
+# MambaTV 1.1.0-rc.2（候选版本，build 4）
+
+RC.1 在签名构建的 Release Lint 阶段因回环 domain 缺少 includeSubdomains 被拦截，未发布；RC.2 显式设置为 false 并增加 CI 配置守卫。失败标签保留，不覆盖。
 
 本批候选在 v1.0.0 基础上包含 M8／M9 内容与界面增量。用于 Android TV 测试，提供 ARM64／ARM32 APK，沿用正式签名；最终版本、提交、证书及校验和以同批构建元数据为准。
 

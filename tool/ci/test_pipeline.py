@@ -8,12 +8,27 @@ from pathlib import Path
 import subprocess
 import tempfile
 import unittest
+import xml.etree.ElementTree as ET
 from unittest.mock import patch
 
 import pipeline
 
 
 class ReleaseGuardsTest(unittest.TestCase):
+    def test_dash_loopback_network_policy_is_explicit_and_scoped(self):
+        resources = pipeline.ROOT / "android/app/src/main"
+        config = ET.parse(resources / "res/xml/network_security_config.xml").getroot()
+        self.assertEqual(config.find("base-config").get("cleartextTrafficPermitted"), "false")
+        domains = config.findall("domain-config")
+        self.assertEqual(len(domains), 1)
+        self.assertEqual(domains[0].get("cleartextTrafficPermitted"), "true")
+        hosts = domains[0].findall("domain")
+        self.assertEqual(len(hosts), 1)
+        self.assertEqual(hosts[0].text, "127.0.0.1")
+        self.assertEqual(hosts[0].get("includeSubdomains"), "false")
+        app = ET.parse(resources / "AndroidManifest.xml").getroot().find("application")
+        self.assertEqual(app.get("{http://schemas.android.com/apk/res/android}networkSecurityConfig"), "@xml/network_security_config")
+
     def test_version_and_exact_tag(self):
         self.assertEqual(pipeline.version("version: 1.0.0+1\n"), ("1.0.0", 1))
         self.assertEqual(pipeline.version('version: "1.2.3-rc.1+42" # candidate\n'), ("1.2.3-rc.1", 42))

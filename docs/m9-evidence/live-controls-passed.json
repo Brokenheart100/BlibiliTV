@@ -1,0 +1,22 @@
+{
+  "status": "passed",
+  "recordedAtUtc": "2026-10-28T15:13:49.744699Z",
+  "backend": "Better Player / Media3",
+  "readOnly": true,
+  "physicalTv": false,
+  "initialQuality": 150,
+  "requestedQuality": 250,
+  "actualQuality": 250,
+  "serverFallback": false,
+  "distinctQualityVerified": true,
+  "liveAfterBackground": 0,
+  "explicitResume": true,
+  "created": 3,
+  "released": 3,
+  "maximumEngines": 1,
+  "liveAfterReturn": 0,
+  "nativeErrors": [],
+  "remoteWrites": 0,
+  "lifecycleMethod": "Flutter binding inactive/paused/resumed with real native engine",
+  "hostRecordedAtUtc": "2026-10-28T15:13:49.808979Z"
+}

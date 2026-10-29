@@ -1,0 +1,33 @@
+{
+  "clientDate": "2026-10-29",
+  "owner": "guest",
+  "referenceCommit": "affac5334fc41744894618d9fb53b7101db9532a",
+  "readOnly": true,
+  "bangumi": {
+    "status": "passed",
+    "count": 11,
+    "firstIdentity": "season:47836",
+    "firstTitle": "鬼灭之刃 柱训练篇",
+    "hasNextPage": false
+  },
+  "cinema": {
+    "status": "passed",
+    "count": 1,
+    "firstIdentity": "season:44847",
+    "firstTitle": "流浪地球2",
+    "hasNextPage": false
+  },
+  "live": {
+    "status": "passed",
+    "count": 20,
+    "firstIdentity": "live:1840116832",
+    "firstTitle": "B站兔娘再就业~",
+    "hasNextPage": true
+  },
+  "livePage2": {
+    "status": "passed",
+    "count": 20
+  },
+  "remoteWrites": 0,
+  "status": "passed"
+}

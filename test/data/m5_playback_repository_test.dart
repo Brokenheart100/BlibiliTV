@@ -200,6 +200,7 @@ void main() {
   test('native failure classification distinguishes expiry, CDN and unsupported without exposing messages', () {
     for (final (message, kind) in [
       ('HTTP 403 at https://cdn.invalid/private', FailureKind.resourceExpired),
+      ('Response code: 404', FailureKind.cdn),
       ('HTTP 503', FailureKind.cdn),
       ('Failed to open https://cdn.invalid/private', FailureKind.cdn),
       ('Decoder codec not supported', FailureKind.unsupported),

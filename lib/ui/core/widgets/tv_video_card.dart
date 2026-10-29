@@ -7,10 +7,12 @@ import '../images/tv_image_cache.dart';
 import 'tv_button.dart';
 import 'creator_avatar.dart';
 import 'liquid_glass_card.dart';
+import 'tv_motion.dart';
 
 class TvArtwork extends StatelessWidget {
-  const TvArtwork({required this.video, super.key});
+  const TvArtwork({required this.video, this.poster = false, super.key});
   final VideoSummary video;
+  final bool poster;
   @override
   Widget build(BuildContext context) {
     const palettes = [
@@ -89,11 +91,9 @@ class TvArtwork extends StatelessWidget {
             CachedNetworkImage(
               imageUrl: url,
               cacheManager: TvImageCache.manager,
-              memCacheWidth: 640,
-              memCacheHeight: 360,
-              maxWidthDiskCache: 640,
-              maxHeightDiskCache: 360,
-              fit: BoxFit.cover,
+              memCacheWidth: poster ? 480 : 640,
+              maxWidthDiskCache: poster ? 480 : 640,
+              fit: poster ? BoxFit.contain : BoxFit.cover,
               placeholder: (_, _) => artwork,
               errorWidget: (_, _, _) => artwork,
             )
@@ -115,21 +115,22 @@ class TvArtwork extends StatelessWidget {
                 ),
               ),
             ),
-          Positioned(
-            right: 8,
-            bottom: 8,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-              decoration: BoxDecoration(
-                color: Colors.black.withValues(alpha: .55),
-                borderRadius: BorderRadius.circular(4),
-              ),
-              child: Text(
-                '${video.durationSeconds ~/ 60}:${(video.durationSeconds % 60).toString().padLeft(2, '0')}',
-                style: const TextStyle(fontSize: 11, color: Colors.white),
+          if (video.durationSeconds > 0)
+            Positioned(
+              right: 8,
+              bottom: 8,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                decoration: BoxDecoration(
+                  color: Colors.black.withValues(alpha: .55),
+                  borderRadius: BorderRadius.circular(4),
+                ),
+                child: Text(
+                  '${video.durationSeconds ~/ 60}:${(video.durationSeconds % 60).toString().padLeft(2, '0')}',
+                  style: const TextStyle(fontSize: 11, color: Colors.white),
+                ),
               ),
             ),
-          ),
         ],
       ),
     );
@@ -145,6 +146,8 @@ class TvVideoCard extends StatefulWidget {
     required this.onAttach,
     required this.onDetach,
     this.reducedMotion = false,
+    this.showViewCount = true,
+    this.poster = false,
     super.key,
   });
   final VideoSummary video;
@@ -152,6 +155,8 @@ class TvVideoCard extends StatefulWidget {
   final TvKeyHandler onKey;
   final ValueChanged<FocusNode> onAttach, onDetach;
   final bool reducedMotion;
+  final bool showViewCount;
+  final bool poster;
   @override
   State<TvVideoCard> createState() => _TvVideoCardState();
 }
@@ -177,9 +182,9 @@ class _TvVideoCardState extends State<TvVideoCard> {
     canRequestFocus: false,
     skipTraversal: true,
     onKeyEvent: (_, event) => widget.onKey(event),
-    child: AnimatedScale(
-      scale: focused && !widget.reducedMotion ? 1.015 : 1,
-      duration: Duration(milliseconds: widget.reducedMotion ? 0 : 100),
+    child: TvFocusMotion(
+      focused: focused,
+      reducedMotion: widget.reducedMotion,
       child: LiquidGlassCard(
         focused: focused,
         child: Material(
@@ -195,7 +200,9 @@ class _TvVideoCardState extends State<TvVideoCard> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Expanded(child: TvArtwork(video: widget.video)),
+                Expanded(
+                  child: TvArtwork(video: widget.video, poster: widget.poster),
+                ),
                 const SizedBox(height: 9),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 3),
@@ -217,15 +224,18 @@ class _TvVideoCardState extends State<TvVideoCard> {
                   padding: const EdgeInsets.symmetric(horizontal: 3),
                   child: Row(
                     children: [
-                      CreatorAvatar(
-                        key: ValueKey('creator-avatar-${widget.video.id}'),
-                        name: widget.video.creator,
-                        url: widget.video.creatorAvatarUrl,
-                      ),
-                      const SizedBox(width: 6),
+                      if (!widget.poster)
+                        CreatorAvatar(
+                          key: ValueKey('creator-avatar-${widget.video.id}'),
+                          name: widget.video.creator,
+                          url: widget.video.creatorAvatarUrl,
+                        ),
+                      if (!widget.poster) const SizedBox(width: 6),
                       Expanded(
                         child: Text(
-                          '${widget.video.creator}  ·  ${(widget.video.viewCount / 10000).toStringAsFixed(1)}万次观看',
+                          widget.showViewCount
+                              ? '${widget.video.creator}  ·  ${(widget.video.viewCount / 10000).toStringAsFixed(1)}万次观看'
+                              : widget.video.creator,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(

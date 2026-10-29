@@ -10,13 +10,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:media_kit/media_kit.dart' hide PlayerState, SubtitleTrack;
-import 'package:media_kit_video/media_kit_video.dart';
 import 'package:mambatv/app/app.dart';
+import 'package:mambatv/app/logging/app_container.dart';
 import 'package:mambatv/app/bootstrap.dart';
 import 'package:mambatv/app/providers/infrastructure_providers.dart';
 import 'package:mambatv/app/providers/repository_providers.dart';
 import 'package:mambatv/app/providers/playback_providers.dart';
 import 'package:mambatv/app/providers/overlay_providers.dart';
+import 'package:mambatv/app/providers/ui_providers.dart';
 import 'package:mambatv/domain/overlays/overlays.dart';
 import 'package:mambatv/ui/features/player/view_models/overlay_view_models.dart';
 import 'package:mambatv/app/router.dart';
@@ -24,7 +25,9 @@ import 'package:mambatv/core/result.dart';
 import 'package:mambatv/data/repositories/local_settings_repository.dart';
 import 'package:mambatv/data/repositories/memory_session_repository.dart';
 import 'package:mambatv/data/services/local/app_database.dart';
-import 'package:mambatv/data/services/playback/media_kit_engine.dart';
+import 'package:mambatv/data/services/playback/better_player_engine.dart';
+import 'package:mambatv/data/services/playback/audio_session_focus.dart';
+import 'package:mambatv/domain/playback/playback.dart';
 import 'package:mambatv/domain/entities/app_models.dart';
 import 'package:mambatv/ui/core/images/tv_image_cache.dart';
 import 'package:mambatv/ui/features/player/views/player_page.dart';
@@ -33,82 +36,54 @@ import 'package:mambatv/ui/features/player/view_models/player_view_model.dart';
 
 import '../test/support/memory_preferences.dart';
 import '../test/support/fake_overlays.dart';
-import 'm5_playback_flow_test.dart' show M5Tracker, M5Engine;
 
-class M8Tracker extends M5Tracker {
+class M8Tracker {
+  int active = 0, maximum = 0, created = 0, released = 0;
+  final focus = AudioSessionFocus();
   final errors = <Map<String, Object?>>[];
-  @override
   PlaybackAdapter get adapter => PlaybackAdapter(
     focus: focus,
     create: () => M8Engine(this),
-    surface: (engine) => Video(
-      controller: (engine as MediaKitEngine).controller,
-      controls: null,
-      pauseUponEnteringBackgroundMode: false,
-      resumeUponEnteringForegroundMode: false,
-    ),
+    surface: (engine) => BetterPlayerSurface(engine as BetterPlayerEngine),
   );
 }
 
-class M8Engine extends M5Engine {
-  M8Engine(M8Tracker tracker) : super(tracker) {
-    subscription = player.stream.error.listen((message) {
-      final lower = message.toLowerCase();
-      const phrases = [
-        'partial file',
-        'input/output error',
-        'i/o error',
-        'error reading',
-        'invalid data',
-        'error while decoding',
-        'audio device',
-        'underrun',
-        'failed to open',
-        'error opening',
-        'connection',
-        'timed out',
-        'end of file',
-        'http',
-        '403',
-        '404',
-        '410',
-        '500',
-        '502',
-        '503',
-        '504',
-        'demux',
-        'ffmpeg',
-        'tls',
-        'read error',
-        'stream',
-        'avcodec',
-        'could not',
-        'seek failed',
-        'reconnect',
-        'failed',
-        'network',
-      ];
-      final item = <String, Object?>{
-        'kind': classifyNativePlaybackFailure(message).kind.name,
-        'tokens': [
-          for (final phrase in phrases)
-            if (lower.contains(phrase)) phrase,
-        ],
-      };
-      if (tracker.errors.length < 100) tracker.errors.add(item);
-      debugPrint('M8_NATIVE_ERROR ${jsonEncode(item)}');
+class M8Engine extends BetterPlayerEngine {
+  M8Engine(this.tracker) {
+    tracker.created++;
+    tracker.active++;
+    if (tracker.active > tracker.maximum) tracker.maximum = tracker.active;
+    subscription = snapshots.listen((value) {
+      final failure = value.failure;
+      if (failure != null && failure.kind != previousFailure) {
+        previousFailure = failure.kind;
+        if (tracker.errors.length < 100) {
+          tracker.errors.add({'kind': failure.kind.name});
+        }
+      }
     });
   }
-  late final StreamSubscription<String> subscription;
+  final M8Tracker tracker;
+  late final StreamSubscription<EngineSnapshot> subscription;
+  FailureKind? previousFailure;
+  bool closing = false;
   @override
   Future<void> dispose() async {
+    if (closing) return;
+    closing = true;
     await subscription.cancel();
-    await super.dispose();
+    try {
+      await super.dispose();
+    } finally {
+      tracker.active--;
+      tracker.released++;
+    }
   }
 }
 
 const soakSeconds = int.fromEnvironment('M8_SOAK_SECONDS', defaultValue: 900);
 const danmakuOnly = bool.fromEnvironment('M8_DANMAKU_ONLY');
+const fixedMaximumDanmaku = bool.fromEnvironment('M8_FIXED_MAX_DANMAKU');
 const syntheticDanmakuPerSecond = int.fromEnvironment(
   'M8_SYNTHETIC_PER_SECOND',
   defaultValue: 20,
@@ -117,6 +92,11 @@ const pressureDensity = int.fromEnvironment(
   'M8_PRESSURE_DENSITY',
   defaultValue: 40,
 );
+
+double _p95(List<double> values) {
+  final sorted = [...values]..sort();
+  return sorted.isEmpty ? 0 : sorted[((sorted.length - 1) * .95).round()];
+}
 
 class M8Subtitles extends FakeOverlays {
   M8Subtitles() {
@@ -194,27 +174,34 @@ void main() {
     expect(const bool.fromEnvironment('MAMBA_VALIDATION_APP'), true);
     expect(const bool.fromEnvironment('MAMBA_READ_ONLY_VALIDATION'), true);
     expect(kProfileMode, true);
+    if (fixedMaximumDanmaku) {
+      expect(danmakuOnly, isTrue);
+      expect(pressureDensity, 40);
+    }
     final tracker = M8Tracker();
     final database = AppDatabase(driftDatabase(name: 'mambatv_m8_soak'));
     final sessions = MemorySessionRepository();
     final preferences = LocalSettingsRepository(MemoryPreferencesStore());
+    final subtitles = danmakuOnly ? FakeOverlays() : M8Subtitles();
     final overlayPreferences = MemoryOverlayPreferences()
       ..preferences = const OverlayPreferences(
         subtitles: !danmakuOnly,
         danmaku: true,
         density: pressureDensity,
+        area: fixedMaximumDanmaku ? 1 : .5,
         subtitleBottom: 100,
       );
     late M8PressureDanmaku pressure;
     await preferences.save(const AppSettings(autoNext: true));
-    final container = ProviderContainer(
-      retry: (_, _) => null,
+    final container = createAppContainer(
       overrides: [
         sessionRepositoryProvider.overrideWithValue(sessions),
         appDatabaseProvider.overrideWithValue(database),
         settingsRepositoryProvider.overrideWithValue(preferences),
         playbackAdapterProvider.overrideWithValue(tracker.adapter),
-        subtitleRepositoryProvider.overrideWithValue(M8Subtitles()),
+        subtitleRepositoryProvider.overrideWithValue(subtitles),
+        if (fixedMaximumDanmaku)
+          danmakuAdaptiveLoadProvider.overrideWithValue(false),
         overlayPreferencesRepositoryProvider.overrideWithValue(
           overlayPreferences,
         ),
@@ -227,10 +214,15 @@ void main() {
     );
     binding.reportData = {
       'status': 'running',
+      'backend': 'Better Player / Media3',
       'requestedSeconds': soakSeconds,
       'physicalTv': false,
       'manualLipSyncVerified': false,
       'danmakuOnly': danmakuOnly,
+      'fixedMaximumDanmaku': fixedMaximumDanmaku,
+      'pressureDensity': pressureDensity,
+      'pressureArea': fixedMaximumDanmaku ? 1 : .5,
+      'adaptiveDensity': !fixedMaximumDanmaku,
       'syntheticDanmakuPerSecond': syntheticDanmakuPerSecond,
     };
     PlayerViewModel? activeVm;
@@ -252,7 +244,7 @@ void main() {
     WidgetsBinding.instance.addTimingsCallback(timings);
     addTearDown(() async {
       WidgetsBinding.instance.removeTimingsCallback(timings);
-      await activeVm?.close();
+      await tester.runAsync(() async => activeVm?.close());
       await tester.pumpWidget(const SizedBox.shrink());
       if (binding.reportData?['status'] == 'running') {
         binding.reportData!['status'] = 'failed';
@@ -305,6 +297,14 @@ void main() {
     late PlayerViewModelProvider provider;
     PlayerState state() => container.read(provider);
     PlayerViewModel vm() => container.read(provider.notifier);
+    Future<double> nativePositionMs() async {
+      final position = await tester.runAsync(
+        () => (vm().engine! as BetterPlayerEngine).controller.position,
+      );
+      expect(position, isNotNull);
+      return position!.inMicroseconds / 1000;
+    }
+
     Future<void> enter() async {
       router.push<void>('/player/$videoId?part=${detail.parts[startPart].id}');
       await until(() => find.byType(PlayerPage).evaluate().isNotEmpty);
@@ -318,6 +318,7 @@ void main() {
             state().phase == PlayerPhase.playing &&
             state().snapshot.position.inSeconds >= 1,
       );
+      expect(vm().engine, isA<BetterPlayerEngine>());
     }
 
     final cycles = <Map<String, Object?>>[];
@@ -347,6 +348,133 @@ void main() {
     binding.reportData!['comparisonWindows'] = comparisons;
     binding.reportData!['subtitleTimingSamples'] = subtitleSamples;
     await enter();
+    final controlSamples = <Map<String, Object?>>[];
+    final originalQuality = state().quality, originalAudio = state().audioId;
+    binding.reportData!['controlSamples'] = controlSamples;
+    Future<void> controlSample(String stage) async {
+      await until(
+        () => state().snapshot.bufferedPosition > state().snapshot.position,
+      );
+      final native = await nativePositionMs();
+      expect(
+        (native - state().snapshot.position.inMilliseconds).abs(),
+        lessThan(2000),
+      );
+      expect(state().seekTarget, isNull);
+      expect(state().snapshot.failure, isNull);
+      controlSamples.add({
+        'stage': stage,
+        'nativePositionMs': native,
+        'positionMs': state().snapshot.position.inMilliseconds,
+        'bufferedPositionMs': state().snapshot.bufferedPosition.inMilliseconds,
+        'playing': state().snapshot.playing,
+      });
+    }
+
+    if (!danmakuOnly) {
+      await tester.runAsync(() => vm().togglePause());
+      await until(() => state().phase == PlayerPhase.paused);
+      for (final seconds in [60, -45]) {
+        await tester.runAsync(() => vm().seekBy(Duration(seconds: seconds)));
+        expect(state().snapshot.playing, isFalse);
+        await controlSample('paused-seek-$seconds');
+      }
+      await tester.runAsync(() => vm().setRate(1.25));
+      await tester.runAsync(() => vm().setVolume(75));
+      final otherQualities = state().qualities.where(
+        (q) => q.available && q.id != state().quality,
+      );
+      if (otherQualities.isNotEmpty) {
+        final target = otherQualities.first.id;
+        final saved = state().snapshot.position;
+        unawaited(vm().selectQuality(target));
+        await until(
+          () =>
+              state().quality == target && state().phase == PlayerPhase.paused,
+        );
+        expect(
+          (state().snapshot.position - saved).abs(),
+          lessThan(const Duration(seconds: 2)),
+        );
+        expect(state().snapshot.rate, 1.25);
+        expect(state().snapshot.volume, 75);
+        await controlSample('paused-quality');
+      }
+      final otherAudio = state().audioTracks.where(
+        (a) => a.available && a.id != state().audioId,
+      );
+      if (otherAudio.isNotEmpty) {
+        final target = otherAudio.first.id;
+        final saved = state().snapshot.position;
+        unawaited(vm().selectAudio(target));
+        await until(
+          () =>
+              state().audioId == target && state().phase == PlayerPhase.paused,
+        );
+        expect(
+          (state().snapshot.position - saved).abs(),
+          lessThan(const Duration(seconds: 2)),
+        );
+        await controlSample('paused-audio');
+      }
+      if (state().quality != originalQuality) {
+        unawaited(vm().selectQuality(originalQuality));
+        await until(
+          () =>
+              state().quality == originalQuality &&
+              state().phase == PlayerPhase.paused,
+        );
+      }
+      if (state().audioId != originalAudio) {
+        unawaited(vm().selectAudio(originalAudio));
+        await until(
+          () =>
+              state().audioId == originalAudio &&
+              state().phase == PlayerPhase.paused,
+        );
+      }
+      await tester.runAsync(() => vm().setRate(1));
+      await tester.runAsync(() => vm().setVolume(100));
+      await tester.runAsync(() => vm().togglePause());
+      for (final seconds in [120, -90, 60, -30]) {
+        await tester.runAsync(() => vm().seekBy(Duration(seconds: seconds)));
+        await controlSample('playing-seek-$seconds');
+        final before = state().snapshot.position;
+        await until(
+          () => state().snapshot.position > before + const Duration(seconds: 1),
+        );
+      }
+    }
+    final lifecycle = <Map<String, Object?>>[];
+    binding.reportData!['lifecycle'] = lifecycle;
+    if (const bool.fromEnvironment('M8_HOST_CYCLES')) {
+      var backgrounds = 0;
+      final listener = container.listen(appForegroundProvider, (_, active) {
+        if (!active) backgrounds++;
+      });
+      addTearDown(listener.close);
+      for (var i = 0; i < 10; i++) {
+        final before = backgrounds;
+        debugPrint('M8_HOME_WAIT_$i');
+        await until(
+          () => backgrounds > before && container.read(appForegroundProvider),
+        );
+        await until(() => tracker.active == 0);
+        expect(state().snapshot.playing, isFalse);
+        expect(container.read(overlayMetricsProvider).activeSchedulers, 0);
+        final saved = state().snapshot.position;
+        await tester.runAsync(() => vm().togglePause());
+        await until(() => state().phase == PlayerPhase.playing);
+        final error = (state().snapshot.position - saved).abs().inMilliseconds;
+        expect(error, lessThanOrEqualTo(2000));
+        lifecycle.add({
+          'cycle': i + 1,
+          'resumeErrorMs': error,
+          'releasedInBackground': true,
+        });
+        debugPrint('M8_HOME_DONE_$i');
+      }
+    }
     final preferencesVm = container.read(
       overlaySettingsViewModelProvider.notifier,
     );
@@ -362,6 +490,7 @@ void main() {
           subtitles: !danmakuOnly && mode != 'off',
           danmaku: mode == 'both' || mode == 'danmaku',
           density: pressureDensity,
+          area: fixedMaximumDanmaku ? 1 : .5,
           subtitleBottom: 100,
         ),
       );
@@ -390,6 +519,9 @@ void main() {
       rasters.clear();
       frameCount = 0;
       final beforeTicks = container.read(overlayMetricsProvider).clockSamples;
+      final beforeEvaluations = container
+          .read(overlayMetricsProvider)
+          .frameEvaluations;
       final beforePaint = container
           .read(overlayMetricsProvider)
           .canvasDrawTickMs;
@@ -414,6 +546,9 @@ void main() {
             : rasters.where((v) => v > 16.7).length / rasters.length,
         'clockSamples':
             container.read(overlayMetricsProvider).clockSamples - beforeTicks,
+        'frameEvaluations':
+            container.read(overlayMetricsProvider).frameEvaluations -
+            beforeEvaluations,
         'disabledTransitions': container
             .read(overlayMetricsProvider)
             .disabledTransitions,
@@ -438,6 +573,11 @@ void main() {
         reason: 'A/B windows cannot benchmark a disabled canvas',
       );
       if (mode == 'both' || mode == 'danmaku') {
+        if (fixedMaximumDanmaku) {
+          expect(container.read(overlayMetricsProvider).density, 40);
+          expect(container.read(overlayMetricsProvider).lowLoadTransitions, 0);
+          expect(subtitles.signals, isEmpty);
+        }
         expect(
           container.read(overlayMetricsProvider).canvasDrawTickMs - beforePaint,
           greaterThan(5000),
@@ -445,20 +585,30 @@ void main() {
         );
       }
     }
-    for (final result in comparisons) {
-      expect(result['buildP95Ms'] as double, lessThanOrEqualTo(16.7));
-      expect(
-        result['rasterP95Ms'] as double,
-        lessThanOrEqualTo(16.7),
-        reason: 'Sustained playback must meet the original 60Hz budget',
-      );
+    // Preserve the original gates, but finish the stability run even if an A/B
+    // gate fails. The final test still fails and reports both kinds of evidence.
+    final performanceFailures = <String>[
+      for (final result in comparisons)
+        if ((result['buildP95Ms'] as double) > 16.7 ||
+            (result['rasterP95Ms'] as double) > 16.7)
+          '${result['mode']}: frame P95 exceeds 16.7 ms',
+      if ((comparisons.last['rasterP95Ms'] as double) -
+              (comparisons.first['rasterP95Ms'] as double) >
+          3)
+        'Danmaku raster P95 incremental budget exceeds 3 ms',
+    ];
+    binding.reportData!['performanceFailures'] = performanceFailures;
+    void checkContinuousFrameBudget(double buildP95, double rasterP95) {
+      for (final failure in [
+        if (buildP95 > 16.7) 'Continuous build P95 exceeds 16.7 ms',
+        if (rasterP95 > 16.7) 'Continuous raster P95 exceeds 16.7 ms',
+      ]) {
+        if (!performanceFailures.contains(failure)) {
+          performanceFailures.add(failure);
+        }
+      }
     }
-    expect(
-      (comparisons.last['rasterP95Ms'] as double) -
-          (comparisons.first['rasterP95Ms'] as double),
-      lessThanOrEqualTo(3),
-      reason: 'Danmaku raster P95 incremental budget',
-    );
+
     for (final rate in danmakuOnly ? <double>[] : [.5, 1.0, 2.0]) {
       await tester.runAsync(() => vm().setRate(rate));
       await tester.runAsync(
@@ -479,13 +629,7 @@ void main() {
           .widget<Text>(find.byKey(const Key('player-subtitle-text')))
           .data!;
       final cue = int.parse(text.split('#').last);
-      final native =
-          (vm().engine! as MediaKitEngine).player.platform! as NativePlayer;
-      final nativePosition =
-          double.parse(
-            (await tester.runAsync(() => native.getProperty('time-pos')))!,
-          ) *
-          1000;
+      final nativePosition = await nativePositionMs();
       final error = nativePosition < cue * 2000
           ? cue * 2000 - nativePosition
           : nativePosition > cue * 2000 + 1800
@@ -528,6 +672,7 @@ void main() {
     final initialDisabled = container
         .read(overlayMetricsProvider)
         .disabledTransitions;
+    var fixedDensityChecks = 0, renderedSum = 0, maximumRenderedDuringSoak = 0;
     debugPrint('M8_SOAK_STARTED');
     while (clock.elapsed < const Duration(seconds: soakSeconds)) {
       await tester.pump(const Duration(milliseconds: 500));
@@ -538,6 +683,21 @@ void main() {
         await until(() => state().phase == PlayerPhase.playing, seconds: 20);
       }
       expect(tracker.maximum, 1);
+      final currentOverlay = container.read(overlayMetricsProvider);
+      if (fixedMaximumDanmaku && currentOverlay.activeSchedulers > 0) {
+        expect(
+          currentOverlay.density,
+          40,
+          reason: 'Maximum-density pressure cannot silently become a lower-density test',
+        );
+        expect(currentOverlay.lowLoadTransitions, 0);
+        expect(subtitles.signals, isEmpty);
+        fixedDensityChecks++;
+        renderedSum += currentOverlay.renderedDanmaku;
+        if (currentOverlay.renderedDanmaku > maximumRenderedDuringSoak) {
+          maximumRenderedDuringSoak = currentOverlay.renderedDanmaku;
+        }
+      }
       expect(
         container.read(overlayMetricsProvider).disabledTransitions,
         initialDisabled,
@@ -562,8 +722,10 @@ void main() {
           state().phase == PlayerPhase.playing &&
           vm().engine != null) {
         final timeline = advanced + previousPosition;
-        final engine = vm().engine! as MediaKitEngine;
-        final native = engine.player.platform! as NativePlayer;
+        final buildP95 = _p95(builds), rasterP95 = _p95(rasters);
+        if (clock.elapsed.inSeconds >= 60) {
+          checkContinuousFrameBudget(buildP95, rasterP95);
+        }
         final sample = {
           'elapsedSeconds': clock.elapsed.inSeconds,
           'partId': state().partId,
@@ -571,33 +733,23 @@ void main() {
           'cumulativeMediaMs': timeline.inMilliseconds,
           'rate': state().snapshot.rate,
           'durationMs': state().snapshot.duration.inMilliseconds,
-          'nativeSpeed': await tester.runAsync(
-            () => native.getProperty('speed'),
-          ),
-          'nativePosition': await tester.runAsync(
-            () => native.getProperty('time-pos'),
-          ),
-          'audioOutput': await tester.runAsync(
-            () => native.getProperty('current-ao'),
-          ),
-          'audioSpeedCorrection': await tester.runAsync(
-            () => native.getProperty('audio-speed-correction'),
-          ),
+          'nativePositionMs': await nativePositionMs(),
+          'bufferedPositionMs':
+              state().snapshot.bufferedPosition.inMilliseconds,
+          'videoWidth': state().snapshot.width,
+          'videoHeight': state().snapshot.height,
           'phase': state().phase.name,
-          'audioSampleRate': state().snapshot.audioSampleRate,
           'rssBytes': ProcessInfo.currentRss,
           'imageCacheBytes':
               PaintingBinding.instance.imageCache.currentSizeBytes,
           'liveEngines': tracker.active,
-          'avSyncSeconds': double.tryParse(
-            await tester.runAsync(() => native.getProperty('avsync')) ?? '',
-          ),
-          'audioPtsSeconds': double.tryParse(
-            await tester.runAsync(() => native.getProperty('audio-pts')) ?? '',
-          ),
+          'frameWindowSize': builds.length,
+          'buildWindowP95Ms': buildP95,
+          'rasterWindowP95Ms': rasterP95,
           'overlayMetrics': container.read(overlayMetricsProvider).snapshot(),
         };
-        expect(state().snapshot.audioSampleRate, greaterThan(0));
+        expect(state().snapshot.width, greaterThan(0));
+        expect(state().snapshot.failure, isNull);
         samples.add(sample);
         final admitted = container.read(overlayMetricsProvider).admittedDanmaku;
         if (clock.elapsed.inSeconds >= 60) {
@@ -638,6 +790,20 @@ void main() {
       lessThan(const Duration(seconds: 30)),
     );
     final cumulativeAtEndMs = (advanced + previousPosition).inMilliseconds;
+    // Freeze playback timings before release/pop/home animations add frames.
+    final continuousBuildP95 = _p95(builds);
+    final continuousRasterP95 = _p95(rasters);
+    final continuousFrameCount = frameCount;
+    final continuousWindowSize = builds.length;
+    checkContinuousFrameBudget(continuousBuildP95, continuousRasterP95);
+    if (danmakuOnly) {
+      expect(subtitles.signals, isEmpty);
+      expect(find.byKey(const Key('player-subtitle-text')), findsNothing);
+    }
+    if (fixedMaximumDanmaku) {
+      expect(fixedDensityChecks, greaterThan(soakSeconds));
+      expect(maximumRenderedDuringSoak, 40);
+    }
     await tester.runAsync(() => vm().close());
     activeVm = null;
     router.pop();
@@ -662,22 +828,32 @@ void main() {
       reason: 'Native errors must not be silently accepted',
     );
     expect(container.read(bilibiliApiProvider).remoteWriteRequestsSent, 0);
-    double p95(List<double> values) {
-      final sorted = [...values]..sort();
-      return sorted.isEmpty ? 0 : sorted[((sorted.length - 1) * .95).round()];
-    }
-
     binding.reportData = {
-      'status': 'passed',
+      'status': performanceFailures.isEmpty ? 'passed' : 'failed',
+      'playbackRegressionStatus': 'passed',
+      'performanceFailures': performanceFailures,
+      'controlSamples': controlSamples,
+      'lifecycle': lifecycle,
       'recordedAtUtc': DateTime.now().toUtc().toIso8601String(),
       'mode': 'profile',
       'danmakuOnly': danmakuOnly,
+      'fixedMaximumDanmaku': fixedMaximumDanmaku,
+      'pressureDensity': pressureDensity,
+      'pressureArea': fixedMaximumDanmaku ? 1 : .5,
+      'adaptiveDensity': !fixedMaximumDanmaku,
+      'fixedDensityChecks': fixedDensityChecks,
+      'maximumRenderedDuringSoak': maximumRenderedDuringSoak,
+      'meanRenderedDuringSoak': fixedDensityChecks == 0
+          ? null
+          : renderedSum / fixedDensityChecks,
+      'subtitleRequests': subtitles.signals.length,
       'syntheticDanmakuPerSecond': syntheticDanmakuPerSecond,
       'isolatedPackage': true,
       'owner': 'guest',
       'remoteWrites': container
           .read(bilibiliApiProvider)
           .remoteWriteRequestsSent,
+      'backend': 'Better Player / Media3',
       'requestedSeconds': soakSeconds,
       'cumulativeMediaAtEndMs': cumulativeAtEndMs,
       'elapsedSeconds': clock.elapsed.inSeconds,
@@ -693,15 +869,16 @@ void main() {
       'released': tracker.released,
       'liveAfterReturn': tracker.active,
       'finalRssBytes': ProcessInfo.currentRss,
-      'frameSamplesTotal': frameCount,
-      'frameWindowSize': builds.length,
-      'buildWindowP95Ms': p95(builds),
-      'rasterWindowP95Ms': p95(rasters),
+      'frameSamplesTotal': continuousFrameCount,
+      'frameWindowSize': continuousWindowSize,
+      'buildWindowP95Ms': continuousBuildP95,
+      'rasterWindowP95Ms': continuousRasterP95,
+      'frameWindowIncludesExit': false,
       'manualLipSyncVerified': false,
       'physicalTv': false,
       'comparisonWindows': comparisons,
       'subtitleTimingSamples': subtitleSamples,
-      'subtitleSource': 'synthetic multi-track fixture; real authenticated body read verified separately',
+      'subtitleSource': danmakuOnly ? 'disabled; no tracks or cues requested' : 'synthetic multi-track fixture; real authenticated body read verified separately',
       'danmakuSource': syntheticDanmakuPerSecond == 0
           ? 'real public segments only'
           : 'real public segments plus $syntheticDanmakuPerSecond synthetic entries per media second',
@@ -709,5 +886,10 @@ void main() {
       'syntheticDanmakuGenerated': pressure.syntheticCount,
       'overlayMetrics': container.read(overlayMetricsProvider).snapshot(),
     };
+    expect(
+      performanceFailures,
+      isEmpty,
+      reason: 'Original performance gates remain mandatory',
+    );
   }, timeout: const Timeout(Duration(seconds: soakSeconds + 1200)));
 }

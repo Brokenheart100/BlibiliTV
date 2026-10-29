@@ -1,3 +1,4 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart' show Provider;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../data/repositories/bilibili_overlay_repository.dart';
@@ -7,6 +8,12 @@ import '../../domain/overlays/overlay_metrics.dart';
 import 'infrastructure_providers.dart';
 import 'repository_providers.dart';
 part 'overlay_providers.g.dart';
+
+// Native pressure tests override this; normal playback retains load protection.
+final danmakuAdaptiveLoadProvider = Provider<bool>(
+  (ref) => true,
+  name: 'danmakuAdaptiveLoadProvider',
+);
 
 @Riverpod(keepAlive: true)
 OverlayMetrics overlayMetrics(Ref ref) => OverlayMetrics();

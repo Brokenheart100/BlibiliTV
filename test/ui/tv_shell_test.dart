@@ -146,7 +146,7 @@ void main() {
     tester,
   ) async {
     await pumpMamba(tester);
-    for (var i = 0; i < 4; i++) {
+    for (var i = 0; i < 5; i++) {
       await press(tester, LogicalKeyboardKey.arrowDown);
     }
     await press(tester, LogicalKeyboardKey.select);
@@ -196,6 +196,8 @@ void main() {
     await pumpMamba(tester);
     await press(tester, LogicalKeyboardKey.arrowDown);
     expect(FocusManager.instance.primaryFocus?.debugLabel, 'nav-4');
+    await press(tester, LogicalKeyboardKey.arrowDown);
+    expect(FocusManager.instance.primaryFocus?.debugLabel, 'nav-5');
     await press(tester, LogicalKeyboardKey.arrowDown);
     expect(FocusManager.instance.primaryFocus?.debugLabel, 'nav-1');
     await press(tester, LogicalKeyboardKey.select);

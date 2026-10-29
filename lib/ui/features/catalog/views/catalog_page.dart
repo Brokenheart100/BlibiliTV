@@ -1,3 +1,5 @@
+import '../../content/views/content_pages.dart';
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -28,6 +30,8 @@ class CatalogPage extends ConsumerStatefulWidget {
     required this.subtitle,
     this.query = '',
     this.registerEntry = true,
+    this.compactHeader = false,
+    this.forceInitialRefresh = false,
     this.onTop,
     this.controller,
     this.options = const CatalogOptions(),
@@ -36,6 +40,8 @@ class CatalogPage extends ConsumerStatefulWidget {
   final String section, pageId, title, subtitle, query;
   final int branchIndex;
   final bool registerEntry;
+  final bool compactHeader;
+  final bool forceInitialRefresh;
   final VoidCallback? onTop;
   final TvGridController? controller;
   final CatalogOptions options;
@@ -46,6 +52,7 @@ class CatalogPage extends ConsumerStatefulWidget {
 class _CatalogPageState extends ConsumerState<CatalogPage> {
   late final grid = widget.controller ?? TvGridController();
   final action = FocusNode(debugLabel: 'catalog-action');
+  final liveContent = ContentBrowseController();
   final tabs = [
     for (final feed in HomeFeed.values)
       FocusNode(
@@ -56,6 +63,7 @@ class _CatalogPageState extends ConsumerState<CatalogPage> {
   final emptyAction = FocusNode(debugLabel: 'catalog-empty-action');
   TvShellScope? shell;
   bool visible = true;
+  bool tabRefresh = false;
   bool get active => visible && ref.read(appForegroundProvider);
   String get owner => ref.read(sessionProvider).value?.ownerKey ?? 'guest';
   CatalogViewModelProvider get provider => catalogViewModelProvider(
@@ -64,8 +72,13 @@ class _CatalogPageState extends ConsumerState<CatalogPage> {
     ownerKey: owner,
     query: widget.query,
     options: widget.options == const CatalogOptions() ? null : widget.options,
+    forceInitialRefresh: widget.forceInitialRefresh || tabRefresh,
   );
   void _entry() {
+    if (widget.section == 'live') {
+      liveContent.focusEntry();
+      return;
+    }
     final value = ref.read(provider).value;
     if (value != null && value.items.isNotEmpty) {
       unawaited(grid.restore());
@@ -134,6 +147,7 @@ class _CatalogPageState extends ConsumerState<CatalogPage> {
       ownerKey: ownerKey,
       query: widget.query,
       options: widget.options == const CatalogOptions() ? null : widget.options,
+      forceInitialRefresh: widget.forceInitialRefresh || tabRefresh,
     );
     final result = ref.watch(listProvider);
     ref.listen(appForegroundProvider, (_, foreground) {
@@ -165,7 +179,7 @@ class _CatalogPageState extends ConsumerState<CatalogPage> {
     final memoryKey =
         '$ownerKey:${widget.pageId}:${widget.section}:${widget.query}:${widget.options}';
     return Padding(
-      padding: const EdgeInsets.fromLTRB(24, 22, 24, 12),
+      padding: EdgeInsets.fromLTRB(24, widget.compactHeader ? 10 : 22, 24, 12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -176,19 +190,24 @@ class _CatalogPageState extends ConsumerState<CatalogPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      widget.title,
-                      style: Theme.of(context).textTheme.headlineLarge,
-                    ),
-                    const SizedBox(height: 3),
-                    Text(
-                      widget.subtitle,
+                      widget.compactHeader ? widget.subtitle : widget.title,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        color: context.tvColors.muted,
-                        fontSize: 12,
-                      ),
+                      style: widget.compactHeader
+                          ? Theme.of(context).textTheme.bodySmall
+                          : Theme.of(context).textTheme.headlineLarge,
                     ),
+                    if (!widget.compactHeader) const SizedBox(height: 3),
+                    if (!widget.compactHeader)
+                      Text(
+                        widget.subtitle,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          color: context.tvColors.muted,
+                          fontSize: 12,
+                        ),
+                      ),
                   ],
                 ),
               ),
@@ -196,6 +215,8 @@ class _CatalogPageState extends ConsumerState<CatalogPage> {
               TvButton(
                 key: const Key('catalog-refresh'),
                 label: '刷新',
+                compact: widget.compactHeader,
+                iconOnly: widget.compactHeader,
                 icon: Icons.refresh,
                 focusNode: action,
                 onPressed: () => unawaited(_retry()),
@@ -229,8 +250,28 @@ class _CatalogPageState extends ConsumerState<CatalogPage> {
                 reducedMotion: reduced,
                 onKey: _tabKey,
                 onSelected: (feed) {
-                  if (feed.section == widget.section) return;
+                  grid.reset();
+                  ref
+                      .read(focusMemoryProvider)
+                      .forget(
+                        '$owner:${widget.pageId}:${feed.section}:${widget.query}:${widget.options}',
+                      );
+                  if (feed.section == widget.section) {
+                    if (feed == HomeFeed.live) {
+                      liveContent.refresh();
+                    } else if (tabRefresh || widget.forceInitialRefresh) {
+                      if (ref.read(listProvider).hasError) {
+                        ref.invalidate(listProvider);
+                      } else {
+                        unawaited(ref.read(listProvider.notifier).refresh());
+                      }
+                    } else {
+                      setState(() => tabRefresh = true);
+                    }
+                    return;
+                  }
                   ref.read(listProvider.notifier).suspend();
+                  setState(() => tabRefresh = true);
                   context.go(feed.location);
                 },
               ),
@@ -256,13 +297,11 @@ class _CatalogPageState extends ConsumerState<CatalogPage> {
             ),
           Expanded(
             child: widget.section == 'live'
-                ? TvStatePanel(
-                    title: '直播还在准备中',
-                    message: '先逛逛推荐与热门视频，发现更多好内容。',
-                    icon: Icons.live_tv_outlined,
-                    actionLabel: '返回个性推荐',
-                    focusNode: emptyAction,
-                    onAction: () => context.go('/home'),
+                ? ContentBrowseView(
+                    live: true,
+                    embedded: true,
+                    controller: liveContent,
+                    onExitUp: () => tabs[HomeFeed.live.index].requestFocus(),
                   )
                 : widget.section == 'following' &&
                       ref.watch(sessionProvider).value?.isAuthenticated != true

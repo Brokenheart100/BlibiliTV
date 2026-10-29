@@ -4,6 +4,7 @@ import 'package:drift_flutter/drift_flutter.dart';
 part 'app_database.g.dart';
 
 class WatchProgressRows extends Table {
+  TextColumn get contentKind => text().withDefault(const Constant('ugc'))();
   TextColumn get ownerKey => text()();
   TextColumn get videoId => text()();
   TextColumn get partId => text()();
@@ -11,7 +12,12 @@ class WatchProgressRows extends Table {
   IntColumn get durationMs => integer().withDefault(const Constant(0))();
   DateTimeColumn get updatedAt => dateTime()();
   @override
-  Set<Column<Object>> get primaryKey => {ownerKey, videoId, partId};
+  Set<Column<Object>> get primaryKey => {
+    ownerKey,
+    contentKind,
+    videoId,
+    partId,
+  };
 }
 
 class SearchEntries extends Table {
@@ -23,6 +29,7 @@ class SearchEntries extends Table {
 }
 
 class HistoryVideos extends Table {
+  TextColumn get contentKind => text().withDefault(const Constant('ugc'))();
   TextColumn get ownerKey => text()();
   TextColumn get videoId => text()();
   TextColumn get title => text()();
@@ -32,7 +39,7 @@ class HistoryVideos extends Table {
   IntColumn get durationSeconds => integer()();
   IntColumn get viewCount => integer().withDefault(const Constant(0))();
   @override
-  Set<Column<Object>> get primaryKey => {ownerKey, videoId};
+  Set<Column<Object>> get primaryKey => {ownerKey, contentKind, videoId};
 }
 
 @DriftDatabase(tables: [WatchProgressRows, SearchEntries, HistoryVideos])
@@ -40,7 +47,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase(super.executor);
   AppDatabase.defaults() : super(driftDatabase(name: 'mambatv'));
   @override
-  int get schemaVersion => 3;
+  int get schemaVersion => 4;
   @override
   MigrationStrategy get migration => MigrationStrategy(
     onCreate: (migrator) => migrator.createAll(),
@@ -48,6 +55,23 @@ class AppDatabase extends _$AppDatabase {
       if (from < 2) await migrator.createTable(historyVideos);
       if (from >= 2 && from < 3) {
         await migrator.addColumn(historyVideos, historyVideos.creatorAvatarUrl);
+      }
+      if (from < 4) {
+        await migrator.alterTable(
+          TableMigration(
+            watchProgressRows,
+            newColumns: [watchProgressRows.contentKind],
+          ),
+        );
+        // v1 creates this table directly in its current shape above.
+        if (from >= 2) {
+          await migrator.alterTable(
+            TableMigration(
+              historyVideos,
+              newColumns: [historyVideos.contentKind],
+            ),
+          );
+        }
       }
     },
     beforeOpen: (_) async {

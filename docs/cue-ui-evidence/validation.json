@@ -1,0 +1,51 @@
+{
+  "clientDate": "2026-10-29",
+  "scope": "Cue UI motion, PGC sidebar branch and portrait artwork",
+  "cueVersion": "0.4.0",
+  "automated": {
+    "newWidgetTests": 6,
+    "fullFlutterTestsPassed": 278,
+    "staticAnalysis": "No issues found with --fatal-infos",
+    "formatFilesChecked": 287,
+    "formatChangesRequired": 0,
+    "buildRunner": "succeeded",
+    "releasePipelineGuardsPassed": 13,
+    "licenseInventoryCheck": "passed",
+    "inventoryPackages": 203,
+    "runtimeGraphPackages": 159
+  },
+  "nativeUi": {
+    "avd": "Mamba_TV_Verify_API36",
+    "device": "emulator-5554",
+    "androidApi": 36,
+    "abi": "x86_64",
+    "applicationId": "app.mamba.mambatv.validation",
+    "buildMode": "debug",
+    "defines": {
+      "MAMBA_VALIDATION_APP": true,
+      "MAMBA_READ_ONLY_VALIDATION": true
+    },
+    "publicPgcImagesLoaded": true,
+    "dpadRailToPosterAndSeasonDetails": "passed",
+    "backFromSeasonToGrid": "passed",
+    "darkAndLightScreenshotsVisuallyInspected": true,
+    "flutterMcpHotReload": "succeeded",
+    "runtimeErrorsAfterReloadAndNavigation": 0,
+    "screenshots": ["dark-pgc.png", "light-pgc.png"]
+  },
+  "artworkSamples": {
+    "seasonIds": ["47836", "44860", "39433"],
+    "sourcePixelSize": "960x1280",
+    "nominalPosterRatio": "3:4",
+    "fit": "contain",
+    "resize": "width only, preserve original aspect ratio"
+  },
+  "boundaries": {
+    "physicalArmTvVerified": false,
+    "motionPerformanceMeasured": false,
+    "newPlaybackSoakRun": false,
+    "remoteCiRun": false,
+    "publishedRelease": false,
+    "existingM8PerformanceGapClosed": false
+  }
+}

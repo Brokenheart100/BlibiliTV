@@ -22,6 +22,7 @@ final class CatalogViewModelProvider
       String ownerKey,
       String query,
       CatalogOptions? options,
+      bool forceInitialRefresh,
     })
     super.argument,
   }) : super(
@@ -57,7 +58,7 @@ final class CatalogViewModelProvider
   }
 }
 
-String _$catalogViewModelHash() => r'804315f757421c490cac7a6048ad36e39efd11fb';
+String _$catalogViewModelHash() => r'604210978d3664b8425131c3b4c9731b54de0972';
 
 final class CatalogViewModelFamily extends $Family
     with
@@ -72,6 +73,7 @@ final class CatalogViewModelFamily extends $Family
             String ownerKey,
             String query,
             CatalogOptions? options,
+            bool forceInitialRefresh,
           })
         > {
   CatalogViewModelFamily._()
@@ -89,6 +91,7 @@ final class CatalogViewModelFamily extends $Family
     required String ownerKey,
     String query = '',
     CatalogOptions? options,
+    bool forceInitialRefresh = false,
   }) => CatalogViewModelProvider._(
     argument: (
       section: section,
@@ -96,6 +99,7 @@ final class CatalogViewModelFamily extends $Family
       ownerKey: ownerKey,
       query: query,
       options: options,
+      forceInitialRefresh: forceInitialRefresh,
     ),
     from: this,
   );
@@ -113,12 +117,14 @@ abstract class _$CatalogViewModel extends $AsyncNotifier<CatalogState> {
             String ownerKey,
             String query,
             CatalogOptions? options,
+            bool forceInitialRefresh,
           });
   String get section => _$args.section;
   String get pageId => _$args.pageId;
   String get ownerKey => _$args.ownerKey;
   String get query => _$args.query;
   CatalogOptions? get options => _$args.options;
+  bool get forceInitialRefresh => _$args.forceInitialRefresh;
 
   FutureOr<CatalogState> build({
     required String section,
@@ -126,6 +132,7 @@ abstract class _$CatalogViewModel extends $AsyncNotifier<CatalogState> {
     required String ownerKey,
     String query = '',
     CatalogOptions? options,
+    bool forceInitialRefresh = false,
   });
   @$mustCallSuper
   @override
@@ -147,6 +154,7 @@ abstract class _$CatalogViewModel extends $AsyncNotifier<CatalogState> {
         ownerKey: _$args.ownerKey,
         query: _$args.query,
         options: _$args.options,
+        forceInitialRefresh: _$args.forceInitialRefresh,
       ),
     );
   }

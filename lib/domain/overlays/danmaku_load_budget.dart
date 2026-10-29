@@ -1,6 +1,7 @@
 /// Reduces admission and animation cost without removing visible comments.
 class DanmakuLoadBudget {
-  DanmakuLoadBudget(this.density);
+  DanmakuLoadBudget(this.density, {this.adaptive = true});
+  final bool adaptive;
   int density;
   int _badWindows = 0;
 
@@ -8,6 +9,7 @@ class DanmakuLoadBudget {
 
   /// Called once per 120 measured frames, after startup and controls settle.
   bool observeWindow(double slowFraction) {
+    if (!adaptive) return false;
     _badWindows = slowFraction > .1 ? _badWindows + 1 : 0;
     if (_badWindows < 2) return false;
     _badWindows = 0;

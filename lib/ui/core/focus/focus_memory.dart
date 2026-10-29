@@ -12,6 +12,7 @@ class FocusMemory {
   final _bookmarks = <String, GridBookmark>{};
   GridBookmark? read(String key) => _bookmarks[key];
   void save(String key, GridBookmark bookmark) => _bookmarks[key] = bookmark;
+  void forget(String key) => _bookmarks.remove(key);
   void clear() => _bookmarks.clear();
 }
 

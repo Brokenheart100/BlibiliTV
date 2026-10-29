@@ -2,6 +2,18 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mambatv/domain/overlays/danmaku_load_budget.dart';
 
 void main() {
+  test(
+    'fixed pressure mode preserves maximum density through sustained load',
+    () {
+      final budget = DanmakuLoadBudget(40, adaptive: false);
+      for (var i = 0; i < 1000; i++) {
+        expect(budget.observeWindow(1), isFalse);
+        expect(budget.density, 40);
+        budget.resetMeasurements();
+      }
+    },
+  );
+
   test('sustained load reduces admission and retains a nonzero floor', () {
     final budget = DanmakuLoadBudget(40);
     expect(budget.observeWindow(.2), isFalse);

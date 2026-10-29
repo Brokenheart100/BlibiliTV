@@ -13,7 +13,7 @@ import '../../core/focus/focus_memory.dart';
 import '../../core/theme/tv_theme.dart';
 import '../../core/widgets/tv_button.dart';
 import '../../core/widgets/tv_dialog.dart';
-import '../../core/widgets/glass_panel.dart';
+import '../../core/widgets/liquid_glass_card.dart';
 
 class TvShell extends StatefulWidget {
   const TvShell({required this.navigationShell, super.key});
@@ -23,19 +23,20 @@ class TvShell extends StatefulWidget {
 }
 
 class _TvShellState extends State<TvShell> {
-  final nodes = List.generate(5, (i) => FocusNode(debugLabel: 'nav-$i'));
+  final nodes = List.generate(6, (i) => FocusNode(debugLabel: 'nav-$i'));
   final themeNode = FocusNode(debugLabel: 'nav-theme');
   final entries = <int, VoidCallback>{};
   bool confirming = false;
-  static const labels = ['发现', '搜索', '我的', '设置', '历史记录'];
+  static const labels = ['发现', '搜索', '我的', '设置', '历史记录', '番剧／影视'];
   // Keep route identities stable while changing the visible/focus order.
-  static const navigationOrder = [0, 4, 1, 2, 3];
+  static const navigationOrder = [0, 4, 5, 1, 2, 3];
   static const icons = [
     CupertinoIcons.compass,
     CupertinoIcons.search,
     CupertinoIcons.person_crop_circle,
     CupertinoIcons.gear_alt,
     CupertinoIcons.clock,
+    CupertinoIcons.film,
   ];
   @override
   void dispose() {
@@ -117,7 +118,8 @@ class _TvShellState extends State<TvShell> {
                 child: SizedBox(
                   key: const Key('icon-navigation-rail'),
                   width: 76,
-                  child: GlassPanel(
+                  child: LiquidGlassCard(
+                    radius: 30,
                     padding: const EdgeInsets.symmetric(
                       horizontal: 10,
                       vertical: 16,
@@ -148,6 +150,7 @@ class _TvShellState extends State<TvShell> {
                                           label: labels[i],
                                           icon: icons[i],
                                           iconOnly: true,
+                                          glass: true,
                                           compact: true,
                                           focusNode: nodes[i],
                                           autofocus: i == 0,
@@ -194,6 +197,7 @@ class _TvShellState extends State<TvShell> {
                                     ? CupertinoIcons.moon
                                     : CupertinoIcons.sun_max,
                                 iconOnly: true,
+                                glass: true,
                                 compact: true,
                                 focusNode: themeNode,
                                 onPressed: () {

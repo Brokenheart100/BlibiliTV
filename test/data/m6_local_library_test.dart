@@ -28,7 +28,7 @@ void main() {
       );
       final db = AppDatabase(schema.newConnection());
       addTearDown(db.close);
-      await verifier.migrateAndValidate(db, 3);
+      await verifier.migrateAndValidate(db, 4);
       final item = (await DriftHistoryRepository(db).list('guest'))
           .valueOrThrow
           .items
@@ -51,7 +51,7 @@ void main() {
     );
     final db = AppDatabase(schema.newConnection());
     addTearDown(db.close);
-    await verifier.migrateAndValidate(db, 3);
+    await verifier.migrateAndValidate(db, 4);
     final history = (await DriftHistoryRepository(db).list('guest'))
         .valueOrThrow;
     expect(history.items.single.position.inSeconds, 25);

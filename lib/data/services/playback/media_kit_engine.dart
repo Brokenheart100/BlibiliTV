@@ -171,6 +171,18 @@ class MediaKitEngine implements PlaybackEngine {
     final bufferEpoch = _invalidateBuffer();
     try {
       await _configureNative();
+      if (source.transport != PlaybackTransport.dash) {
+        await player.open(
+          Media(
+            source.videoUrl,
+            httpHeaders: {...bilibiliMediaHeaders, ...source.headers},
+          ),
+          play: play,
+        );
+        _check();
+        await _resumeBufferUpdates(bufferEpoch);
+        return;
+      }
       // Retain both resources with the fixed CDN headers. The primary file
       // must finish loading before audio-add can use its native stream options.
       _audio = Media(source.audioUrl, httpHeaders: bilibiliMediaHeaders);
@@ -366,7 +378,7 @@ AppFailure classifyNativePlaybackFailure(String message) {
     return const AppFailure(FailureKind.resourceExpired, '播放地址已失效，正在尝试重新获取');
   }
   if (RegExp(
-    r'\b(500|502|503|504)\b|timed out|connection|network|failed to open|error opening',
+    r'\b(404|500|502|503|504)\b|timed out|connection|network|failed to open|error opening',
   ).hasMatch(text)) {
     return const AppFailure(FailureKind.cdn, '播放线路暂不可用');
   }

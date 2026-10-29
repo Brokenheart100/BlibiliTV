@@ -18,7 +18,7 @@ void main() {
     tester,
   ) async {
     await pumpMamba(tester);
-    const order = [0, 4, 1, 2, 3];
+    const order = [0, 4, 5, 1, 2, 3];
     final positions = [
       for (final i in order) tester.getCenter(find.byKey(Key('nav-$i'))).dy,
     ];
@@ -190,18 +190,11 @@ void main() {
           section,
         );
       }
-      expect(find.text('直播还在准备中'), findsOneWidget);
+      expect(find.byKey(const Key('content-input')), findsOneWidget);
       await press(tester, LogicalKeyboardKey.arrowDown);
-      await press(tester, LogicalKeyboardKey.select);
-      expect(
-        container
-            .read(appRouterProvider)
-            .routeInformationProvider
-            .value
-            .uri
-            .path,
-        '/home',
-      );
+      expect(FocusManager.instance.primaryFocus?.debugLabel, 'content-open');
+      await press(tester, LogicalKeyboardKey.arrowUp);
+      expect(FocusManager.instance.primaryFocus?.debugLabel, 'content-input');
       expect(tester.takeException(), isNull);
     },
   );

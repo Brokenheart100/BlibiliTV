@@ -1,0 +1,8 @@
+{
+  "entrypoint": "lib/main.dart",
+  "mode": "debug",
+  "readOnly": true,
+  "hotReload": "passed",
+  "runtimeErrors": 0,
+  "timing": "after profile test; production source unchanged"
+}

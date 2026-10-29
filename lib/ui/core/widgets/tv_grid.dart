@@ -14,6 +14,8 @@ class TvGridController {
   Future<void> restore() async {
     await _state?._restore();
   }
+
+  void reset() => _state?._resetPosition();
 }
 
 class GridItemBindings {
@@ -45,8 +47,22 @@ class TvGrid extends TvItemGrid<VideoSummary> {
     super.loadingMore,
     super.loadMoreFailed,
     super.reducedMotion,
+    super.header,
+    super.autoLoadMore,
+    super.showFooter,
+    bool showViewCount = true,
+    bool poster = false,
     super.key,
-  }) : super(itemKey: _videoKey, itemBuilder: _videoCard);
+  }) : super(
+         itemKey: _videoKey,
+         itemBuilder: poster
+             ? _posterCard
+             : showViewCount
+             ? _videoCard
+             : _contentCard,
+         artworkAspectRatio: poster ? 3 / 4 : 16 / 9,
+         minItemWidth: poster ? 120 : 214,
+       );
 }
 
 String _videoKey(VideoSummary item) => item.id;
@@ -54,9 +70,37 @@ Widget _videoCard(
   BuildContext context,
   VideoSummary video,
   GridItemBindings bindings,
-) => TvVideoCard(
+) => _buildVideoCard(context, video, bindings);
+
+Widget _contentCard(
+  BuildContext context,
+  VideoSummary video,
+  GridItemBindings bindings,
+) => _buildVideoCard(context, video, bindings, showViewCount: false);
+
+Widget _posterCard(
+  BuildContext context,
+  VideoSummary video,
+  GridItemBindings bindings,
+) => _buildVideoCard(
+  context,
+  video,
+  bindings,
+  showViewCount: false,
+  poster: true,
+);
+
+Widget _buildVideoCard(
+  BuildContext context,
+  VideoSummary video,
+  GridItemBindings bindings, {
+  bool showViewCount = true,
+  bool poster = false,
+}) => TvVideoCard(
   key: ValueKey('video-${video.id}'),
   video: video,
+  showViewCount: showViewCount,
+  poster: poster,
   reducedMotion: bindings.reducedMotion,
   onAttach: bindings.onAttach,
   onDetach: bindings.onDetach,
@@ -72,6 +116,9 @@ class TvItemGrid<T> extends StatefulWidget {
     required this.itemBuilder,
     this.artworkAspectRatio = 16 / 9,
     this.minItemWidth = 214,
+    this.header,
+    this.autoLoadMore = false,
+    this.showFooter = true,
     required this.memory,
     required this.memoryKey,
     required this.controller,
@@ -96,6 +143,8 @@ class TvItemGrid<T> extends StatefulWidget {
   final VoidCallback onExitLeft, onExitUp;
   final Future<void> Function() onLoadMore;
   final bool hasMore, loadingMore, reducedMotion, loadMoreFailed;
+  final Widget? header;
+  final bool autoLoadMore, showFooter;
   @override
   State<TvItemGrid<T>> createState() => _TvGridState<T>();
 }
@@ -109,10 +158,24 @@ class _TvGridState<T> extends State<TvItemGrid<T>> {
   int columns = 3;
   double rowExtent = 200;
   bool requestingPage = false;
+  final headerKey = GlobalKey();
+  int? pendingFocus;
+  void _resetPosition() {
+    widget.memory.forget(widget.memoryKey);
+    pendingFocus = null;
+    if (scroll.hasClients) scroll.jumpTo(0);
+  }
+
+  double get headerExtent {
+    final box = headerKey.currentContext?.findRenderObject();
+    return box is RenderBox && box.hasSize ? box.size.height : 0;
+  }
+
   @override
   void initState() {
     super.initState();
     widget.controller._state = this;
+    scroll.addListener(_nearEnd);
   }
 
   @override
@@ -121,6 +184,13 @@ class _TvGridState<T> extends State<TvItemGrid<T>> {
     if (oldWidget.controller != widget.controller) {
       oldWidget.controller._state = null;
       widget.controller._state = this;
+    }
+    if (pendingFocus != null && widget.items.length > oldWidget.items.length) {
+      final index = pendingFocus!;
+      pendingFocus = null;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) unawaited(_focus(index));
+      });
     }
   }
 
@@ -135,7 +205,7 @@ class _TvGridState<T> extends State<TvItemGrid<T>> {
   Future<void> _focus(int requested) async {
     if (widget.items.isEmpty || !mounted) return;
     final index = requested.clamp(0, widget.items.length - 1);
-    final offset = (index ~/ columns) * rowExtent;
+    final offset = headerExtent + (index ~/ columns) * rowExtent;
     if (scroll.hasClients) {
       final top = scroll.offset;
       final bottom = top + scroll.position.viewportDimension;
@@ -190,6 +260,11 @@ class _TvGridState<T> extends State<TvItemGrid<T>> {
       case LogicalKeyboardKey.arrowDown:
         if (index + columns < widget.items.length) {
           unawaited(_focus(index + columns));
+        } else if (widget.autoLoadMore &&
+            widget.hasMore &&
+            !widget.loadMoreFailed) {
+          pendingFocus = index + columns;
+          unawaited(_autoMore());
         } else {
           footer.requestFocus();
           unawaited(Scrollable.ensureVisible(footer.context!, alignment: 1));
@@ -213,6 +288,31 @@ class _TvGridState<T> extends State<TvItemGrid<T>> {
     }
   }
 
+  void _nearEnd() {
+    if (!widget.autoLoadMore ||
+        !scroll.hasClients ||
+        scroll.position.extentAfter > rowExtent * 1.5) {
+      return;
+    }
+    unawaited(_autoMore());
+  }
+
+  Future<void> _autoMore() async {
+    if (!widget.autoLoadMore ||
+        !widget.hasMore ||
+        widget.loadingMore ||
+        widget.loadMoreFailed ||
+        requestingPage) {
+      return;
+    }
+    requestingPage = true;
+    try {
+      await widget.onLoadMore();
+    } finally {
+      requestingPage = false;
+    }
+  }
+
   @override
   Widget build(BuildContext context) => LayoutBuilder(
     builder: (context, constraints) {
@@ -229,6 +329,10 @@ class _TvGridState<T> extends State<TvItemGrid<T>> {
           controller: scroll,
           scrollCacheExtent: ScrollCacheExtent.pixels(rowExtent * 2),
           slivers: [
+            if (widget.header != null)
+              SliverToBoxAdapter(
+                child: KeyedSubtree(key: headerKey, child: widget.header!),
+              ),
             SliverPadding(
               padding: const EdgeInsets.all(6),
               sliver: SliverGrid(
@@ -251,53 +355,60 @@ class _TvGridState<T> extends State<TvItemGrid<T>> {
                         if (nodes[id] == node) nodes.remove(id);
                       },
                       onKey: (event) => _key(index, event),
-                      onFocus: () => widget.memory.save(
-                        widget.memoryKey,
-                        GridBookmark(
-                          id,
-                          index,
-                          scroll.hasClients ? scroll.offset : 0,
-                        ),
-                      ),
+                      onFocus: () {
+                        if (widget.autoLoadMore &&
+                            index >= widget.items.length - columns * 2) {
+                          unawaited(_autoMore());
+                        }
+                        widget.memory.save(
+                          widget.memoryKey,
+                          GridBookmark(
+                            id,
+                            index,
+                            scroll.hasClients ? scroll.offset : 0,
+                          ),
+                        );
+                      },
                       onPressed: () => unawaited(widget.onSelected(video)),
                     ),
                   );
                 }, childCount: widget.items.length),
               ),
             ),
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.all(8),
-                child: Center(
-                  child: TvButton(
-                    key: const Key('load-more'),
-                    focusNode: footer,
-                    label: widget.loadingMore
-                        ? '正在加载…'
-                        : widget.loadMoreFailed
-                        ? '重试加载更多'
-                        : widget.hasMore
-                        ? '加载更多'
-                        : '已经看到全部内容',
-                    onPressed: () => unawaited(_more()),
-                    onKeyEvent: (event) {
-                      if (!isDirectionEvent(event)) {
+            if (widget.showFooter)
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Center(
+                    child: TvButton(
+                      key: const Key('load-more'),
+                      focusNode: footer,
+                      label: widget.loadingMore
+                          ? '正在加载…'
+                          : widget.loadMoreFailed
+                          ? '重试加载更多'
+                          : widget.hasMore
+                          ? '加载更多'
+                          : '已经看到全部内容',
+                      onPressed: () => unawaited(_more()),
+                      onKeyEvent: (event) {
+                        if (!isDirectionEvent(event)) {
+                          return KeyEventResult.ignored;
+                        }
+                        if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
+                          unawaited(_focus(widget.items.length - 1));
+                          return KeyEventResult.handled;
+                        }
+                        if (event.logicalKey == LogicalKeyboardKey.arrowLeft) {
+                          widget.onExitLeft();
+                          return KeyEventResult.handled;
+                        }
                         return KeyEventResult.ignored;
-                      }
-                      if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
-                        unawaited(_focus(widget.items.length - 1));
-                        return KeyEventResult.handled;
-                      }
-                      if (event.logicalKey == LogicalKeyboardKey.arrowLeft) {
-                        widget.onExitLeft();
-                        return KeyEventResult.handled;
-                      }
-                      return KeyEventResult.ignored;
-                    },
+                      },
+                    ),
                   ),
                 ),
               ),
-            ),
           ],
         ),
       );

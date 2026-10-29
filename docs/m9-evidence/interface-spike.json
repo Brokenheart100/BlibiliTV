@@ -1,0 +1,46 @@
+{
+  "recordedAtUtc": "2026-10-28T14:39:28.702459Z",
+  "owner": "guest",
+  "readOnly": true,
+  "referenceCommit": "affac5334fc41744894618d9fb53b7101db9532a",
+  "pgcCatalog": {
+    "status": "passed",
+    "count": 24
+  },
+  "season": {
+    "id": "28320",
+    "episodeCount": 22,
+    "additionalGroups": 2
+  },
+  "freeEpisode": {
+    "status": "passed",
+    "transport": "dash",
+    "durationSeconds": 1626,
+    "videoDashMetadata": true,
+    "audioDashMetadata": true
+  },
+  "restrictedEpisode": {
+    "status": "passed",
+    "sourceWithheld": true
+  },
+  "liveCatalog": {
+    "status": "blocked",
+    "kind": "rateLimited"
+  },
+  "room": {
+    "requestedId": "6",
+    "canonicalId": "7734200",
+    "live": true,
+    "locked": false
+  },
+  "liveSource": {
+    "status": "passed",
+    "transport": "hls",
+    "quality": 150,
+    "qualityOptions": 5,
+    "backupCount": 1,
+    "playlistBytes": 456,
+    "cleartextChildUri": false
+  },
+  "remoteWrites": 0
+}

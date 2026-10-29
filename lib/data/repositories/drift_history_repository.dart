@@ -3,9 +3,11 @@ import 'package:drift/drift.dart';
 import '../../core/result.dart';
 import '../../domain/entities/app_models.dart';
 import '../../domain/library/library.dart';
+import '../../domain/playback/playback_target.dart';
 import '../services/local/app_database.dart';
 
-class DriftHistoryRepository implements LocalHistoryRepository {
+class DriftHistoryRepository
+    implements LocalHistoryRepository, TypedLocalHistoryRepository {
   DriftHistoryRepository(this.database);
   final AppDatabase database;
   @override
@@ -23,10 +25,10 @@ class DriftHistoryRepository implements LocalHistoryRepository {
             '''
         SELECT p.*, h.title, h.creator, h.cover_url, h.creator_avatar_url, h.duration_seconds, h.view_count
         FROM watch_progress_rows p LEFT JOIN history_videos h
-        ON p.owner_key=h.owner_key AND p.video_id=h.video_id
-        WHERE p.owner_key=? AND p.position_ms>=1000 AND p.duration_ms>=p.position_ms
+        ON p.owner_key=h.owner_key AND p.content_kind=h.content_kind AND p.video_id=h.video_id
+        WHERE p.owner_key=? AND (p.content_kind='live' OR (p.position_ms>=1000 AND p.duration_ms>=p.position_ms))
         AND NOT EXISTS (SELECT 1 FROM watch_progress_rows n
-          WHERE n.owner_key=p.owner_key AND n.video_id=p.video_id
+          WHERE n.owner_key=p.owner_key AND n.content_kind=p.content_kind AND n.video_id=p.video_id
           AND (n.updated_at>p.updated_at OR (n.updated_at=p.updated_at AND n.rowid>p.rowid)))
         ORDER BY p.updated_at DESC, p.rowid DESC LIMIT 25 OFFSET ?
       ''',
@@ -38,7 +40,19 @@ class DriftHistoryRepository implements LocalHistoryRepository {
           items: [
             for (final row in rows.take(24))
               LibraryEntry(
-                key: row.read<String>('video_id'),
+                key: row.read<String>('content_kind') == 'ugc'
+                    ? row.read<String>('video_id')
+                    : '${row.read<String>('content_kind')}:${row.read<String>('video_id')}',
+                target: switch (row.read<String>('content_kind')) {
+                  'pgc' => PlaybackTarget.pgc(
+                    seasonId: row.read<String>('video_id'),
+                    episodeId: row.read<String>('part_id'),
+                  ),
+                  'live' => PlaybackTarget.live(
+                    roomId: row.read<String>('video_id'),
+                  ),
+                  _ => null,
+                },
                 video: VideoSummary(
                   id: row.read<String>('video_id'),
                   title:
@@ -91,7 +105,11 @@ class DriftHistoryRepository implements LocalHistoryRepository {
     }
   }
 
-  Future<Result<void>> _delete(String ownerKey, String? videoId) async {
+  Future<Result<void>> _delete(
+    String ownerKey,
+    String? videoId, {
+    ContentKind kind = ContentKind.ugc,
+  }) async {
     try {
       await database.transaction(() async {
         await (database.delete(database.watchProgressRows)..where(
@@ -99,7 +117,8 @@ class DriftHistoryRepository implements LocalHistoryRepository {
                   t.ownerKey.equals(ownerKey) &
                   (videoId == null
                       ? const Constant(true)
-                      : t.videoId.equals(videoId)),
+                      : t.videoId.equals(videoId) &
+                            t.contentKind.equals(kind.name)),
             ))
             .go();
         await (database.delete(database.historyVideos)..where(
@@ -107,7 +126,8 @@ class DriftHistoryRepository implements LocalHistoryRepository {
                   t.ownerKey.equals(ownerKey) &
                   (videoId == null
                       ? const Constant(true)
-                      : t.videoId.equals(videoId)),
+                      : t.videoId.equals(videoId) &
+                            t.contentKind.equals(kind.name)),
             ))
             .go();
       });
@@ -122,4 +142,7 @@ class DriftHistoryRepository implements LocalHistoryRepository {
       _delete(ownerKey, videoId);
   @override
   Future<Result<void>> clear(String ownerKey) => _delete(ownerKey, null);
+  @override
+  Future<Result<void>> removeTarget(String ownerKey, PlaybackTarget target) =>
+      _delete(ownerKey, target.contentId, kind: target.kind);
 }

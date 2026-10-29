@@ -1,0 +1,10 @@
+{
+  "recordedAtUtc": "2026-10-28T04:50:54.5893231Z",
+  "mode": "debug",
+  "entrypoint": "lib/main.dart",
+  "package": "app.mamba.mambatv.validation",
+  "readOnly": true,
+  "hotReload": "passed",
+  "runtimeErrors": 0,
+  "note": "Verified after the completed profile regression; no hot reload during measured playback."
+}

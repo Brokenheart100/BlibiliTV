@@ -87,7 +87,8 @@ void main() {
       expect(find.text('我的番剧'), findsOneWidget);
       await tester.tap(find.byKey(const Key('personal-item-season:10')));
       await tester.pumpAndSettle();
-      expect(find.textContaining('看到第 2 话'), findsOneWidget);
+      expect(container.read(appRouterProvider).state.uri.path, '/season/10');
+      expect(find.byKey(const Key('episode-1')), findsOneWidget);
       await press(tester, LogicalKeyboardKey.goBack);
       await tester.tap(find.byKey(const Key('personal-drama')));
       await tester.pumpAndSettle();

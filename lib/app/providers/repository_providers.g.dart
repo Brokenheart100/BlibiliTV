@@ -9,6 +9,184 @@ part of 'repository_providers.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
 
+@ProviderFor(contentSearchRepository)
+final contentSearchRepositoryProvider = ContentSearchRepositoryProvider._();
+
+final class ContentSearchRepositoryProvider
+    extends
+        $FunctionalProvider<
+          ContentSearchRepository,
+          ContentSearchRepository,
+          ContentSearchRepository
+        >
+    with $Provider<ContentSearchRepository> {
+  ContentSearchRepositoryProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'contentSearchRepositoryProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$contentSearchRepositoryHash();
+
+  @$internal
+  @override
+  $ProviderElement<ContentSearchRepository> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  ContentSearchRepository create(Ref ref) {
+    return contentSearchRepository(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(ContentSearchRepository value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<ContentSearchRepository>(value),
+    );
+  }
+}
+
+String _$contentSearchRepositoryHash() =>
+    r'af1654f1d8c7f89749ead813a056a189766f9b61';
+
+@ProviderFor(pgcRepository)
+final pgcRepositoryProvider = PgcRepositoryProvider._();
+
+final class PgcRepositoryProvider
+    extends $FunctionalProvider<PgcRepository, PgcRepository, PgcRepository>
+    with $Provider<PgcRepository> {
+  PgcRepositoryProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'pgcRepositoryProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$pgcRepositoryHash();
+
+  @$internal
+  @override
+  $ProviderElement<PgcRepository> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  PgcRepository create(Ref ref) {
+    return pgcRepository(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(PgcRepository value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<PgcRepository>(value),
+    );
+  }
+}
+
+String _$pgcRepositoryHash() => r'f3ca5cbe0c28298132fbf10e60ef2bf5ad4ddad8';
+
+@ProviderFor(liveRepository)
+final liveRepositoryProvider = LiveRepositoryProvider._();
+
+final class LiveRepositoryProvider
+    extends $FunctionalProvider<LiveRepository, LiveRepository, LiveRepository>
+    with $Provider<LiveRepository> {
+  LiveRepositoryProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'liveRepositoryProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$liveRepositoryHash();
+
+  @$internal
+  @override
+  $ProviderElement<LiveRepository> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  LiveRepository create(Ref ref) {
+    return liveRepository(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(LiveRepository value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<LiveRepository>(value),
+    );
+  }
+}
+
+String _$liveRepositoryHash() => r'acb15a7333aa5f4d7789b27781548ac65e540659';
+
+@ProviderFor(contentProgressRepository)
+final contentProgressRepositoryProvider = ContentProgressRepositoryProvider._();
+
+final class ContentProgressRepositoryProvider
+    extends
+        $FunctionalProvider<
+          ContentProgressRepository,
+          ContentProgressRepository,
+          ContentProgressRepository
+        >
+    with $Provider<ContentProgressRepository> {
+  ContentProgressRepositoryProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'contentProgressRepositoryProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$contentProgressRepositoryHash();
+
+  @$internal
+  @override
+  $ProviderElement<ContentProgressRepository> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  ContentProgressRepository create(Ref ref) {
+    return contentProgressRepository(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(ContentProgressRepository value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<ContentProgressRepository>(value),
+    );
+  }
+}
+
+String _$contentProgressRepositoryHash() =>
+    r'd082946c8fdf2739b5d6ee020ca7aa227bb64b03';
+
 @ProviderFor(personalHomeRepository)
 final personalHomeRepositoryProvider = PersonalHomeRepositoryProvider._();
 

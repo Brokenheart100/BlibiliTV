@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'tv_button.dart';
+import 'tv_motion.dart';
 
 Future<bool> showTvConfirmation(
   BuildContext context, {
@@ -14,22 +15,24 @@ Future<bool> showTvConfirmation(
           context: context,
           requestFocus: true,
           traversalEdgeBehavior: TraversalEdgeBehavior.closedLoop,
-          builder: (context) => AlertDialog(
-            title: Text(title),
-            content: Text(message),
-            actions: [
-              TvButton(
-                key: const Key('dialog-cancel'),
-                label: '取消',
-                autofocus: true,
-                onPressed: () => Navigator.pop(context, false),
-              ),
-              TvButton(
-                key: const Key('dialog-confirm'),
-                label: confirmLabel,
-                onPressed: () => Navigator.pop(context, true),
-              ),
-            ],
+          builder: (context) => TvSceneMotion(
+            child: AlertDialog(
+              title: Text(title),
+              content: Text(message),
+              actions: [
+                TvButton(
+                  key: const Key('dialog-cancel'),
+                  label: '取消',
+                  autofocus: true,
+                  onPressed: () => Navigator.pop(context, false),
+                ),
+                TvButton(
+                  key: const Key('dialog-confirm'),
+                  label: confirmLabel,
+                  onPressed: () => Navigator.pop(context, true),
+                ),
+              ],
+            ),
           ),
         ) ??
         false;

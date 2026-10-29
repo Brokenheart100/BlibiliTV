@@ -8,6 +8,7 @@ import 'package:go_router/go_router.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 import '../../../app/providers/repository_providers.dart';
+import '../../../app/providers/ui_providers.dart';
 import '../../../domain/entities/app_models.dart';
 import '../../../core/result.dart';
 import '../../core/images/tv_image_cache.dart';
@@ -16,7 +17,10 @@ import '../../core/widgets/glass_panel.dart';
 import '../../core/widgets/tv_button.dart';
 import '../../core/widgets/tv_state_panel.dart';
 import '../../core/widgets/tv_video_card.dart';
+import '../../core/widgets/tv_grid.dart';
+import '../settings/view_models/settings_view_model.dart';
 import 'view_models/video_detail_view_model.dart';
+import '../catalog/view_models/catalog_view_model.dart';
 import '../library/views/personal_actions_dialog.dart';
 
 class VideoDetailPage extends ConsumerStatefulWidget {
@@ -34,9 +38,8 @@ class _VideoDetailPageState extends ConsumerState<VideoDetailPage> {
   final descriptionFocus = FocusNode(debugLabel: 'detail-description');
   final relatedRetry = FocusNode(debugLabel: 'related-retry');
   final partsScroll = ScrollController();
-  final relatedScroll = ScrollController();
+  final relatedGrid = TvGridController();
   final partNodes = <String, FocusNode>{};
-  final relatedNodes = <String, FocusNode>{};
   List<VideoPart> parts = [];
   List<VideoSummary> related = [];
   bool focusedOnce = false, expanded = false;
@@ -55,7 +58,6 @@ class _VideoDetailPageState extends ConsumerState<VideoDetailPage> {
     descriptionFocus.dispose();
     relatedRetry.dispose();
     partsScroll.dispose();
-    relatedScroll.dispose();
     for (final node in partNodes.values) {
       node.dispose();
     }
@@ -107,17 +109,7 @@ class _VideoDetailPageState extends ConsumerState<VideoDetailPage> {
       _showNode(relatedRetry.context != null ? relatedRetry : play);
       return;
     }
-    final safe = index.clamp(0, related.length - 1);
-    if (relatedScroll.hasClients) {
-      relatedScroll.jumpTo(
-        (safe * 258.0).clamp(0, relatedScroll.position.maxScrollExtent),
-      );
-    }
-    await WidgetsBinding.instance.endOfFrame;
-    if (mounted) {
-      final node = relatedNodes[related[safe].id];
-      if (node != null) _showNode(node);
-    }
+    await relatedGrid.restore();
   }
 
   KeyEventResult _partKey(int index, KeyEvent event) {
@@ -162,6 +154,25 @@ class _VideoDetailPageState extends ConsumerState<VideoDetailPage> {
   Widget build(BuildContext context) {
     ref.watch(sessionProvider.select((s) => s.value?.scopeKey));
     final detailProvider = provider;
+    final scope = ref.watch(sessionProvider).value?.scopeKey ?? 'guest:0';
+    final discoveryProvider = detailDiscoveryProvider(
+      id: widget.id,
+      pageId: widget.pageId,
+      ownerKey: owner,
+      scopeKey: scope,
+    );
+    final recommendations = ref.watch(discoveryProvider);
+    related = recommendations.value?.items ?? const [];
+    final reduced =
+        ref.watch(settingsViewModelProvider).value?.settings.reducedMotion ??
+        false;
+    ref.listen(appForegroundProvider, (_, foreground) {
+      if (!foreground) {
+        ref.read(discoveryProvider.notifier).suspend();
+      } else if (ref.read(discoveryProvider).hasError) {
+        ref.invalidate(discoveryProvider);
+      }
+    });
     final result = ref.watch(detailProvider);
     ref.listen(detailProvider, (_, next) {
       if (!focusedOnce && next.hasValue) {
@@ -408,9 +419,27 @@ class _VideoDetailPageState extends ConsumerState<VideoDetailPage> {
                           ),
                       ],
                     );
-                    return SingleChildScrollView(
+                    return TvGrid(
                       key: const Key('detail-scroll'),
-                      child: Column(
+                      items: related,
+                      controller: relatedGrid,
+                      memory: ref.read(focusMemoryProvider),
+                      memoryKey: '$scope:${widget.pageId}:detail-discovery',
+                      reducedMotion: reduced,
+                      autoLoadMore: true,
+                      showFooter: recommendations.hasValue,
+                      hasMore: recommendations.value?.nextCursor != null,
+                      loadingMore: recommendations.value?.loadingMore ?? false,
+                      loadMoreFailed:
+                          recommendations.value?.loadMoreFailed ?? false,
+                      onExitLeft: () => unawaited(_focusPart(0)),
+                      onExitUp: () => unawaited(_focusPart(0)),
+                      onLoadMore: ref.read(discoveryProvider.notifier).loadMore,
+                      onSelected: (video) async {
+                        await context.push<void>('/video/${video.id}');
+                        if (mounted) await relatedGrid.restore();
+                      },
+                      header: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           LayoutBuilder(
@@ -539,7 +568,10 @@ class _VideoDetailPageState extends ConsumerState<VideoDetailPage> {
                             style: Theme.of(context).textTheme.titleLarge,
                           ),
                           const SizedBox(height: 12),
-                          _relatedSection(),
+                          _relatedSection(
+                            recommendations,
+                            () => ref.invalidate(discoveryProvider),
+                          ),
                           const SizedBox(height: 18),
                         ],
                       ),
@@ -554,117 +586,51 @@ class _VideoDetailPageState extends ConsumerState<VideoDetailPage> {
     );
   }
 
-  Widget _relatedSection() {
-    final relatedProvider = relatedVideosProvider(
-      id: widget.id,
-      pageId: widget.pageId,
-      ownerKey: owner,
-    );
-    return Consumer(
-      builder: (context, ref, _) => ref
-          .watch(relatedProvider)
-          .when(
-            loading: () => const SizedBox(
-              height: 80,
-              child: Center(child: CircularProgressIndicator(strokeWidth: 2)),
+  Widget _relatedSection(AsyncValue<CatalogState> state, VoidCallback retry) =>
+      state.when(
+        loading: () => const SizedBox(
+          height: 72,
+          child: Center(child: CircularProgressIndicator(strokeWidth: 2)),
+        ),
+        error: (_, _) => Row(
+          children: [
+            Expanded(
+              child: Text(
+                '相关视频暂不可用，仍可播放当前视频',
+                style: TextStyle(color: context.tvColors.muted),
+              ),
             ),
-            error: (_, _) => Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    '相关视频暂不可用，仍可播放当前视频',
-                    style: TextStyle(color: context.tvColors.muted),
-                  ),
-                ),
-                TvButton(
-                  key: const Key('related-retry'),
-                  focusNode: relatedRetry,
-                  onKeyEvent: (e) {
-                    if (isDirectionEvent(e) &&
-                        e.logicalKey == LogicalKeyboardKey.arrowUp) {
-                      unawaited(_focusPart(0));
-                      return KeyEventResult.handled;
-                    }
-                    return KeyEventResult.ignored;
-                  },
-                  label: '重试',
-                  compact: true,
-                  onPressed: () => ref.invalidate(relatedProvider),
-                ),
-              ],
+            TvButton(
+              key: const Key('related-retry'),
+              focusNode: relatedRetry,
+              label: '重试',
+              compact: true,
+              onPressed: retry,
+              onKeyEvent: (event) {
+                if (isDirectionEvent(event) &&
+                    event.logicalKey == LogicalKeyboardKey.arrowUp) {
+                  unawaited(_focusPart(0));
+                  return KeyEventResult.handled;
+                }
+                return KeyEventResult.ignored;
+              },
             ),
-            data: (items) {
-              related = items;
-              if (items.isEmpty) {
-                return Text(
-                  '暂时没有相关视频',
-                  style: TextStyle(color: context.tvColors.muted),
-                );
-              }
-              return SizedBox(
-                height: 218,
-                child: ListView.separated(
-                  controller: relatedScroll,
-                  scrollDirection: Axis.horizontal,
-                  itemCount: items.length,
-                  separatorBuilder: (_, _) => const SizedBox(width: 12),
-                  itemBuilder: (_, index) {
-                    final video = items[index];
-                    return SizedBox(
-                      width: 246,
-                      child: TvVideoCard(
-                        key: ValueKey('related-${video.id}'),
-                        video: video,
-                        reducedMotion: false,
-                        onAttach: (node) => relatedNodes[video.id] = node,
-                        onDetach: (node) {
-                          if (relatedNodes[video.id] == node) {
-                            relatedNodes.remove(video.id);
-                          }
-                        },
-                        onFocus: () {
-                          final node = relatedNodes[video.id];
-                          if (node?.context != null) {
-                            unawaited(
-                              Scrollable.ensureVisible(
-                                node!.context!,
-                                alignment: .5,
-                              ),
-                            );
-                          }
-                        },
-                        onKey: (e) {
-                          if (!isDirectionEvent(e)) {
-                            return KeyEventResult.ignored;
-                          }
-                          if (e.logicalKey == LogicalKeyboardKey.arrowRight) {
-                            unawaited(_focusRelated(index + 1));
-                          } else if (e.logicalKey ==
-                              LogicalKeyboardKey.arrowLeft) {
-                            if (index == 0) {
-                              unawaited(_focusPart(0));
-                            } else {
-                              unawaited(_focusRelated(index - 1));
-                            }
-                          } else if (e.logicalKey ==
-                              LogicalKeyboardKey.arrowUp) {
-                            unawaited(_focusPart(0));
-                          } else {
-                            return KeyEventResult.ignored;
-                          }
-                          return KeyEventResult.handled;
-                        },
-                        onPressed: () => unawaited(() async {
-                          await context.push<void>('/video/${video.id}');
-                          if (mounted) await _focusRelated(index);
-                        }()),
-                      ),
-                    );
-                  },
-                ),
-              );
-            },
-          ),
-    );
-  }
+          ],
+        ),
+        data: (data) => Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (data.notice != null)
+              Text(
+                data.notice!,
+                style: TextStyle(color: context.tvColors.muted, fontSize: 12),
+              ),
+            if (data.failure != null)
+              Text(
+                data.failure!.message,
+                style: TextStyle(color: context.tvColors.muted),
+              ),
+          ],
+        ),
+      );
 }

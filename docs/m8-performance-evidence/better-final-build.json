@@ -1,0 +1,58 @@
+{
+  "recordedAtUtc": "2026-10-28T04:31:12.1657359Z",
+  "commit": "af884a58998e4a528da9ece3b7e5390906a8c2d9",
+  "dirtySources": true,
+  "backend": "Better Player / Media3",
+  "renderer": "Impeller OpenGLES",
+  "profileApkSha256": "a9fa03355129e3b6508b3b8b9f7926f734d8b30718f48356f4d27b37c1621094",
+  "device": {
+    "serial": "emulator-5556",
+    "avd": "Mamba_TV_API36",
+    "api": 36,
+    "abi": "x86_64",
+    "physicalSize": "1920x1080",
+    "density": 320,
+    "gpu": "host",
+    "coldBoot": true,
+    "otherAvdPresent": "emulator-5554, preserved",
+    "concurrentBuildDuringMeasuredPlayback": false
+  },
+  "sources": [
+    {
+      "path": "integration_test/m8_stability_test.dart",
+      "sha256": "69dcc68a19581afb88766f44b9849f7efba0b828eda42fe7f5512d0f9e7490e1"
+    },
+    {
+      "path": "lib/data/services/playback/better_player_engine.dart",
+      "sha256": "7f171714cd743c6921eaa60b705dbfd96c025d505b589f9da43d73f66dcbefe3"
+    },
+    {
+      "path": "lib/domain/overlays/overlay_metrics.dart",
+      "sha256": "d6eb1f08da9e1ebadc482875da356814d1b7f6c358c8f8d5a12b7b062b095aeb"
+    },
+    {
+      "path": "lib/ui/features/player/views/danmaku_glyph_cache.dart",
+      "sha256": "4fe7aca11f58eb19f9e62f44251edd9cedae509dc5344e8e9aa2b200bb578437"
+    },
+    {
+      "path": "lib/ui/features/player/views/playback_overlays.dart",
+      "sha256": "00c19637abdaa8022398a5a006f9e69aceba2a82bd21849f0219a26d780c44d0"
+    },
+    {
+      "path": "test_driver/m8_stability_test.dart",
+      "sha256": "11415f6fc0e9a186323e2c887b356cd283a583375414e1b389dc8a68bb8057c8"
+    },
+    {
+      "path": "test/ui/danmaku_continuity_test.dart",
+      "sha256": "5da3c9b8eb483074a75358f650428c7164a38f9d8aa7fcd7ff25792e6965a2ea"
+    },
+    {
+      "path": "test/ui/danmaku_glyph_cache_test.dart",
+      "sha256": "4c43941a1183c0a6319dba590beabb2f948f7a93e76b7c33be90fa00e1cb1652"
+    },
+    {
+      "path": "tool/m8_host_cycles.ps1",
+      "sha256": "b14081e415ea8e3a85f3c28c38223873d0c115205b944da392b7f9e0ab1cb03a"
+    }
+  ]
+}

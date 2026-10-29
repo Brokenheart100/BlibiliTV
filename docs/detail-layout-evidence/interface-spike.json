@@ -1,0 +1,33 @@
+{
+  "clientDate": "2026-10-29",
+  "owner": "guest",
+  "readOnly": true,
+  "season": {
+    "id": "281",
+    "title": "甘城光辉游乐园",
+    "score": 9.7,
+    "ratingCount": 34657,
+    "views": 79502032,
+    "danmaku": 1653208,
+    "followText": "348.2万系列追番",
+    "tags": [
+      "日常",
+      "奇幻",
+      "励志",
+      "职场"
+    ],
+    "hasActors": true,
+    "hasStaff": true,
+    "episodeCount": 14,
+    "groupCount": 0,
+    "episodesWithArtwork": 14
+  },
+  "discovery": {
+    "relatedCount": 20,
+    "feedCount": 12,
+    "nextPageCount": 12,
+    "continued": true,
+    "notice": null
+  },
+  "remoteWrites": 0
+}

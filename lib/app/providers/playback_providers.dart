@@ -72,4 +72,7 @@ StartPlayback startPlayback(Ref ref) => StartPlayback(
   ref.watch(playbackRepositoryProvider),
   ref.watch(progressRepositoryProvider),
   ref.watch(settingsRepositoryProvider),
+  pgc: () => ref.read(pgcRepositoryProvider),
+  live: () => ref.read(liveRepositoryProvider),
+  contentProgress: () => ref.read(contentProgressRepositoryProvider),
 );

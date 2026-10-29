@@ -2,6 +2,8 @@
 class OverlayMetrics {
   int created = 0, disposed = 0, active = 0, maximum = 0;
   int clockSamples = 0, captionChanges = 0, admittedDanmaku = 0, cleared = 0;
+  int frameEvaluations = 0;
+  int glyphCacheHits = 0, glyphCacheMisses = 0, glyphCacheBytes = 0;
   int maximumDanmaku = 0, activeSchedulers = 0, lastPositionMs = 0;
   int lowLoadTransitions = 0, disabledTransitions = 0;
   int canvasFps = 0, density = 0, slowFramePercent = 0;
@@ -13,6 +15,10 @@ class OverlayMetrics {
     'active': active,
     'maximum': maximum,
     'clockSamples': clockSamples,
+    'frameEvaluations': frameEvaluations,
+    'glyphCacheHits': glyphCacheHits,
+    'glyphCacheMisses': glyphCacheMisses,
+    'glyphCacheBytes': glyphCacheBytes,
     'captionChanges': captionChanges,
     'admittedDanmaku': admittedDanmaku,
     'cleared': cleared,

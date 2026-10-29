@@ -14,11 +14,19 @@ import 'package:mambatv/domain/repositories/repositories.dart';
 import 'package:mambatv/ui/features/settings/view_models/settings_view_model.dart';
 
 import 'memory_preferences.dart';
+import 'fake_content_search.dart';
+
+import 'package:mambatv/domain/discovery/content_search.dart';
+
 import 'fake_overlays.dart';
 
 import 'package:mambatv/app/providers/overlay_providers.dart';
 
 import 'fake_playback.dart';
+import 'fake_content.dart';
+
+import 'package:mambatv/domain/playback/content_playback.dart';
+
 import 'fake_auth.dart';
 import 'fake_personal_home.dart';
 
@@ -48,6 +56,9 @@ Future<ProviderContainer> pumpMamba(
   CacheCleaner? cacheCleaner,
   List<LicenseNotice>? licenses,
   PersonalHomeRepository? personalHome,
+  PgcRepository? pgc,
+  LiveRepository? live,
+  ContentSearchRepository? contentSearch,
 }) async {
   tester.view.physicalSize = size;
   tester.view.devicePixelRatio = 1;
@@ -56,9 +67,20 @@ Future<ProviderContainer> pumpMamba(
   await tester.binding.setSurfaceSize(size);
   addTearDown(() => tester.binding.setSurfaceSize(null));
   final session = sessions ?? MemorySessionRepository();
+  final localProgress = progress ?? MemoryContentProgress();
   final container = createAppContainer(
     talker: createAppTalker(console: false),
     overrides: [
+      contentSearchRepositoryProvider.overrideWithValue(
+        contentSearch ?? FakeContentSearchRepository(),
+      ),
+      pgcRepositoryProvider.overrideWithValue(pgc ?? FakePgcRepository()),
+      liveRepositoryProvider.overrideWithValue(live ?? FakeLiveRepository()),
+      contentProgressRepositoryProvider.overrideWithValue(
+        localProgress is ContentProgressRepository
+            ? localProgress as ContentProgressRepository
+            : MemoryContentProgress(),
+      ),
       personalHomeRepositoryProvider.overrideWithValue(
         personalHome ??
             FakePersonalHomeRepository(session: () => session.current),
@@ -91,9 +113,7 @@ Future<ProviderContainer> pumpMamba(
       playbackRepositoryProvider.overrideWithValue(
         playback ?? FakePlaybackRepository(),
       ),
-      progressRepositoryProvider.overrideWithValue(
-        progress ?? MemoryProgressRepository(),
-      ),
+      progressRepositoryProvider.overrideWithValue(localProgress),
       sessionRepositoryProvider.overrideWithValue(session),
       catalogRepositoryProvider.overrideWithValue(
         catalog ?? FakeCatalogRepository(latency: Duration.zero),

@@ -1,9 +1,9 @@
 {
-  "pubspecLockSha256": "67ee8181b56cc27a51ccbfe72831869e21dc7daf2ebb191f849e8ab8e230462c",
-  "lockCanonicalSha256": "67ee8181b56cc27a51ccbfe72831869e21dc7daf2ebb191f849e8ab8e230462c",
+  "pubspecLockSha256": "0e68272d6cb437533132bacd3b8081a53ece7bd11dcae0abb7a49b45d1b8d15f",
+  "lockCanonicalSha256": "0e68272d6cb437533132bacd3b8081a53ece7bd11dcae0abb7a49b45d1b8d15f",
   "nativeNoticesSha256": "1dd2eac304b0754ef4ac9bdfd3e05192b611ac9c16546bbd42fbe4f395da6a0b",
-  "runtimePackageCount": 158,
-  "allDependencyCount": 202,
+  "runtimePackageCount": 159,
+  "allDependencyCount": 203,
   "packages": [
     {
       "package": "_fe_analyzer_shared",
@@ -346,6 +346,15 @@
       "source": "https://github.com/dart-lang/core/tree/main/pkgs/crypto",
       "licenseFile": "LICENSE",
       "licenseSha256": "ad6a71997da90924b2cfb1fb47ec46537f70faf469efe016168794ae45ed6888"
+    },
+    {
+      "package": "cue",
+      "version": "0.4.0",
+      "kind": "direct",
+      "runtimeGraph": true,
+      "source": "https://github.com/Milad-Akarie/cue",
+      "licenseFile": "LICENSE",
+      "licenseSha256": "5c48d02518d26a6244fd0518b1259cd63b7a9d105900abed3010b9c877d96b3d"
     },
     {
       "package": "cupertino_icons",

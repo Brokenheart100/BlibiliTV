@@ -23,7 +23,7 @@ void main() {
             '{"event":"http","method":"GET","status":${i == 34 ? 503 : 200},"category":"response","elapsedMs":$i}',
           );
         }
-        for (var i = 0; i < 4; i++) {
+        for (var i = 0; i < 5; i++) {
           await press(tester, LogicalKeyboardKey.arrowDown);
         }
         await press(tester, LogicalKeyboardKey.select);

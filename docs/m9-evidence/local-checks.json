@@ -1,0 +1,39 @@
+{
+  "recordedAtUtc": "2026-10-28T15:25:02.205247+00:00",
+  "localOnly": true,
+  "flutterTests": {
+    "passed": 272,
+    "failed": 0,
+    "concurrency": 2
+  },
+  "staticAnalysis": "no issues; fatal infos enabled",
+  "format": {
+    "files": 285,
+    "changed": 0
+  },
+  "generation": {
+    "stableFiles": 47,
+    "secondRunOutputs": 0,
+    "finalRunBuilderOutputsIncludingTemporaryFiles": 94,
+    "finalRunChangedCheckedFiles": 0
+  },
+  "pipelineGuards": {
+    "passed": 13
+  },
+  "dependencyNotices": "current; no added package",
+  "remoteCiRun": false,
+  "physicalTv": false,
+  "published": false,
+  "finalUiAffectedTests": 19,
+  "finalMcpAnalysis": "no errors across lib, test, integration_test, test_driver, tool",
+  "flutterMcpUi": {
+    "catalog": true,
+    "seasonById": true,
+    "liveRiskErrorAndDirectInput": true,
+    "missingViewCountHidden": true,
+    "hotReload": "passed",
+    "runtimeErrors": 0,
+    "device": "emulator-5556",
+    "package": "app.mamba.mambatv.validation"
+  }
+}

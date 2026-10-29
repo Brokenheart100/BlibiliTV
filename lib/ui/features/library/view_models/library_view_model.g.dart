@@ -103,7 +103,7 @@ final class LibraryViewModelProvider
   }
 }
 
-String _$libraryViewModelHash() => r'ff91d6e32ea46fdfb64b5a52ead781ba324d105d';
+String _$libraryViewModelHash() => r'462676b17fc73085c2482bae0c5f0b3436887088';
 
 final class LibraryViewModelFamily extends $Family
     with

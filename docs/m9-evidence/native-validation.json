@@ -1,0 +1,291 @@
+{
+  "status": "passed",
+  "backend": "Better Player / Media3",
+  "readOnly": true,
+  "liveRequestedSeconds": 900,
+  "physicalTv": false,
+  "manualHearingVerified": false,
+  "cycles": [
+    {
+      "cycle": 1,
+      "kind": "ugc",
+      "liveAfterReturn": 0
+    },
+    {
+      "cycle": 2,
+      "kind": "pgc",
+      "liveAfterReturn": 0
+    },
+    {
+      "cycle": 3,
+      "kind": "live",
+      "liveAfterReturn": 0
+    },
+    {
+      "cycle": 4,
+      "kind": "ugc",
+      "liveAfterReturn": 0
+    },
+    {
+      "cycle": 5,
+      "kind": "pgc",
+      "liveAfterReturn": 0
+    },
+    {
+      "cycle": 6,
+      "kind": "live",
+      "liveAfterReturn": 0
+    },
+    {
+      "cycle": 7,
+      "kind": "ugc",
+      "liveAfterReturn": 0
+    },
+    {
+      "cycle": 8,
+      "kind": "pgc",
+      "liveAfterReturn": 0
+    },
+    {
+      "cycle": 9,
+      "kind": "live",
+      "liveAfterReturn": 0
+    },
+    {
+      "cycle": 10,
+      "kind": "ugc",
+      "liveAfterReturn": 0
+    },
+    {
+      "cycle": 11,
+      "kind": "pgc",
+      "liveAfterReturn": 0
+    },
+    {
+      "cycle": 12,
+      "kind": "live",
+      "liveAfterReturn": 0
+    },
+    {
+      "cycle": 13,
+      "kind": "ugc",
+      "liveAfterReturn": 0
+    },
+    {
+      "cycle": 14,
+      "kind": "pgc",
+      "liveAfterReturn": 0
+    },
+    {
+      "cycle": 15,
+      "kind": "live",
+      "liveAfterReturn": 0
+    },
+    {
+      "cycle": 16,
+      "kind": "ugc",
+      "liveAfterReturn": 0
+    },
+    {
+      "cycle": 17,
+      "kind": "pgc",
+      "liveAfterReturn": 0
+    },
+    {
+      "cycle": 18,
+      "kind": "live",
+      "liveAfterReturn": 0
+    },
+    {
+      "cycle": 19,
+      "kind": "ugc",
+      "liveAfterReturn": 0
+    },
+    {
+      "cycle": 20,
+      "kind": "pgc",
+      "liveAfterReturn": 0
+    }
+  ],
+  "pgc": {
+    "freeEpisode": "280924",
+    "resumeErrorMs": 0,
+    "autoNextEpisode": "285888",
+    "restrictedSourceWithheld": true
+  },
+  "samples": [
+    {
+      "elapsedSeconds": 0,
+      "nativePositionMs": 420,
+      "width": 854,
+      "height": 480,
+      "phase": "playing",
+      "buffering": false,
+      "activeEngines": 1,
+      "positionChanges": 1
+    },
+    {
+      "elapsedSeconds": 60,
+      "nativePositionMs": 305,
+      "width": 854,
+      "height": 480,
+      "phase": "playing",
+      "buffering": false,
+      "activeEngines": 1,
+      "positionChanges": 117
+    },
+    {
+      "elapsedSeconds": 120,
+      "nativePositionMs": 207,
+      "width": 854,
+      "height": 480,
+      "phase": "playing",
+      "buffering": false,
+      "activeEngines": 1,
+      "positionChanges": 233
+    },
+    {
+      "elapsedSeconds": 180,
+      "nativePositionMs": 100,
+      "width": 854,
+      "height": 480,
+      "phase": "playing",
+      "buffering": false,
+      "activeEngines": 1,
+      "positionChanges": 349
+    },
+    {
+      "elapsedSeconds": 240,
+      "nativePositionMs": 0,
+      "width": 854,
+      "height": 480,
+      "phase": "playing",
+      "buffering": false,
+      "activeEngines": 1,
+      "positionChanges": 465
+    },
+    {
+      "elapsedSeconds": 300,
+      "nativePositionMs": -82,
+      "width": 854,
+      "height": 480,
+      "phase": "playing",
+      "buffering": false,
+      "activeEngines": 1,
+      "positionChanges": 581
+    },
+    {
+      "elapsedSeconds": 360,
+      "nativePositionMs": 333,
+      "width": 854,
+      "height": 480,
+      "phase": "playing",
+      "buffering": false,
+      "activeEngines": 1,
+      "positionChanges": 698
+    },
+    {
+      "elapsedSeconds": 420,
+      "nativePositionMs": 237,
+      "width": 854,
+      "height": 480,
+      "phase": "playing",
+      "buffering": false,
+      "activeEngines": 1,
+      "positionChanges": 814
+    },
+    {
+      "elapsedSeconds": 480,
+      "nativePositionMs": 172,
+      "width": 854,
+      "height": 480,
+      "phase": "playing",
+      "buffering": false,
+      "activeEngines": 1,
+      "positionChanges": 930
+    },
+    {
+      "elapsedSeconds": 540,
+      "nativePositionMs": 91,
+      "width": 854,
+      "height": 480,
+      "phase": "playing",
+      "buffering": false,
+      "activeEngines": 1,
+      "positionChanges": 1046
+    },
+    {
+      "elapsedSeconds": 600,
+      "nativePositionMs": -7,
+      "width": 854,
+      "height": 480,
+      "phase": "playing",
+      "buffering": false,
+      "activeEngines": 1,
+      "positionChanges": 1162
+    },
+    {
+      "elapsedSeconds": 660,
+      "nativePositionMs": 421,
+      "width": 854,
+      "height": 480,
+      "phase": "playing",
+      "buffering": false,
+      "activeEngines": 1,
+      "positionChanges": 1279
+    },
+    {
+      "elapsedSeconds": 720,
+      "nativePositionMs": 249,
+      "width": 854,
+      "height": 480,
+      "phase": "playing",
+      "buffering": false,
+      "activeEngines": 1,
+      "positionChanges": 1395
+    },
+    {
+      "elapsedSeconds": 780,
+      "nativePositionMs": 149,
+      "width": 854,
+      "height": 480,
+      "phase": "playing",
+      "buffering": false,
+      "activeEngines": 1,
+      "positionChanges": 1511
+    },
+    {
+      "elapsedSeconds": 840,
+      "nativePositionMs": 147,
+      "width": 854,
+      "height": 480,
+      "phase": "playing",
+      "buffering": false,
+      "activeEngines": 1,
+      "positionChanges": 1627
+    },
+    {
+      "elapsedSeconds": 900,
+      "nativePositionMs": 45,
+      "width": 854,
+      "height": 480,
+      "phase": "playing",
+      "buffering": false,
+      "activeEngines": 1,
+      "positionChanges": 1743
+    }
+  ],
+  "recordedAtUtc": "2026-10-28T15:09:11.829279Z",
+  "liveElapsedSecondsIncludingCleanup": 900,
+  "liveRequestedDurationMet": true,
+  "livePositionChanges": 1743,
+  "maximumNativePositionStallMs": 0,
+  "created": 25,
+  "released": 25,
+  "maximumEngines": 1,
+  "liveAfterReturn": 0,
+  "nativeErrors": [],
+  "remoteWrites": 0,
+  "databaseSchema": 4,
+  "hostRecordedAtUtc": "2026-10-28T15:09:11.896496Z"
+}

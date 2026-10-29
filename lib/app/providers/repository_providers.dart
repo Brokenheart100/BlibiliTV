@@ -19,9 +19,28 @@ import '../../data/repositories/drift_history_repository.dart';
 import '../../data/repositories/bilibili_library_repository.dart';
 import '../../data/repositories/bilibili_personal_home_repository.dart';
 import '../../domain/library/personal_home.dart';
+import '../../domain/playback/content_playback.dart';
+import '../../data/repositories/bilibili_pgc_repository.dart';
+import '../../data/repositories/bilibili_live_repository.dart';
+import '../../data/repositories/bilibili_content_search_repository.dart';
+import '../../domain/discovery/content_search.dart';
 import 'infrastructure_providers.dart';
 
 part 'repository_providers.g.dart';
+
+@Riverpod(keepAlive: true)
+ContentSearchRepository contentSearchRepository(Ref ref) =>
+    BilibiliContentSearchRepository(ref.watch(bilibiliApiProvider));
+
+@Riverpod(keepAlive: true)
+PgcRepository pgcRepository(Ref ref) =>
+    BilibiliPgcRepository(ref.watch(bilibiliApiProvider));
+@Riverpod(keepAlive: true)
+LiveRepository liveRepository(Ref ref) =>
+    BilibiliLiveRepository(ref.watch(bilibiliApiProvider));
+@Riverpod(keepAlive: true)
+ContentProgressRepository contentProgressRepository(Ref ref) =>
+    LocalProgressRepository(ref.watch(appDatabaseProvider));
 
 @Riverpod(keepAlive: true)
 PersonalHomeRepository personalHomeRepository(Ref ref) =>

@@ -1,3 +1,5 @@
+import '../../../../domain/playback/playback_target.dart';
+
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -122,7 +124,7 @@ class LibraryViewModel extends _$LibraryViewModel {
     }
   }
 
-  Future<void> removeLocal(String? videoId) async {
+  Future<void> removeLocal(String? videoId, {PlaybackTarget? target}) async {
     final old = state.value;
     if (section != LibrarySection.local ||
         old == null ||

@@ -1,8 +1,14 @@
 # MambaTV：TV 端 B 站客户端详细开发计划
 
-日期：2026-10-26。状态：M6／M7 已随提交 `7eef332` 推送，[v1.0.0](https://github.com/Brokenheart100/BlibiliTV/releases/tag/v1.0.0) 正式签名发布成功；托管 CI 通过 179 项 Flutter 测试与 13 项流水线守卫。M7 按用户要求完成 15 分钟 profile、20 次进出与自动下一 P；真实 TV、人工音画与真实账号写入仍待验收，avsync 波动保留记录。M8 必交功能已实现，本机和真实账号只读验证通过，但持续弹幕性能未通过，M8 尚未完成验收；M9 已规划、未开工。详细范围和完成标准已并入下文第 11 节，设计边界见 [ADR 0009](adr/0009-m8-m9-roadmap-and-feature-boundaries.md)。各阶段历史证据保留于 [M7](m7-validation.md)、[M6](m6-validation.md)、[M5](m5-validation.md)。
+2026-10-29 详情增量：视频“接着发现”改为纵向网格并自动续载；首页／搜索／我的 Tabs 点击刷新首屏；番剧按参考图改为封面资料区、真实统计、分组选集网格和配音／制作区。用户确认长短评后续再做，见 [详情记录](detail-layout-and-refresh.md)。
+
+2026-10-29 搜索增量：扩展现有搜索的番剧／影视／直播类型，与视频共用胶囊 Tabs；首页／我的／搜索 Tabs 和侧栏统一玻璃效果。状态隔离、协议和验证见 [搜索记录](search-types-and-glass.md)。影视索引完整分类与直播推荐 -352 问题仍单列，不以关键词搜索代替这些验收。
+
+日期：2026-10-26。状态：M6／M7 已随提交 `7eef332` 推送，[v1.0.0](https://github.com/Brokenheart100/BlibiliTV/releases/tag/v1.0.0) 正式签名发布成功；托管 CI 通过 179 项 Flutter 测试与 13 项流水线守卫。M7 按用户要求完成 15 分钟 profile、20 次进出与自动下一 P；真实 TV、人工音画与真实账号写入仍待验收，avsync 波动保留记录。M8 必交功能已实现，本机和真实账号只读验证通过，但持续弹幕性能未通过，M8 尚未完成验收；M9 核心已实现，原生回归与未验收项见 [M9 记录](m9-validation.md)。详细范围和完成标准已并入下文第 11 节，设计边界见 [ADR 0009](adr/0009-m8-m9-roadmap-and-feature-boundaries.md)。各阶段历史证据保留于 [M7](m7-validation.md)、[M6](m6-validation.md)、[M5](m5-validation.md)。
 
 架构依据：[设计原则与架构](tv-bilibili-architecture.md)。主平台为 Android TV，使用 Flutter + Riverpod + MVVM + 整洁架构。
+
+2026-10-29 界面增量：Cue 0.4.0 用于焦点、胶囊 Tabs 和局部进入动效；番剧成为侧栏独立分支，海报按实测原图使用 3:4 与保比例解码，历史记录保留第二位。实施及验证见 [界面记录](cue-tv-ui.md)，不代替 M8 弹幕性能或物理设备验收。
 
 2026-10-27 播放增量：按用户要求，Android 默认试用 Better Player／Media3，保留 PlaybackEngine、既有 TV 控制和 media_kit 构建时回退。真实游客视频、缓冲与前后跳转已做专项模拟器验证；人工跳转杂音、口型同步与 ARM／物理电视验收单列待补，历史 M5–M7 长时结果不自动适用于新后端。详见 [试用记录](better-player-trial.md)。
 
@@ -267,7 +273,7 @@ M4 后续补充（2026-10-25）：已完成白名单 HTTP 内存缓存、主动�
 
 ## 11. M8／M9：详细开发计划
 
-**当前状态**：M8 字幕、只读弹幕、UP／关注与搜索筛选已实现，202 项本机测试、真实账号只读与 20 次资源释放检查通过；持续弹幕性能未通过，900 秒压力验收未完成。正式签名的 `1.1.0+2` ARM 包仅为本地测试候选，未提交、推送或发布。点赞／投币独立延期。M9 尚未开始。证据见 [M8 验收](m8-validation.md) 与 [ADR 0010](adr/0010-m8-media-overlays-and-discovery.md)。
+**当前状态（2026-10-28）**：M8 必交功能已实现，最高密度纯弹幕已跑满 900 秒，但持续慢帧仍未达标，见 [专项报告](danmaku-max-density-validation.md)。字幕组合按用户要求暂缓，点赞／投币独立延期。M9-0／M9-1 与基础直播观看已实现，已完成 20 次混合切换、900 秒直播及原生控制验证；直播推荐 -352、物理／人工条件和可选模块单列未验收。见 [M9 验收](m9-validation.md) 与 [ADR 0011](adr/0011-m9-typed-content-and-live.md)。当前代码未提交、推送或发布，既有本地候选不代表 M9 Release。
 
 以下为 M8／M9 的完整范围、执行顺序、工期、架构、接口决策和完成标准。原[专项计划](m8-m9-development-plan.md)保留旧链接入口；后续以本节为准。
 
@@ -278,7 +284,7 @@ M4 后续补充（2026-10-25）：已完成白名单 HTTP 内存缓存、主动�
 | 发布 | v1.0.0，源码提交 `7eef332cc19caad9759b760a05bcd1bd4011be38` | 后续从该基线增量演进，不回退到原规划的 v0.1.0／v0.2.0 编号 |
 | 托管验证 | [CI](https://github.com/Brokenheart100/BlibiliTV/actions/runs/40210596029) 与 [发布流水线](https://github.com/Brokenheart100/BlibiliTV/actions/runs/40210598808) 成功；179 项 Flutter 测试、13 项流水线守卫 | 新功能增加有意义的回归；测试数量不是验收目标 |
 | 发布平台 | Android API 24 起；Release 为 armeabi-v7a／arm64-v8a，x86_64 留在 CI Debug artifacts | 不因新增功能放弃 ARM32；平台最低版本变化需单独决策 |
-| 技术栈 | Flutter、Riverpod Notifier／AsyncNotifier、Freezed、Dio、Drift、media_kit | 沿用 MVVM／整洁架构，不切换状态管理或重复引入播放器 |
+| 技术栈 | Flutter、Riverpod Notifier／AsyncNotifier、Freezed、Dio、Drift、Android Better Player／Media3 与 media_kit 回退 | 沿用 MVVM／整洁架构，不切换状态管理或重复引入播放器 |
 | 播放 | 当前是普通 UGC，`PlaybackRepository.resolve(videoId, partId)`；唯一引擎由 `PlaybackCoordinator` 管理 | M8 复用播放会话；M9 扩展类型化目标，不能把 roomId／episodeId 塞进 BVID |
 | 验证设备 | API 36 x86_64 TV 模拟器；M7 15 分钟／20 次进出／自然下一 P | 不把模拟器结果写成物理 ARM 电视通过；不恢复成 2 小时循环 |
 | 未完成验证 | 物理 TV、人工音画同步、真实账号写入、自然凭据续期；M7 存在单点 avsync 约 14.3 秒后恢复 | 纳入前置诊断与发布说明，不能用新增字幕／弹幕掩盖播放器时钟问题 |
@@ -444,15 +450,15 @@ M9 核心约 **21–32 人日**，加 25% 缓冲约 **27–40 人日，6–8 周
 
 | 拟新增契约 | 设计 |
 | --- | --- |
-| `PlaybackTarget` | Freezed 联合类型：UGC（bvid／cid）、PGC（seasonId／episodeId／已解析 cid）、Live（roomId）、后续 Local（assetId）／Cast（sessionId） |
-| `ResolvedPlayback` | 区分独立音视频、单流／自适应资源、本地资源；短期签名和请求头不持久化、不输出日志 |
+| `PlaybackTarget` | 已实现 Freezed UGC（bvid／cid）、PGC（seasonId／episodeId）、Live（roomId）；PGC 实际 cid／bvid 放解析结果，Local／Cast 后续按需增加 |
+| `PlaybackPlan`／`PlaybackSource` | 已扩展 DASH／HLS 传输、类型化目标与能力；复用现有契约，不另建同职责 ResolvedPlayback。短期签名和请求头不持久化、不输出日志 |
 | `PlaybackCapabilities` | 显式声明 seek、rate、duration、分集、音轨、字幕、历史同步能力；UI 由当前能力生成菜单 |
-| 内容专用解析器 | `UgcPlaybackResolver`／`PgcPlaybackResolver`／`LivePlaybackResolver`，通过装配选择；Domain 不 import 具体 HTTP 或 media_kit |
+| 内容专用解析器 | 实际由 `PlaybackRepository`／`PgcRepository`／`LiveRepository` 提供，`StartPlayback` 按类型调用；Domain 不 import HTTP 或媒体插件 |
 | 历史与续播键 | `(ownerKey, contentKind, contentId, partId)`；直播只保存房间访问记录，不保存虚假 duration 或对直播 seek 续播 |
 
 实施时保留现有 UGC 入口兼容，逐步让 `StartPlayback` 接收类型化目标；仍由唯一 `PlaybackCoordinator` 发放引擎租约。不是为每种内容启动一个播放器实例，也不把全部新逻辑塞进当前 `BilibiliApi`。
 
-Drift 按新增持久数据需要从当前 v2 升级到 v3：旧 UGC 记录回填 contentKind 与原 ID，保留观看进度、搜索、视频元数据和 ownerKey；PGC／直播使用独立键。迁移覆盖 v1→最新与 v2→最新，使用实际 SQLite 测试。后续可选模块确有 schema 变化再递增，不预建无需求的下载／账号空表。
+Drift 实施时已是 v3（头像列），本次升级 **v4**：旧 UGC 回填 contentKind，保留观看进度、搜索、头像、元数据和 ownerKey；PGC／直播使用独立键。实际 SQLite 测试覆盖 v1／v2／v3→v4 及同 ID 跨类型／账号隔离。后续可选模块按实际需要递增，不预建下载／账号空表。
 
 #### 11.4.3 M9-1：番剧／影视
 
@@ -469,6 +475,8 @@ Drift 按新增持久数据需要从当前 v2 升级到 v3：旧 UGC 记录回�
 
 **完成条件**：免费真实剧集可用遥控器完成详情→选集→播放→下一集→退出→续播；受限样本不给出错误播放入口；20 次混合 UGC／PGC 切换最多一个引擎存活，进度与字幕不串集。
 
+2026-10-28 实施：番剧索引、链接／ss 号、既有追番／追剧入口接入季详情；选集改为固定高度懒加载列表，保持正片／附加分组与焦点。免费完整 DASH、会员试看拒绝已实测；本地续播和下一集进入原生回归。2026-10-29 已扩展现有关键词搜索的番剧／影视类型，完整影视分类及真实会员账号仍待验收；不把界面上的受限标识当作账号最终权限，播放解析仍以服务返回为准。
+
 #### 11.4.4 M9-2：直播
 
 **第一批**：直播发现／搜索、房间信息、开播／未开播／断流状态、可用清晰度、源切换、进入与退出。只做被实测支持的传输／编码组合，不承诺所有 HLS／HTTP-FLV 或低延迟协议。
@@ -483,6 +491,8 @@ Drift 按新增持久数据需要从当前 v2 升级到 v3：旧 UGC 记录回�
 6. 礼物、付费消息、签到、发送弹幕、直播间互动不纳入本计划；长连接本身所需的协议消息与用户账号写入分别审查和记录。
 
 **完成条件**：真实公开直播持续播放 15 分钟；断网／恢复、下播／受限、清晰度切换和 20 次进出后无残留流／声音；启用聊天室的独立子版本退出后 socket 和心跳归零。人工听感与物理 TV 另列。
+
+2026-10-28 实施：短号→真实房间、HTTPS HLS／TS／AVC、能力菜单、清晰度、暂停释放／恢复、三次退避重连已接入；真实房间与清单已验证，900 秒长播及 150→250 原生档位切换已通过。推荐接口返回 -352，保留明确错误与直接输入入口，发现列表未验收。2026-10-29 关键词搜索已接入现有搜索页；真实断网／备源切换／全部清晰度、聊天室仍未验收；返回的备用 CDN 暂未提供独立选择器。HLS 分片 404 已按线路故障处理，保留首轮失败证据。
 
 #### 11.4.5 M9-3：投屏接收专项
 
@@ -505,7 +515,7 @@ Drift 按新增持久数据需要从当前 v2 升级到 v3：旧 UGC 记录回�
 4. 下载临时文件与完成 manifest 原子提交；任一轨缺失不标记完成。校验内容长度／ETag 或可用摘要；服务器 Range 行为或资源版本变化时不能直接续接旧字节。
 5. 可设置存储上限并预检可用空间；低空间、写入失败与应用强杀可恢复。只删除明确属于任务的文件，显示删除确认，普通“清临时缓存”不移除已完成离线视频。
 6. 离线库按账号隔离；退出／移除账号明确提供保留或删除本机文件的选项。受限内容能否离线播放取决于实际资源与权限模型，不能以本机存在文件推定长期有效。
-7. 后台／设备重启续传是第二批，另选 Android 调度方案。Media3 有专门 [下载组件](https://developer.android.com/media/media3/exoplayer/downloading-media)，但当前使用 media_kit，不能把该文档当成现成 Flutter API；后台工作需按 [Android 调度约束](https://developer.android.com/develop/background-work/background-tasks/persistent) 验证通知、生命周期与目标系统行为。
+7. 后台／设备重启续传是第二批，另选 Android 调度方案。Media3 有专门 [下载组件](https://developer.android.com/media/media3/exoplayer/downloading-media)，但 Better Player 的现有 Flutter 封装尚未提供本项目的离线端口，不能把该文档当成现成 Flutter API；后台工作需按 [Android 调度约束](https://developer.android.com/develop/background-work/background-tasks/persistent) 验证通知、生命周期与目标系统行为。
 
 **完成条件**：一条真实分离音视频完成下载，断网后画面与音轨可播放；暂停／重启／链接过期／Range 不支持／磁盘不足／删除／账号切换均有结果；未授权跨账号文件不显示。后台能力只有在应用退出／重启设备后实测通过才列为支持。
 
@@ -542,7 +552,7 @@ Drift 按新增持久数据需要从当前 v2 升级到 v3：旧 UGC 记录回�
 
 | 能力 | 初始方案 | 定版门槛 |
 | --- | --- | --- |
-| 播放 | 继续 media_kit 1.2.6／media_kit_video 2.0.1，版本以 lock 为准 | 现有 UGC 不退化；新增传输、原生字幕或本地双轨需 spike |
+| 播放 | Android Better Player 1.29.0／Media3 1.11.0；media_kit 保留 Windows／构建回退，版本以 lock 为准 | 现有 UGC 不退化；新增传输、原生字幕或本地双轨需 spike |
 | 字幕 | 首批复用 Dart JSON／集合及 Flutter 文本渲染，不新建通用字幕 SDK | 已实测 JSON 足以满足需求；额外格式出现再选成熟解析库 |
 | protobuf | 候选 [protobuf 6.1.0](https://pub.dev/packages/protobuf/versions/6.1.0) 与匹配 protoc_plugin／protoc | 协议确实需要、来源／许可明确、Dart 兼容、生成可重复；不手写二进制解码器 |
 | 弹幕画布 | 优先评测 [canvas_danmaku](https://pub.dev/packages/canvas_danmaku)，本次查阅版本 0.3.3，候选而非定版 | 真实视频合成、暂停／清空／seek／倍速、资源释放、性能预算及维护情况通过；UI 适配端口可替换 |
@@ -612,7 +622,7 @@ Drift 按新增持久数据需要从当前 v2 升级到 v3：旧 UGC 记录回�
 
 新增候选阶段先运行全量 CI，再由已存在的 tag 流程构建正式签名包。公共 Release 继续只有 ARM32／ARM64，x86_64 留作开发验证。最小 schema 变更与可独立关闭入口降低回退成本；数据库升级后不承诺直接安装旧 APK 保持数据可用，修复采用向前迁移与递增版本，不能自动卸载或清空用户数据。
 
-M8-0 的公开／真实只读协议 spike 和必交实现已完成；本轮验证结论、遗留条件与证据统一记录到 [M8 验收](m8-validation.md)。进入 M9 的第一步是 **M9-0 的内容目标、播放能力和存储迁移设计**；投屏、下载、多账号不会提前挤入字幕或弹幕开发。
+M8 结论与性能缺口记录到 [M8 验收](m8-validation.md)。M9 类型化基础、PGC 和直播基础观看的实施与证据见 [ADR 0011](adr/0011-m9-typed-content-and-live.md) 和 [M9 验收](m9-validation.md)；投屏、下载、多账号继续作为后续独立模块，不因核心实现而勾选完成。
 
 ## 12. 接口验证清单
 
@@ -716,8 +726,8 @@ flutter build apk --release --split-per-abi
 | M6                      | 已实现，本机／模拟器及真实账号只读通过 | 176 项回归、迁移／隔离／合成写入、TV 原生流程；真实写入和心跳仍待验收，见 M6 记录 |
 | M7 CI/CD 与首次发布     | v1.0.0 正式签名发布成功          | 完整托管 CI／13 项守卫／两个 ARM Release APK／11 份资产；同批元数据与校验和已核对 |
 | M7 设备验收             | 本机模拟器通过，物理／人工待补   | 15 分钟／20 次进出、179 项、测试证书升级；物理 TV／正式身份覆盖升级／人工音画待补 |
-| M8 必交 | 功能已实现，持续弹幕性能未通过 | 202 项回归、真实账号只读和 20 次资源释放通过；900 秒弹幕压力仍阻塞，见 [M8](m8-validation.md)，可选互动延期 |
-| M9 | 详细规划完成，未开工 | 专项计划与 ADR 0009；先做类型化内容与能力模型 |
+| M8 必交 | 功能已实现，纯弹幕持续帧性能待优化 | 无字幕／固定最高 40 档跑满 900 秒，1740 次密度检查、A/B 3.534 ms 及 255 项测试通过；稳态慢帧约 21%，未获性能验收，见 [专项报告](danmaku-max-density-validation.md)；字幕组合按用户要求暂缓，物理／人工待补 |
+| M9 核心 | 核心已实现，本机／模拟器代表流程通过 | Drift v4、272 项回归、20 次切换／900 秒直播；直播推荐 -352、物理／人工与可选模块未验收，见 [M9 记录](m9-validation.md) |
 | 游客接口与扫码申请       | 实测通过                         | 热门、搜索、详情、DASH；二维码申请与未扫描／取消                             |
 | 登录后的接口一致性       | M3 实测通过                      | nav 身份匹配、热门、详情、DASH 与实际播放；账号已按授权退出                  |
 | Android 构建与 TV 模拟器 | 实测通过                         | 构建、安装、可见画面、音轨、暂停、seek、安全存储合成数据读写；不代表真机硬解 |

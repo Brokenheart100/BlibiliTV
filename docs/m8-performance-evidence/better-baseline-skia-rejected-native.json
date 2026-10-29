@@ -1,0 +1,163 @@
+{
+  "status": "failed",
+  "backend": "Better Player / Media3",
+  "requestedSeconds": 30,
+  "physicalTv": false,
+  "manualLipSyncVerified": false,
+  "danmakuOnly": false,
+  "syntheticDanmakuPerSecond": 20,
+  "comparisonWindows": [
+    {
+      "mode": "off",
+      "elapsedMs": 10031,
+      "frameCount": 557,
+      "buildP95Ms": 0.938,
+      "rasterP95Ms": 2.978,
+      "rasterP99Ms": 15.553,
+      "overBudgetRatio": 0.0,
+      "clockSamples": 0,
+      "disabledTransitions": 0,
+      "canvasFps": 0,
+      "density": 40
+    },
+    {
+      "mode": "subtitles",
+      "elapsedMs": 10034,
+      "frameCount": 562,
+      "buildP95Ms": 0.886,
+      "rasterP95Ms": 3.647,
+      "rasterP99Ms": 16.071,
+      "overBudgetRatio": 0.0071174377224199285,
+      "clockSamples": 201,
+      "disabledTransitions": 0,
+      "canvasFps": 0,
+      "density": 40
+    },
+    {
+      "mode": "both",
+      "elapsedMs": 10031,
+      "frameCount": 603,
+      "buildP95Ms": 1.59,
+      "rasterP95Ms": 18.059,
+      "rasterP99Ms": 19.471,
+      "overBudgetRatio": 0.19237147595356552,
+      "clockSamples": 201,
+      "disabledTransitions": 0,
+      "canvasFps": 60,
+      "density": 10
+    }
+  ],
+  "subtitleTimingSamples": [],
+  "overlayMetrics": {
+    "created": 4,
+    "disposed": 4,
+    "active": 0,
+    "maximum": 1,
+    "clockSamples": 1182,
+    "captionChanges": 64,
+    "admittedDanmaku": 162,
+    "cleared": 6,
+    "maximumDanmaku": 40,
+    "activeSchedulers": 0,
+    "lowLoadTransitions": 2,
+    "disabledTransitions": 0,
+    "canvasFps": 0,
+    "density": 10,
+    "slowFramePercent": 22,
+    "canvasDrawTickMs": 28233,
+    "renderedDanmaku": 9,
+    "maximumRenderedDanmaku": 40,
+    "loadWindows": [
+      {
+        "atMs": 32740,
+        "fps": 60,
+        "density": 40,
+        "slowPercent": 0.8333333333333334,
+        "items": 14430,
+        "rendered": 33
+      },
+      {
+        "atMs": 34725,
+        "fps": 60,
+        "density": 40,
+        "slowPercent": 0.0,
+        "items": 14430,
+        "rendered": 36
+      },
+      {
+        "atMs": 36708,
+        "fps": 60,
+        "density": 40,
+        "slowPercent": 0.0,
+        "items": 14430,
+        "rendered": 39
+      },
+      {
+        "atMs": 38708,
+        "fps": 60,
+        "density": 40,
+        "slowPercent": 1.6666666666666667,
+        "items": 14430,
+        "rendered": 38
+      },
+      {
+        "atMs": 40770,
+        "fps": 60,
+        "density": 40,
+        "slowPercent": 22.5,
+        "items": 14430,
+        "rendered": 40
+      },
+      {
+        "atMs": 42736,
+        "fps": 60,
+        "density": 40,
+        "slowPercent": 20.833333333333336,
+        "items": 14430,
+        "rendered": 39
+      },
+      {
+        "atMs": 46622,
+        "fps": 60,
+        "density": 20,
+        "slowPercent": 20.833333333333336,
+        "items": 14430,
+        "rendered": 20
+      },
+      {
+        "atMs": 48657,
+        "fps": 60,
+        "density": 20,
+        "slowPercent": 23.333333333333332,
+        "items": 14430,
+        "rendered": 18
+      },
+      {
+        "atMs": 52588,
+        "fps": 60,
+        "density": 10,
+        "slowPercent": 20.833333333333336,
+        "items": 14430,
+        "rendered": 10
+      },
+      {
+        "atMs": 54687,
+        "fps": 60,
+        "density": 10,
+        "slowPercent": 13.333333333333334,
+        "items": 14430,
+        "rendered": 8
+      },
+      {
+        "atMs": 56686,
+        "fps": 60,
+        "density": 10,
+        "slowPercent": 21.666666666666668,
+        "items": 14430,
+        "rendered": 10
+      }
+    ]
+  },
+  "hostRecordedAtUtc": "2026-10-28T04:23:38.642732Z",
+  "hostDriverElapsedMs": 95055
+}

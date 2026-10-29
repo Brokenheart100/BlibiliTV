@@ -37,6 +37,7 @@ class CatalogViewModel extends _$CatalogViewModel {
     required String ownerKey,
     String query = '',
     CatalogOptions? options,
+    bool forceInitialRefresh = false,
   }) async {
     _repository = ref.watch(catalogRepositoryProvider);
     final signal = _active = CancellationSignal();
@@ -52,6 +53,7 @@ class CatalogViewModel extends _$CatalogViewModel {
       query: query,
       options: options ?? const CatalogOptions(),
       cancellation: signal,
+      forceRefresh: forceInitialRefresh,
     );
     if (signal.isCancelled) return const CatalogState(paused: true);
     final page = result.valueOrThrow;

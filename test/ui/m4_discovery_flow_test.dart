@@ -86,6 +86,7 @@ class LongDetailCatalog extends FakeCatalogRepository {
 Future<void> openSearch(WidgetTester tester) async {
   await press(tester, LogicalKeyboardKey.arrowDown);
   await press(tester, LogicalKeyboardKey.arrowDown);
+  await press(tester, LogicalKeyboardKey.arrowDown);
   await press(tester, LogicalKeyboardKey.select);
 }
 

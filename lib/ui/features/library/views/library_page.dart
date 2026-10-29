@@ -1,3 +1,5 @@
+import '../../../../domain/playback/playback_target.dart';
+
 import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
@@ -151,7 +153,10 @@ class _LibraryPageState extends ConsumerState<LibraryPage> {
       return;
     }
     if (item.unavailableReason != null) return;
-    if (section == LibrarySection.local || section == LibrarySection.remote) {
+    if (item.target != null) {
+      await context.push<void>(item.target!.location);
+    } else if (section == LibrarySection.local ||
+        section == LibrarySection.remote) {
       final parameters = <String, String>{
         if (item.partId != null) 'part': item.partId!,
         if (section == LibrarySection.remote)
@@ -173,7 +178,7 @@ class _LibraryPageState extends ConsumerState<LibraryPage> {
     });
   }
 
-  Future<void> _remove(String? videoId) async {
+  Future<void> _remove(String? videoId, {PlaybackTarget? target}) async {
     final originalProvider = provider;
     final originalScope = scope;
     final confirmed = await showTvConfirmation(
@@ -187,7 +192,9 @@ class _LibraryPageState extends ConsumerState<LibraryPage> {
         originalScope != ref.read(sessionProvider).value?.scopeKey) {
       return;
     }
-    await ref.read(originalProvider.notifier).removeLocal(videoId);
+    await ref
+        .read(originalProvider.notifier)
+        .removeLocal(videoId, target: target);
     if (mounted) refresh.requestFocus();
   }
 
@@ -497,6 +504,9 @@ class _LibraryPageState extends ConsumerState<LibraryPage> {
                                                   item.unavailableReason ??
                                                       (item.folderId != null
                                                           ? '${item.count} 个视频'
+                                                          : item.target
+                                                                is LiveTarget
+                                                          ? '直播访问 · ${item.video.creator}'
                                                           : '${item.video.creator}  ·  ${item.position.inMinutes}:${(item.position.inSeconds % 60).toString().padLeft(2, '0')}'),
                                                   maxLines: 1,
                                                   overflow:
@@ -544,7 +554,12 @@ class _LibraryPageState extends ConsumerState<LibraryPage> {
                                         onPressed: () {
                                           if (busy) return;
                                           if (section == LibrarySection.local) {
-                                            unawaited(_remove(item.video.id));
+                                            unawaited(
+                                              _remove(
+                                                item.video.id,
+                                                target: item.target,
+                                              ),
+                                            );
                                           } else if (item.unavailableReason ==
                                               null) {
                                             unawaited(

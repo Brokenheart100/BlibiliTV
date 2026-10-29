@@ -1,0 +1,86 @@
+{
+  "recordedAtUtc": "2026-10-28T05:21:18.5832235Z",
+  "commit": "af884a58998e4a528da9ece3b7e5390906a8c2d9",
+  "dirtySources": true,
+  "backend": "Better Player / Media3",
+  "renderer": "Impeller OpenGLES",
+  "profileApkSha256": "4e55a76a0d260237bb3cdcb40ef1d78251b3779a55e1ce0f8567c25feca346de",
+  "device": {
+    "serial": "emulator-5556",
+    "avd": "Mamba_TV_API36",
+    "api": 36,
+    "abi": "x86_64",
+    "physicalSize": "1920x1080",
+    "density": 320,
+    "coldBootThisRun": false,
+    "otherAdbDevicesPresent": false,
+    "concurrentBuildDuringMeasuredPlayback": false,
+    "gpu": "host"
+  },
+  "configuration": {
+    "subtitles": false,
+    "density": 40,
+    "area": 1,
+    "adaptiveDensity": false,
+    "syntheticPerMediaSecond": 20,
+    "requestedSeconds": 900,
+    "resourceCycles": 2
+  },
+  "sources": [
+    {
+      "path": "integration_test/m8_stability_test.dart",
+      "sha256": "b07396a3a66324f1d435a678e6517607037e880c291e8ba2bebbfd9704a17a81"
+    },
+    {
+      "path": "lib/app/providers/overlay_providers.dart",
+      "sha256": "f4feae6c57ae1efcc3b57b82fd6bc400e33ea8879fff1512b402dad13e857f3e"
+    },
+    {
+      "path": "lib/data/services/playback/better_player_engine.dart",
+      "sha256": "7f171714cd743c6921eaa60b705dbfd96c025d505b589f9da43d73f66dcbefe3"
+    },
+    {
+      "path": "lib/domain/overlays/danmaku_load_budget.dart",
+      "sha256": "d882e24f1a9415cb61dd652bb4f41bbe4bac0f465cd908eb5bbf1010d09f3171"
+    },
+    {
+      "path": "lib/domain/overlays/overlay_metrics.dart",
+      "sha256": "d6eb1f08da9e1ebadc482875da356814d1b7f6c358c8f8d5a12b7b062b095aeb"
+    },
+    {
+      "path": "lib/ui/features/player/views/danmaku_glyph_cache.dart",
+      "sha256": "4fe7aca11f58eb19f9e62f44251edd9cedae509dc5344e8e9aa2b200bb578437"
+    },
+    {
+      "path": "lib/ui/features/player/views/playback_overlays.dart",
+      "sha256": "a572414b120f0cb1b7f9bad43d922cf6d15798e4edc28a9b4f405aa369445e48"
+    },
+    {
+      "path": "test_driver/m8_stability_test.dart",
+      "sha256": "0faced71b3e9317cdc8530a49218192a1157af857635b982ed0d0376b425a98e"
+    },
+    {
+      "path": "test/domain/danmaku_load_budget_test.dart",
+      "sha256": "5ac2e4e987a2476d08b72e6a7028ef16ec78301078e706aaed1a8b4b43756f86"
+    },
+    {
+      "path": "test/ui/danmaku_continuity_test.dart",
+      "sha256": "26494054d124d82f5dab9c7f9e6256ef88f45868d687981e17dfcb583c2d43ca"
+    },
+    {
+      "path": "test/ui/danmaku_glyph_cache_test.dart",
+      "sha256": "4c43941a1183c0a6319dba590beabb2f948f7a93e76b7c33be90fa00e1cb1652"
+    },
+    {
+      "path": "tool/m8_host_cycles.ps1",
+      "sha256": "b14081e415ea8e3a85f3c28c38223873d0c115205b944da392b7f9e0ab1cb03a"
+    }
+  ],
+  "postRunChanges": [
+    {
+      "path": "integration_test/m8_stability_test.dart",
+      "reason": "Validation-only followup after detecting missing continuous frame budget assertion; production sources unchanged.",
+      "currentSha256": "aeb43be02caa2793ba8262f5389012210841b7538585c7adc7fcc8f4b5dbe3ab"
+    }
+  ]
+}

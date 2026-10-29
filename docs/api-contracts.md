@@ -140,6 +140,25 @@ M3 真实申请返回的二维码目标为 HTTPS `account.bilibili.com`；实现
 
 实测计数见 [公开 spike](m8-evidence/interface-spike.json)、[账号只读](m8-evidence/real-readonly.json) 与 [验收](m8-validation.md)。账号报告的 recordedAtUtc 来自当时旧模拟器时钟，不能当作主机时间；执行发生于本轮 2026-10-26，原报告保持不改写。不同客户端的 manifest.total 样本出现差异，按各自响应处理，未推定原因。
 
-## M8 可选增量与 M9 尚未验证的契约
+## M9 已实现的只读契约（2026-10-28）
 
-点赞／投币是独立延期增量；没有新增对应生产命令或真实写入验收。PGC／直播需独立内容 ID、解析与错误契约；UGC 心跳、时长和续播规则不自动适用。后续继续按“来源／日期、请求与响应字段、合成 fixture、真实只读样本、失败语义、范围”补录。
+2026-10-29 详情增量：季详情可选映射 `rating.score/count`、`stat`、`styles`、`publish`、`new_ep`、`actors`、`staff` 和 `episodes[].cover`；缺失数值不伪造，评分只接受 0–10。真实季 281 返回 14 集、14 张剧集图、评分 9.7 和配音／制作文本。`archive/related` 是有限列表，后续发现网格调用既有首页推荐的真实游标分页，并按 BVID 去重，不为相关接口编造页码。契约与证据见 [详情记录](detail-layout-and-refresh.md)。
+
+2026-10-29 新增：现有搜索通过同一 WBI `/x/web-interface/wbi/search/type` 接口查询 media_bangumi／media_ft／live_room，按 season_id／roomid 映射独立结果，按 numPages 分页，code=0 的 v_voucher 作为风控错误处理；零结果可缺省 result。参数、边界和新证据见 [搜索契约](search-types-and-glass.md#接口)。下表仍为原 M9 样本快照。
+
+固定 PiliPlus `affac5334fc41744894618d9fb53b7101db9532a` 的 `api.dart`／`pgc.dart`／`live.dart` 核对线索，实际公共只读结果见 [spike](m9-evidence/interface-spike.json)。这些是当前 Web 协议事实，不是稳定官方 SDK 的承诺。
+
+| 能力 | 请求／参数 | 响应与实际验证 |
+| --- | --- | --- |
+| 番剧索引 | `GET api.bilibili.com/pgc/season/index/result`，season_type=1、type=1、order=3、sort=0、page、pagesize=24 | `data.list`、has_next；真实 24 项，其他影视分类／关键词未验收 |
+| 季详情 | `GET /pgc/view/web/season`，season_id | `result` 下 season_id／title／episodes／section[].episodes；季 28320，22 正片／2 附加分组 |
+| PGC 播放 | `GET /pgc/player/web/v2/playurl`，ep_id、qn、fnval=4048、fnver=0、fourk=1 | **`result.video_info`** 的 DASH；280924 完整源、285889 is_preview／PLAY_PREVIEW 拒绝，不降格为完整播放；DRM／受限合成拒绝 |
+| 直播房间 | `GET api.live.bilibili.com/xlive/web-room/v1/index/getH5InfoByRoom`，room_id | `data.room_info` 与 anchor_info.base_info；短号 6→7734200，开播／受限决定可播放性 |
+| 直播播放 | `GET /xlive/web-room/v2/index/getRoomPlayInfo`，room_id、protocol=0,1、format=0,1,2、codec=0、qn（默认80）、platform=web、ptype=8 | `data.playurl_info.playurl`；只选 http_hls／ts／avc，current_qn 为实际档位；host+base_url+extra 在内存组合，HTTPS B站媒体域；真实清单可读 |
+| 直播推荐 | `GET /xlive/web-interface/v1/second/getUserRecommend`，page、page_size=24 | 真实 **-352**，尚无成功列表证据；UI 展示错误，保留链接／房间号直达，不伪造推荐 |
+
+PGC／直播 API 使用当前会话 scope，取消和账号更换后丢弃结果。它们不进入通用 HTTP 缓存白名单；媒体请求头不附 Cookie。路由只携带公开 ID。直播 HLS 分片 404 映射线路故障、403／410 映射地址失效，可有限重取源；原始地址和消息不暴露到 UI／Talker。没有新增账号写入、直播 socket 或 PGC 心跳。
+
+## M8 可选增量与 M9 后续契约
+
+点赞／投币独立延期；没有新增对应生产命令或真实写入验收。PGC 账号专属权限、直播推荐／关键词搜索／聊天室，以及投屏／下载／多账号继续独立补验；UGC 心跳、时长和续播规则不自动适用。后续按来源、字段、合成 fixture、真实样本、失败语义与范围补录。

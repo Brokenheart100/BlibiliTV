@@ -2,8 +2,11 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../core/result.dart';
 import '../entities/app_models.dart';
+import 'playback_target.dart';
 
 part 'playback.freezed.dart';
+
+enum PlaybackTransport { dash, hls, flv, single }
 
 /// Ephemeral signed resources. Never serialize or include URLs in diagnostics.
 final class PlaybackSource {
@@ -20,6 +23,8 @@ final class PlaybackSource {
     this.audioBackups = const [],
     this.videoDash,
     this.audioDash,
+    this.transport = PlaybackTransport.dash,
+    this.headers = const {},
   });
   final String videoUrl, audioUrl, codec;
   final Duration duration;
@@ -28,6 +33,8 @@ final class PlaybackSource {
   final List<PlaybackOption> qualities, audioTracks;
   final List<String> videoBackups, audioBackups;
   final DashRepresentation? videoDash, audioDash;
+  final PlaybackTransport transport;
+  final Map<String, String> headers;
   PlaybackSource? get alternate => videoBackups.isEmpty || audioBackups.isEmpty
       ? null
       : PlaybackSource(
@@ -41,6 +48,8 @@ final class PlaybackSource {
           audioId: audioId,
           videoDash: videoDash,
           audioDash: audioDash,
+          transport: transport,
+          headers: headers,
         );
   @override
   String toString() =>
@@ -159,10 +168,13 @@ final class WatchProgress {
     required this.partId,
     required this.position,
     required this.duration,
+    this.kind = ContentKind.ugc,
   });
   final String ownerKey, videoId, partId;
+  final ContentKind kind;
   final Duration position, duration;
   bool get isValid =>
+      kind != ContentKind.live &&
       position.inMilliseconds >= 1000 &&
       duration > Duration.zero &&
       position <= duration;
@@ -196,6 +208,10 @@ final class PlaybackPlan {
     this.autoNext = false,
     this.syncHistory = false,
     this.preferenceNotice,
+    this.playbackTarget,
+    this.capabilities = const PlaybackCapabilities(),
+    this.overlayVideoId,
+    this.overlayPartId,
   });
   final PlaybackSource source;
   final String videoId, partId, title, partTitle;
@@ -205,4 +221,9 @@ final class PlaybackPlan {
   final double initialRate;
   final bool autoNext, syncHistory;
   final String? preferenceNotice;
+  final PlaybackTarget? playbackTarget;
+  PlaybackTarget get target =>
+      playbackTarget ?? PlaybackTarget.ugc(bvid: videoId, cid: partId);
+  final PlaybackCapabilities capabilities;
+  final String? overlayVideoId, overlayPartId;
 }

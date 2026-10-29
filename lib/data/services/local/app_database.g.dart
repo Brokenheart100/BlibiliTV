@@ -9,6 +9,18 @@ class $WatchProgressRowsTable extends WatchProgressRows
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
   $WatchProgressRowsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _contentKindMeta = const VerificationMeta(
+    'contentKind',
+  );
+  @override
+  late final GeneratedColumn<String> contentKind = GeneratedColumn<String>(
+    'content_kind',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('ugc'),
+  );
   static const VerificationMeta _ownerKeyMeta = const VerificationMeta(
     'ownerKey',
   );
@@ -77,6 +89,7 @@ class $WatchProgressRowsTable extends WatchProgressRows
   );
   @override
   List<GeneratedColumn> get $columns => [
+    contentKind,
     ownerKey,
     videoId,
     partId,
@@ -96,6 +109,15 @@ class $WatchProgressRowsTable extends WatchProgressRows
   }) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
+    if (data.containsKey('content_kind')) {
+      context.handle(
+        _contentKindMeta,
+        contentKind.isAcceptableOrUnknown(
+          data['content_kind']!,
+          _contentKindMeta,
+        ),
+      );
+    }
     if (data.containsKey('owner_key')) {
       context.handle(
         _ownerKeyMeta,
@@ -144,11 +166,20 @@ class $WatchProgressRowsTable extends WatchProgressRows
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => {ownerKey, videoId, partId};
+  Set<GeneratedColumn> get $primaryKey => {
+    ownerKey,
+    contentKind,
+    videoId,
+    partId,
+  };
   @override
   WatchProgressRow map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return WatchProgressRow(
+      contentKind: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}content_kind'],
+      )!,
       ownerKey: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}owner_key'],
@@ -184,6 +215,7 @@ class $WatchProgressRowsTable extends WatchProgressRows
 
 class WatchProgressRow extends DataClass
     implements Insertable<WatchProgressRow> {
+  final String contentKind;
   final String ownerKey;
   final String videoId;
   final String partId;
@@ -191,6 +223,7 @@ class WatchProgressRow extends DataClass
   final int durationMs;
   final DateTime updatedAt;
   const WatchProgressRow({
+    required this.contentKind,
     required this.ownerKey,
     required this.videoId,
     required this.partId,
@@ -201,6 +234,7 @@ class WatchProgressRow extends DataClass
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
+    map['content_kind'] = Variable<String>(contentKind);
     map['owner_key'] = Variable<String>(ownerKey);
     map['video_id'] = Variable<String>(videoId);
     map['part_id'] = Variable<String>(partId);
@@ -212,6 +246,7 @@ class WatchProgressRow extends DataClass
 
   WatchProgressRowsCompanion toCompanion(bool nullToAbsent) {
     return WatchProgressRowsCompanion(
+      contentKind: Value(contentKind),
       ownerKey: Value(ownerKey),
       videoId: Value(videoId),
       partId: Value(partId),
@@ -227,6 +262,7 @@ class WatchProgressRow extends DataClass
   }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return WatchProgressRow(
+      contentKind: serializer.fromJson<String>(json['contentKind']),
       ownerKey: serializer.fromJson<String>(json['ownerKey']),
       videoId: serializer.fromJson<String>(json['videoId']),
       partId: serializer.fromJson<String>(json['partId']),
@@ -239,6 +275,7 @@ class WatchProgressRow extends DataClass
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
+      'contentKind': serializer.toJson<String>(contentKind),
       'ownerKey': serializer.toJson<String>(ownerKey),
       'videoId': serializer.toJson<String>(videoId),
       'partId': serializer.toJson<String>(partId),
@@ -249,6 +286,7 @@ class WatchProgressRow extends DataClass
   }
 
   WatchProgressRow copyWith({
+    String? contentKind,
     String? ownerKey,
     String? videoId,
     String? partId,
@@ -256,6 +294,7 @@ class WatchProgressRow extends DataClass
     int? durationMs,
     DateTime? updatedAt,
   }) => WatchProgressRow(
+    contentKind: contentKind ?? this.contentKind,
     ownerKey: ownerKey ?? this.ownerKey,
     videoId: videoId ?? this.videoId,
     partId: partId ?? this.partId,
@@ -265,6 +304,9 @@ class WatchProgressRow extends DataClass
   );
   WatchProgressRow copyWithCompanion(WatchProgressRowsCompanion data) {
     return WatchProgressRow(
+      contentKind: data.contentKind.present
+          ? data.contentKind.value
+          : this.contentKind,
       ownerKey: data.ownerKey.present ? data.ownerKey.value : this.ownerKey,
       videoId: data.videoId.present ? data.videoId.value : this.videoId,
       partId: data.partId.present ? data.partId.value : this.partId,
@@ -281,6 +323,7 @@ class WatchProgressRow extends DataClass
   @override
   String toString() {
     return (StringBuffer('WatchProgressRow(')
+          ..write('contentKind: $contentKind, ')
           ..write('ownerKey: $ownerKey, ')
           ..write('videoId: $videoId, ')
           ..write('partId: $partId, ')
@@ -292,12 +335,20 @@ class WatchProgressRow extends DataClass
   }
 
   @override
-  int get hashCode =>
-      Object.hash(ownerKey, videoId, partId, positionMs, durationMs, updatedAt);
+  int get hashCode => Object.hash(
+    contentKind,
+    ownerKey,
+    videoId,
+    partId,
+    positionMs,
+    durationMs,
+    updatedAt,
+  );
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is WatchProgressRow &&
+          other.contentKind == this.contentKind &&
           other.ownerKey == this.ownerKey &&
           other.videoId == this.videoId &&
           other.partId == this.partId &&
@@ -307,6 +358,7 @@ class WatchProgressRow extends DataClass
 }
 
 class WatchProgressRowsCompanion extends UpdateCompanion<WatchProgressRow> {
+  final Value<String> contentKind;
   final Value<String> ownerKey;
   final Value<String> videoId;
   final Value<String> partId;
@@ -315,6 +367,7 @@ class WatchProgressRowsCompanion extends UpdateCompanion<WatchProgressRow> {
   final Value<DateTime> updatedAt;
   final Value<int> rowid;
   const WatchProgressRowsCompanion({
+    this.contentKind = const Value.absent(),
     this.ownerKey = const Value.absent(),
     this.videoId = const Value.absent(),
     this.partId = const Value.absent(),
@@ -324,6 +377,7 @@ class WatchProgressRowsCompanion extends UpdateCompanion<WatchProgressRow> {
     this.rowid = const Value.absent(),
   });
   WatchProgressRowsCompanion.insert({
+    this.contentKind = const Value.absent(),
     required String ownerKey,
     required String videoId,
     required String partId,
@@ -336,6 +390,7 @@ class WatchProgressRowsCompanion extends UpdateCompanion<WatchProgressRow> {
        partId = Value(partId),
        updatedAt = Value(updatedAt);
   static Insertable<WatchProgressRow> custom({
+    Expression<String>? contentKind,
     Expression<String>? ownerKey,
     Expression<String>? videoId,
     Expression<String>? partId,
@@ -345,6 +400,7 @@ class WatchProgressRowsCompanion extends UpdateCompanion<WatchProgressRow> {
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
+      if (contentKind != null) 'content_kind': contentKind,
       if (ownerKey != null) 'owner_key': ownerKey,
       if (videoId != null) 'video_id': videoId,
       if (partId != null) 'part_id': partId,
@@ -356,6 +412,7 @@ class WatchProgressRowsCompanion extends UpdateCompanion<WatchProgressRow> {
   }
 
   WatchProgressRowsCompanion copyWith({
+    Value<String>? contentKind,
     Value<String>? ownerKey,
     Value<String>? videoId,
     Value<String>? partId,
@@ -365,6 +422,7 @@ class WatchProgressRowsCompanion extends UpdateCompanion<WatchProgressRow> {
     Value<int>? rowid,
   }) {
     return WatchProgressRowsCompanion(
+      contentKind: contentKind ?? this.contentKind,
       ownerKey: ownerKey ?? this.ownerKey,
       videoId: videoId ?? this.videoId,
       partId: partId ?? this.partId,
@@ -378,6 +436,9 @@ class WatchProgressRowsCompanion extends UpdateCompanion<WatchProgressRow> {
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
+    if (contentKind.present) {
+      map['content_kind'] = Variable<String>(contentKind.value);
+    }
     if (ownerKey.present) {
       map['owner_key'] = Variable<String>(ownerKey.value);
     }
@@ -405,6 +466,7 @@ class WatchProgressRowsCompanion extends UpdateCompanion<WatchProgressRow> {
   @override
   String toString() {
     return (StringBuffer('WatchProgressRowsCompanion(')
+          ..write('contentKind: $contentKind, ')
           ..write('ownerKey: $ownerKey, ')
           ..write('videoId: $videoId, ')
           ..write('partId: $partId, ')
@@ -690,6 +752,18 @@ class $HistoryVideosTable extends HistoryVideos
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
   $HistoryVideosTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _contentKindMeta = const VerificationMeta(
+    'contentKind',
+  );
+  @override
+  late final GeneratedColumn<String> contentKind = GeneratedColumn<String>(
+    'content_kind',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('ugc'),
+  );
   static const VerificationMeta _ownerKeyMeta = const VerificationMeta(
     'ownerKey',
   );
@@ -779,6 +853,7 @@ class $HistoryVideosTable extends HistoryVideos
   );
   @override
   List<GeneratedColumn> get $columns => [
+    contentKind,
     ownerKey,
     videoId,
     title,
@@ -800,6 +875,15 @@ class $HistoryVideosTable extends HistoryVideos
   }) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
+    if (data.containsKey('content_kind')) {
+      context.handle(
+        _contentKindMeta,
+        contentKind.isAcceptableOrUnknown(
+          data['content_kind']!,
+          _contentKindMeta,
+        ),
+      );
+    }
     if (data.containsKey('owner_key')) {
       context.handle(
         _ownerKeyMeta,
@@ -868,11 +952,15 @@ class $HistoryVideosTable extends HistoryVideos
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => {ownerKey, videoId};
+  Set<GeneratedColumn> get $primaryKey => {ownerKey, contentKind, videoId};
   @override
   HistoryVideo map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return HistoryVideo(
+      contentKind: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}content_kind'],
+      )!,
       ownerKey: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}owner_key'],
@@ -915,6 +1003,7 @@ class $HistoryVideosTable extends HistoryVideos
 }
 
 class HistoryVideo extends DataClass implements Insertable<HistoryVideo> {
+  final String contentKind;
   final String ownerKey;
   final String videoId;
   final String title;
@@ -924,6 +1013,7 @@ class HistoryVideo extends DataClass implements Insertable<HistoryVideo> {
   final int durationSeconds;
   final int viewCount;
   const HistoryVideo({
+    required this.contentKind,
     required this.ownerKey,
     required this.videoId,
     required this.title,
@@ -936,6 +1026,7 @@ class HistoryVideo extends DataClass implements Insertable<HistoryVideo> {
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
+    map['content_kind'] = Variable<String>(contentKind);
     map['owner_key'] = Variable<String>(ownerKey);
     map['video_id'] = Variable<String>(videoId);
     map['title'] = Variable<String>(title);
@@ -953,6 +1044,7 @@ class HistoryVideo extends DataClass implements Insertable<HistoryVideo> {
 
   HistoryVideosCompanion toCompanion(bool nullToAbsent) {
     return HistoryVideosCompanion(
+      contentKind: Value(contentKind),
       ownerKey: Value(ownerKey),
       videoId: Value(videoId),
       title: Value(title),
@@ -974,6 +1066,7 @@ class HistoryVideo extends DataClass implements Insertable<HistoryVideo> {
   }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return HistoryVideo(
+      contentKind: serializer.fromJson<String>(json['contentKind']),
       ownerKey: serializer.fromJson<String>(json['ownerKey']),
       videoId: serializer.fromJson<String>(json['videoId']),
       title: serializer.fromJson<String>(json['title']),
@@ -988,6 +1081,7 @@ class HistoryVideo extends DataClass implements Insertable<HistoryVideo> {
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
+      'contentKind': serializer.toJson<String>(contentKind),
       'ownerKey': serializer.toJson<String>(ownerKey),
       'videoId': serializer.toJson<String>(videoId),
       'title': serializer.toJson<String>(title),
@@ -1000,6 +1094,7 @@ class HistoryVideo extends DataClass implements Insertable<HistoryVideo> {
   }
 
   HistoryVideo copyWith({
+    String? contentKind,
     String? ownerKey,
     String? videoId,
     String? title,
@@ -1009,6 +1104,7 @@ class HistoryVideo extends DataClass implements Insertable<HistoryVideo> {
     int? durationSeconds,
     int? viewCount,
   }) => HistoryVideo(
+    contentKind: contentKind ?? this.contentKind,
     ownerKey: ownerKey ?? this.ownerKey,
     videoId: videoId ?? this.videoId,
     title: title ?? this.title,
@@ -1022,6 +1118,9 @@ class HistoryVideo extends DataClass implements Insertable<HistoryVideo> {
   );
   HistoryVideo copyWithCompanion(HistoryVideosCompanion data) {
     return HistoryVideo(
+      contentKind: data.contentKind.present
+          ? data.contentKind.value
+          : this.contentKind,
       ownerKey: data.ownerKey.present ? data.ownerKey.value : this.ownerKey,
       videoId: data.videoId.present ? data.videoId.value : this.videoId,
       title: data.title.present ? data.title.value : this.title,
@@ -1040,6 +1139,7 @@ class HistoryVideo extends DataClass implements Insertable<HistoryVideo> {
   @override
   String toString() {
     return (StringBuffer('HistoryVideo(')
+          ..write('contentKind: $contentKind, ')
           ..write('ownerKey: $ownerKey, ')
           ..write('videoId: $videoId, ')
           ..write('title: $title, ')
@@ -1054,6 +1154,7 @@ class HistoryVideo extends DataClass implements Insertable<HistoryVideo> {
 
   @override
   int get hashCode => Object.hash(
+    contentKind,
     ownerKey,
     videoId,
     title,
@@ -1067,6 +1168,7 @@ class HistoryVideo extends DataClass implements Insertable<HistoryVideo> {
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is HistoryVideo &&
+          other.contentKind == this.contentKind &&
           other.ownerKey == this.ownerKey &&
           other.videoId == this.videoId &&
           other.title == this.title &&
@@ -1078,6 +1180,7 @@ class HistoryVideo extends DataClass implements Insertable<HistoryVideo> {
 }
 
 class HistoryVideosCompanion extends UpdateCompanion<HistoryVideo> {
+  final Value<String> contentKind;
   final Value<String> ownerKey;
   final Value<String> videoId;
   final Value<String> title;
@@ -1088,6 +1191,7 @@ class HistoryVideosCompanion extends UpdateCompanion<HistoryVideo> {
   final Value<int> viewCount;
   final Value<int> rowid;
   const HistoryVideosCompanion({
+    this.contentKind = const Value.absent(),
     this.ownerKey = const Value.absent(),
     this.videoId = const Value.absent(),
     this.title = const Value.absent(),
@@ -1099,6 +1203,7 @@ class HistoryVideosCompanion extends UpdateCompanion<HistoryVideo> {
     this.rowid = const Value.absent(),
   });
   HistoryVideosCompanion.insert({
+    this.contentKind = const Value.absent(),
     required String ownerKey,
     required String videoId,
     required String title,
@@ -1114,6 +1219,7 @@ class HistoryVideosCompanion extends UpdateCompanion<HistoryVideo> {
        creator = Value(creator),
        durationSeconds = Value(durationSeconds);
   static Insertable<HistoryVideo> custom({
+    Expression<String>? contentKind,
     Expression<String>? ownerKey,
     Expression<String>? videoId,
     Expression<String>? title,
@@ -1125,6 +1231,7 @@ class HistoryVideosCompanion extends UpdateCompanion<HistoryVideo> {
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
+      if (contentKind != null) 'content_kind': contentKind,
       if (ownerKey != null) 'owner_key': ownerKey,
       if (videoId != null) 'video_id': videoId,
       if (title != null) 'title': title,
@@ -1138,6 +1245,7 @@ class HistoryVideosCompanion extends UpdateCompanion<HistoryVideo> {
   }
 
   HistoryVideosCompanion copyWith({
+    Value<String>? contentKind,
     Value<String>? ownerKey,
     Value<String>? videoId,
     Value<String>? title,
@@ -1149,6 +1257,7 @@ class HistoryVideosCompanion extends UpdateCompanion<HistoryVideo> {
     Value<int>? rowid,
   }) {
     return HistoryVideosCompanion(
+      contentKind: contentKind ?? this.contentKind,
       ownerKey: ownerKey ?? this.ownerKey,
       videoId: videoId ?? this.videoId,
       title: title ?? this.title,
@@ -1164,6 +1273,9 @@ class HistoryVideosCompanion extends UpdateCompanion<HistoryVideo> {
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
+    if (contentKind.present) {
+      map['content_kind'] = Variable<String>(contentKind.value);
+    }
     if (ownerKey.present) {
       map['owner_key'] = Variable<String>(ownerKey.value);
     }
@@ -1197,6 +1309,7 @@ class HistoryVideosCompanion extends UpdateCompanion<HistoryVideo> {
   @override
   String toString() {
     return (StringBuffer('HistoryVideosCompanion(')
+          ..write('contentKind: $contentKind, ')
           ..write('ownerKey: $ownerKey, ')
           ..write('videoId: $videoId, ')
           ..write('title: $title, ')
@@ -1231,6 +1344,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
 
 typedef $$WatchProgressRowsTableCreateCompanionBuilder =
     WatchProgressRowsCompanion Function({
+      Value<String> contentKind,
       required String ownerKey,
       required String videoId,
       required String partId,
@@ -1241,6 +1355,7 @@ typedef $$WatchProgressRowsTableCreateCompanionBuilder =
     });
 typedef $$WatchProgressRowsTableUpdateCompanionBuilder =
     WatchProgressRowsCompanion Function({
+      Value<String> contentKind,
       Value<String> ownerKey,
       Value<String> videoId,
       Value<String> partId,
@@ -1259,6 +1374,11 @@ class $$WatchProgressRowsTableFilterComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
+  ColumnFilters<String> get contentKind => $composableBuilder(
+    column: $table.contentKind,
+    builder: (column) => ColumnFilters(column),
+  );
+
   ColumnFilters<String> get ownerKey => $composableBuilder(
     column: $table.ownerKey,
     builder: (column) => ColumnFilters(column),
@@ -1299,6 +1419,11 @@ class $$WatchProgressRowsTableOrderingComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
+  ColumnOrderings<String> get contentKind => $composableBuilder(
+    column: $table.contentKind,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<String> get ownerKey => $composableBuilder(
     column: $table.ownerKey,
     builder: (column) => ColumnOrderings(column),
@@ -1339,6 +1464,11 @@ class $$WatchProgressRowsTableAnnotationComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
+  GeneratedColumn<String> get contentKind => $composableBuilder(
+    column: $table.contentKind,
+    builder: (column) => column,
+  );
+
   GeneratedColumn<String> get ownerKey =>
       $composableBuilder(column: $table.ownerKey, builder: (column) => column);
 
@@ -1402,6 +1532,7 @@ class $$WatchProgressRowsTableTableManager
               ),
           updateCompanionCallback:
               ({
+                Value<String> contentKind = const Value.absent(),
                 Value<String> ownerKey = const Value.absent(),
                 Value<String> videoId = const Value.absent(),
                 Value<String> partId = const Value.absent(),
@@ -1410,6 +1541,7 @@ class $$WatchProgressRowsTableTableManager
                 Value<DateTime> updatedAt = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => WatchProgressRowsCompanion(
+                contentKind: contentKind,
                 ownerKey: ownerKey,
                 videoId: videoId,
                 partId: partId,
@@ -1420,6 +1552,7 @@ class $$WatchProgressRowsTableTableManager
               ),
           createCompanionCallback:
               ({
+                Value<String> contentKind = const Value.absent(),
                 required String ownerKey,
                 required String videoId,
                 required String partId,
@@ -1428,6 +1561,7 @@ class $$WatchProgressRowsTableTableManager
                 required DateTime updatedAt,
                 Value<int> rowid = const Value.absent(),
               }) => WatchProgressRowsCompanion.insert(
+                contentKind: contentKind,
                 ownerKey: ownerKey,
                 videoId: videoId,
                 partId: partId,
@@ -1647,6 +1781,7 @@ typedef $$SearchEntriesTableProcessedTableManager =
     >;
 typedef $$HistoryVideosTableCreateCompanionBuilder =
     HistoryVideosCompanion Function({
+      Value<String> contentKind,
       required String ownerKey,
       required String videoId,
       required String title,
@@ -1659,6 +1794,7 @@ typedef $$HistoryVideosTableCreateCompanionBuilder =
     });
 typedef $$HistoryVideosTableUpdateCompanionBuilder =
     HistoryVideosCompanion Function({
+      Value<String> contentKind,
       Value<String> ownerKey,
       Value<String> videoId,
       Value<String> title,
@@ -1679,6 +1815,11 @@ class $$HistoryVideosTableFilterComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
+  ColumnFilters<String> get contentKind => $composableBuilder(
+    column: $table.contentKind,
+    builder: (column) => ColumnFilters(column),
+  );
+
   ColumnFilters<String> get ownerKey => $composableBuilder(
     column: $table.ownerKey,
     builder: (column) => ColumnFilters(column),
@@ -1729,6 +1870,11 @@ class $$HistoryVideosTableOrderingComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
+  ColumnOrderings<String> get contentKind => $composableBuilder(
+    column: $table.contentKind,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<String> get ownerKey => $composableBuilder(
     column: $table.ownerKey,
     builder: (column) => ColumnOrderings(column),
@@ -1779,6 +1925,11 @@ class $$HistoryVideosTableAnnotationComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
+  GeneratedColumn<String> get contentKind => $composableBuilder(
+    column: $table.contentKind,
+    builder: (column) => column,
+  );
+
   GeneratedColumn<String> get ownerKey =>
       $composableBuilder(column: $table.ownerKey, builder: (column) => column);
 
@@ -1839,6 +1990,7 @@ class $$HistoryVideosTableTableManager
               $$HistoryVideosTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback:
               ({
+                Value<String> contentKind = const Value.absent(),
                 Value<String> ownerKey = const Value.absent(),
                 Value<String> videoId = const Value.absent(),
                 Value<String> title = const Value.absent(),
@@ -1849,6 +2001,7 @@ class $$HistoryVideosTableTableManager
                 Value<int> viewCount = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => HistoryVideosCompanion(
+                contentKind: contentKind,
                 ownerKey: ownerKey,
                 videoId: videoId,
                 title: title,
@@ -1861,6 +2014,7 @@ class $$HistoryVideosTableTableManager
               ),
           createCompanionCallback:
               ({
+                Value<String> contentKind = const Value.absent(),
                 required String ownerKey,
                 required String videoId,
                 required String title,
@@ -1871,6 +2025,7 @@ class $$HistoryVideosTableTableManager
                 Value<int> viewCount = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => HistoryVideosCompanion.insert(
+                contentKind: contentKind,
                 ownerKey: ownerKey,
                 videoId: videoId,
                 title: title,

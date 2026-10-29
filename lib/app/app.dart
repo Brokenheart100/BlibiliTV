@@ -38,6 +38,9 @@ class MambaApp extends ConsumerWidget {
     final theme =
         ref.watch(settingsViewModelProvider).value?.settings.theme ??
         AppTheme.dark;
+    final reducedMotion =
+        ref.watch(settingsViewModelProvider).value?.settings.reducedMotion ??
+        false;
     return MaterialApp.router(
       title: 'MambaTV',
       debugShowCheckedModeBanner: false,
@@ -49,49 +52,56 @@ class MambaApp extends ConsumerWidget {
         AppTheme.system => ThemeMode.system,
       },
       routerConfig: router,
-      builder: (context, child) => LifecycleBridge(
-        child: Shortcuts(
-          shortcuts: const <ShortcutActivator, Intent>{
-            SingleActivator(LogicalKeyboardKey.select): ActivateIntent(),
-            SingleActivator(LogicalKeyboardKey.gameButtonA): ActivateIntent(),
-            // Android's Back also arrives through the platform popRoute
-            // callback. Mapping its key event here would pop two routes.
-            SingleActivator(LogicalKeyboardKey.escape): TvBackIntent(),
-          },
-          child: Actions(
-            actions: <Type, Action<Intent>>{
-              TvBackIntent: CallbackAction<TvBackIntent>(
-                onInvoke: (_) {
-                  unawaited(router.routerDelegate.popRoute());
-                  return null;
-                },
-              ),
+      builder: (context, child) => MediaQuery(
+        data: MediaQuery.of(context).copyWith(
+          disableAnimations:
+              MediaQuery.disableAnimationsOf(context) || reducedMotion,
+        ),
+        child: LifecycleBridge(
+          child: Shortcuts(
+            shortcuts: const <ShortcutActivator, Intent>{
+              SingleActivator(LogicalKeyboardKey.select): ActivateIntent(),
+              SingleActivator(LogicalKeyboardKey.gameButtonA): ActivateIntent(),
+              // Android's Back also arrives through the platform popRoute
+              // callback. Mapping its key event here would pop two routes.
+              SingleActivator(LogicalKeyboardKey.escape): TvBackIntent(),
             },
-            child: TvBackdrop(
-              child: FocusTraversalGroup(
-                child: Stack(
-                  children: [
-                    child!,
-                    if (startup.isLoading)
-                      const Positioned(
-                        top: 0,
-                        left: 0,
-                        right: 0,
-                        child: LinearProgressIndicator(minHeight: 2),
-                      ),
-                    if (startup.hasError)
-                      Positioned(
-                        bottom: 12,
-                        right: 24,
-                        child: Material(
-                          color: context.tvColors.surface,
-                          child: TvButton(
-                            label: '本地服务暂不可用 · 重试',
-                            onPressed: () => ref.invalidate(appStartupProvider),
+            child: Actions(
+              actions: <Type, Action<Intent>>{
+                TvBackIntent: CallbackAction<TvBackIntent>(
+                  onInvoke: (_) {
+                    unawaited(router.routerDelegate.popRoute());
+                    return null;
+                  },
+                ),
+              },
+              child: TvBackdrop(
+                child: FocusTraversalGroup(
+                  child: Stack(
+                    children: [
+                      child!,
+                      if (startup.isLoading)
+                        const Positioned(
+                          top: 0,
+                          left: 0,
+                          right: 0,
+                          child: LinearProgressIndicator(minHeight: 2),
+                        ),
+                      if (startup.hasError)
+                        Positioned(
+                          bottom: 12,
+                          right: 24,
+                          child: Material(
+                            color: context.tvColors.surface,
+                            child: TvButton(
+                              label: '本地服务暂不可用 · 重试',
+                              onPressed: () =>
+                                  ref.invalidate(appStartupProvider),
+                            ),
                           ),
                         ),
-                      ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),

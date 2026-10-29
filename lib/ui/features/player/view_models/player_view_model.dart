@@ -8,6 +8,7 @@ import '../../../../app/providers/repository_providers.dart';
 import '../../../../core/result.dart';
 import '../../../../domain/entities/app_models.dart';
 import '../../../../domain/playback/playback.dart';
+import '../../../../domain/playback/playback_target.dart';
 import '../../../../domain/playback/playback_coordinator.dart';
 import '../../../../domain/playback/start_playback.dart';
 import '../../../../domain/playback/history_progress_reporter.dart';
@@ -30,6 +31,10 @@ enum PlayerPhase {
 abstract class PlayerState with _$PlayerState {
   const factory PlayerState({
     @Default(PlayerPhase.idle) PlayerPhase phase,
+    @Default(PlaybackCapabilities()) PlaybackCapabilities capabilities,
+    PlaybackTarget? target,
+    String? overlayVideoId,
+    String? overlayPartId,
     @Default(EngineSnapshot()) EngineSnapshot snapshot,
     @Default('') String title,
     @Default('') String partTitle,
@@ -76,7 +81,7 @@ class PlayerViewModel extends _$PlayerViewModel {
   final _saveClock = Stopwatch();
   Duration _lastSavedPosition = Duration.zero;
   int _epoch = 0;
-  ({String videoId, String? partId})? _request;
+  PlaybackTarget? _request;
   bool _wantPlay = true, _foreground = true;
   bool _backupUsed = false,
       _freshUsed = false,
@@ -137,18 +142,19 @@ class PlayerViewModel extends _$PlayerViewModel {
   }
 
   Future<void> start(String videoId, {String? partId, Duration? remoteResume}) {
-    _wantPlay = true;
-    return _replace(
-      videoId,
-      partId: partId,
-      manual: true,
-      fallbackPosition: remoteResume,
+    return startTarget(
+      PlaybackTarget.ugc(bvid: videoId, cid: partId),
+      remoteResume: remoteResume,
     );
   }
 
+  Future<void> startTarget(PlaybackTarget target, {Duration? remoteResume}) {
+    _wantPlay = true;
+    return _replace(target, manual: true, fallbackPosition: remoteResume);
+  }
+
   Future<void> _replace(
-    String videoId, {
-    String? partId,
+    PlaybackTarget target, {
     Duration? position,
     int? quality,
     int? audioId,
@@ -166,7 +172,7 @@ class PlayerViewModel extends _$PlayerViewModel {
     final signal = _active = CancellationSignal();
     _targetPosition = position;
     _targetQuality = quality;
-    _request = (videoId: videoId, partId: partId);
+    _request = target;
     final oldPlan = _plan;
     state = state.copyWith(
       phase: PlayerPhase.resolving,
@@ -200,11 +206,14 @@ class PlayerViewModel extends _$PlayerViewModel {
                 initialRate: oldPlan.initialRate,
                 autoNext: oldPlan.autoNext,
                 syncHistory: oldPlan.syncHistory,
+                playbackTarget: oldPlan.target,
+                capabilities: oldPlan.capabilities,
+                overlayVideoId: oldPlan.overlayVideoId,
+                overlayPartId: oldPlan.overlayPartId,
               )
             : await _wait(
                 _start(
-                  videoId: videoId,
-                  partId: partId,
+                  target: target,
                   ownerKey: ownerKey,
                   cancellation: signal,
                   quality: quality,
@@ -216,14 +225,16 @@ class PlayerViewModel extends _$PlayerViewModel {
               );
         if (!_current(epoch, signal)) return;
         _plan = plan;
-        if (!_preferencesApplied) {
+        if (!_preferencesApplied || state.target?.kind != plan.target.kind) {
           _preferencesApplied = true;
           state = state.copyWith(
-            rate: plan.initialRate,
-            autoNext: plan.autoNext,
+            rate: plan.capabilities.rate ? plan.initialRate : 1,
+            autoNext: plan.capabilities.parts && plan.autoNext,
           );
         }
-        if (plan.syncHistory && ownerKey != 'guest') {
+        if (plan.capabilities.remoteHistory &&
+            plan.syncHistory &&
+            ownerKey != 'guest') {
           _reporter = HistoryProgressReporter(
             ref.read(libraryRepositoryProvider),
             ownerKey,
@@ -238,9 +249,13 @@ class PlayerViewModel extends _$PlayerViewModel {
         }
         _targetPosition = plan.startAt;
         _targetQuality = plan.source.quality;
-        _request = (videoId: plan.videoId, partId: plan.partId);
+        _request = plan.target;
         state = state.copyWith(
           phase: PlayerPhase.opening,
+          capabilities: plan.capabilities,
+          target: plan.target,
+          overlayVideoId: plan.overlayVideoId ?? plan.videoId,
+          overlayPartId: plan.overlayPartId ?? plan.partId,
           title: plan.title,
           partTitle: plan.partTitle,
           partId: plan.partId,
@@ -301,6 +316,7 @@ class PlayerViewModel extends _$PlayerViewModel {
           if (!opening && resumeConfirmed && plan.rememberProgress) {
             final progress = WatchProgress(
               ownerKey: ownerKey,
+              kind: plan.target.kind,
               videoId: plan.videoId,
               partId: plan.partId,
               position: snapshot.completed && snapshot.duration > Duration.zero
@@ -377,6 +393,40 @@ class PlayerViewModel extends _$PlayerViewModel {
   Future<void> _recover(AppFailure failure, {required Duration at}) async {
     final request = _request;
     if (request == null || !ref.mounted || !_foreground) return;
+    if (request is LiveTarget) {
+      final retryable = {
+        FailureKind.cdn,
+        FailureKind.resourceExpired,
+        FailureKind.network,
+        FailureKind.timeout,
+      }.contains(failure.kind);
+      if (!retryable || state.recoveryAttempts >= 3) {
+        await _release();
+        return;
+      }
+      final epoch = _epoch, signal = _active;
+      if (signal == null) return;
+      final attempt = state.recoveryAttempts;
+      state = state.copyWith(
+        recoveryAttempts: attempt + 1,
+        notice: '直播断流，正在重新连接',
+      );
+      try {
+        await _wait(
+          Future<void>.delayed(Duration(seconds: [1, 3, 10][attempt])),
+          signal,
+        );
+      } catch (_) {
+        return;
+      }
+      if (_current(epoch, signal) && _foreground) {
+        await _replace(
+          request,
+          quality: state.quality == 0 ? null : state.quality,
+        );
+      }
+      return;
+    }
     final recoverable = {
       FailureKind.cdn,
       FailureKind.resourceExpired,
@@ -408,8 +458,7 @@ class PlayerViewModel extends _$PlayerViewModel {
     }
     state = state.copyWith(recoveryAttempts: state.recoveryAttempts + 1);
     await _replace(
-      request.videoId,
-      partId: request.partId,
+      request,
       position: at,
       quality: state.quality == 0 ? null : state.quality,
       audioId: state.audioId == 0 ? null : state.audioId,
@@ -458,12 +507,15 @@ class PlayerViewModel extends _$PlayerViewModel {
     if (!_foreground) return;
     final request = _request;
     if (request == null) return;
+    if (request is LiveTarget && state.snapshot.playing) {
+      await suspend();
+      return;
+    }
     if (state.phase == PlayerPhase.opening ||
         state.phase == PlayerPhase.resolving) {
       _wantPlay = !_wantPlay;
       await _replace(
-        request.videoId,
-        partId: request.partId,
+        request,
         position: _replacementPosition,
         quality: _targetQuality,
         audioId: state.audioId == 0 ? null : state.audioId,
@@ -473,19 +525,13 @@ class PlayerViewModel extends _$PlayerViewModel {
     }
     if (state.phase == PlayerPhase.completed) {
       _wantPlay = true;
-      await _replace(
-        request.videoId,
-        partId: request.partId,
-        position: Duration.zero,
-        manual: true,
-      );
+      await _replace(request, position: Duration.zero, manual: true);
       return;
     }
     if (_lease == null && state.phase == PlayerPhase.paused) {
       _wantPlay = true;
       await _replace(
-        request.videoId,
-        partId: request.partId,
+        request,
         position: state.snapshot.position,
         quality: state.quality == 0 ? null : state.quality,
         audioId: state.audioId == 0 ? null : state.audioId,
@@ -520,7 +566,8 @@ class PlayerViewModel extends _$PlayerViewModel {
   }
 
   Future<void> seekBy(Duration delta) {
-    if (_lease == null ||
+    if (!state.capabilities.seek ||
+        _lease == null ||
         _lease!.isClosed ||
         !{
           PlayerPhase.playing,
@@ -585,7 +632,8 @@ class PlayerViewModel extends _$PlayerViewModel {
     return drain;
   }
 
-  Future<void> setRate(double rate) => _parameter(rate, true);
+  Future<void> setRate(double rate) =>
+      state.capabilities.rate ? _parameter(rate, true) : Future.value();
   Future<void> setVolume(double volume) => _parameter(volume, false);
   Duration get _replacementPosition =>
       state.seekTarget ??
@@ -616,7 +664,10 @@ class PlayerViewModel extends _$PlayerViewModel {
     });
   }
 
-  void setAutoNext(bool value) => state = state.copyWith(autoNext: value);
+  void setAutoNext(bool value) {
+    if (state.capabilities.parts) state = state.copyWith(autoNext: value);
+  }
+
   Future<void> selectQuality(int id) async {
     if (!state.qualities.any((q) => q.id == id && q.available) ||
         id == (_targetQuality ?? state.quality)) {
@@ -625,8 +676,7 @@ class PlayerViewModel extends _$PlayerViewModel {
     final request = _request;
     if (request == null) return;
     await _replace(
-      request.videoId,
-      partId: request.partId,
+      request,
       position: _replacementPosition,
       quality: id,
       audioId: state.audioId == 0 ? null : state.audioId,
@@ -642,8 +692,7 @@ class PlayerViewModel extends _$PlayerViewModel {
     final request = _request;
     if (request == null) return;
     await _replace(
-      request.videoId,
-      partId: request.partId,
+      request,
       position: _replacementPosition,
       quality: state.quality,
       audioId: id,
@@ -652,12 +701,13 @@ class PlayerViewModel extends _$PlayerViewModel {
   }
 
   Future<void> selectPart(String id) async {
-    if (!state.parts.any((p) => p.id == id)) return;
+    if (!state.capabilities.parts || !state.parts.any((p) => p.id == id)) {
+      return;
+    }
     final request = _request;
     if (request == null) return;
     await _replace(
-      request.videoId,
-      partId: id,
+      request.withPart(id),
       position: Duration.zero,
       quality: state.quality == 0 ? null : state.quality,
       manual: true,

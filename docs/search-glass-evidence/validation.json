@@ -1,0 +1,53 @@
+{
+  "clientDate": "2026-10-29",
+  "scope": "Typed search tabs and shared liquid glass for all capsule tabs and navigation rail",
+  "automated": {
+    "newDataAndWidgetTests": 17,
+    "fullFlutterTestsPassed": 295,
+    "staticAnalysis": "No issues found with --fatal-infos",
+    "formatFilesChecked": 298,
+    "formatChangesRequired": 0,
+    "buildRunner": "succeeded",
+    "coverage": [
+      "Signed search type, typed ID mapping, HTML text, image normalization and cursor category",
+      "True empty results, malformed envelopes, risk challenges and account mismatch",
+      "Keyword and video filter preservation, pagination persistence and failure retry",
+      "Late responses after type, keyword or account generation changes",
+      "Season and live navigation, return focus and ended-room engine refusal",
+      "640x360 and 960x540, dark/light themes, reduced motion and bounded glass"
+    ]
+  },
+  "publicInterface": {
+    "report": "interface-spike.json",
+    "bangumiCount": 11,
+    "cinemaCount": 1,
+    "livePage1Count": 20,
+    "livePage2Count": 20,
+    "remoteWriteRequestsSent": 0
+  },
+  "nativeUi": {
+    "avd": "Mamba_TV_API36",
+    "device": "emulator-5554",
+    "androidApi": 36,
+    "abi": "x86_64",
+    "applicationId": "app.mamba.mambatv.validation",
+    "buildMode": "debug",
+    "readOnlyValidation": true,
+    "realListsLoaded": ["video", "bangumi", "cinema", "live"],
+    "dpadFromBangumiTabToSeasonAndBack": "passed",
+    "darkAndLightScreenshotsVisuallyInspected": true,
+    "flutterMcpHotReload": "succeeded",
+    "runtimeErrorsAfterReloadAndNavigation": 0,
+    "screenshots": ["bangumi-dark.png", "cinema-light.png", "live-light.png"],
+    "textEntryEmulationRestored": true
+  },
+  "boundaries": {
+    "physicalArmTvVerified": false,
+    "glassFramePerformanceMeasured": false,
+    "newPlaybackSoakRun": false,
+    "liveRecommendationRiskResolved": false,
+    "completePgcIndexFilteringImplemented": false,
+    "remoteCiRun": false,
+    "publishedRelease": false
+  }
+}

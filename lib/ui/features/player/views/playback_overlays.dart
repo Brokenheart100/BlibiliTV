@@ -13,6 +13,7 @@ import '../../../../domain/overlays/overlays.dart';
 import '../../../../domain/playback/playback.dart';
 import '../../../../domain/playback/playback_timeline.dart';
 import '../view_models/overlay_view_models.dart';
+import 'danmaku_glyph_cache.dart';
 
 /// Rendering and high frequency clock sampling stay below PlayerPage.
 class PlaybackOverlays extends ConsumerWidget {
@@ -29,10 +30,10 @@ class PlaybackOverlays extends ConsumerWidget {
   final bool controlsVisible;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final settings =
-        ref.watch(overlaySettingsViewModelProvider).value ??
-        const OverlayPreferences();
-    if (!ref.watch(appForegroundProvider) ||
+    final settings = ref.watch(overlaySettingsViewModelProvider).value;
+    // Do not briefly enable the default subtitle mode while preferences load.
+    if (settings == null ||
+        !ref.watch(appForegroundProvider) ||
         !TickerMode.valuesOf(context).enabled ||
         !settings.subtitles && !settings.danmaku) {
       return const SizedBox.shrink();
@@ -74,6 +75,7 @@ class _MediaOverlaysState extends ConsumerState<_MediaOverlays> {
   final _caption = ValueNotifier('');
   final _notice = ValueNotifier('');
   final _sent = <String>{};
+  final _glyphs = DanmakuGlyphCache();
   Timer? _sampleTimer;
   StreamSubscription<EngineSnapshot>? _subscription;
   DanmakuController<void>? _canvas;
@@ -99,7 +101,7 @@ class _MediaOverlaysState extends ConsumerState<_MediaOverlays> {
     _metrics.created++;
     _metrics.active++;
     if (_metrics.active > _metrics.maximum) _metrics.maximum = _metrics.active;
-    _budget = DanmakuLoadBudget(widget.preferences.density);
+    _budget = _createBudget();
     // Loading segments and warming text caches are not sustained raster load.
     _measureAfterUs = _clock.elapsedMicroseconds + 5000000;
     _subscription = widget.engine.snapshots.listen(_snapshot);
@@ -108,13 +110,28 @@ class _MediaOverlaysState extends ConsumerState<_MediaOverlays> {
   }
 
   void _snapshot(EngineSnapshot value) {
-    if (_timeline.update(value, _clock.elapsedMicroseconds)) {
+    final previous = _timeline.snapshot;
+    final discontinuity = _timeline.update(value, _clock.elapsedMicroseconds);
+    if (discontinuity) {
       _clear();
       _canvas?.updateOption(_option);
     }
     _syncTicker();
-    _frame();
+    // Native samples refresh the anchor. Admit once per 50 ms scheduler tick;
+    // state transitions and seeks still update the visible overlay immediately.
+    if (discontinuity ||
+        _sampleTimer == null ||
+        previous.playing != value.playing ||
+        previous.buffering != value.buffering ||
+        previous.completed != value.completed) {
+      _frame();
+    }
   }
+
+  DanmakuLoadBudget _createBudget() => DanmakuLoadBudget(
+    widget.preferences.density,
+    adaptive: ref.read(danmakuAdaptiveLoadProvider),
+  );
 
   void _syncTicker() {
     final value = _timeline.snapshot;
@@ -209,17 +226,23 @@ class _MediaOverlaysState extends ConsumerState<_MediaOverlays> {
   );
   void _frame() {
     if (!mounted) return;
+    _metrics.frameEvaluations++;
     final position = _position, p = widget.preferences;
     _metrics.lastPositionMs = position;
     _metrics.density = _density;
     // Target cadence; FrameTiming below measures the actual raster cost.
     _metrics.canvasFps = p.danmaku && _canvas != null ? 60 : 0;
-    final painted = [...?_canvas?.scrollDanmaku, ...?_canvas?.staticDanmaku];
-    _metrics.renderedDanmaku = painted.where((item) => !item.expired).length;
-    _metrics.canvasDrawTickMs = painted.fold<int>(
-      0,
-      (value, item) => (item.drawTick ?? 0) > value ? item.drawTick! : value,
-    );
+    var rendered = 0, drawTick = 0;
+    for (final items in [_canvas?.scrollDanmaku, _canvas?.staticDanmaku]) {
+      if (items == null) continue;
+      for (final item in items) {
+        if (!item.expired) rendered++;
+        final tick = item.drawTick ?? 0;
+        if (tick > drawTick) drawTick = tick;
+      }
+    }
+    _metrics.renderedDanmaku = rendered;
+    _metrics.canvasDrawTickMs = drawTick;
     if (_metrics.renderedDanmaku > _metrics.maximumRenderedDanmaku) {
       _metrics.maximumRenderedDanmaku = _metrics.renderedDanmaku;
     }
@@ -278,6 +301,22 @@ class _MediaOverlaysState extends ConsumerState<_MediaOverlays> {
       // A full track can reject a comment even below the density limit. Do not
       // reserve six seconds of capacity for text that never reached the screen.
       if (after > before) {
+        // The official canvas creates a deferred Image for every accepted item.
+        // Reuse a live clone for repeated text before that new image is painted.
+        final item = entry.mode == 1
+            ? _canvas!.scrollDanmaku.last
+            : _canvas!.staticDanmaku.last;
+        final cacheHits = _glyphs.hits, cacheMisses = _glyphs.misses;
+        item.image = _glyphs.reuse((
+          entry.text,
+          entry.color,
+          p.opacity,
+          p.fontSize,
+          MediaQuery.devicePixelRatioOf(context),
+        ), item.image!);
+        _metrics.glyphCacheHits += _glyphs.hits - cacheHits;
+        _metrics.glyphCacheMisses += _glyphs.misses - cacheMisses;
+        _metrics.glyphCacheBytes = _glyphs.bytes;
         _metrics.admittedDanmaku++;
         if (after > _metrics.maximumDanmaku) _metrics.maximumDanmaku = after;
       }
@@ -331,10 +370,12 @@ class _MediaOverlaysState extends ConsumerState<_MediaOverlays> {
       _measureAfterUs = _clock.elapsedMicroseconds + 2000000;
     }
     if (oldWidget.preferences != widget.preferences) {
+      _glyphs.clear();
+      _metrics.glyphCacheBytes = 0;
       _clear();
       if (oldWidget.preferences.danmaku != widget.preferences.danmaku ||
           oldWidget.preferences.density != widget.preferences.density) {
-        _budget = DanmakuLoadBudget(widget.preferences.density);
+        _budget = _createBudget();
         _frames = _slow = 0;
         _measureAfterUs = _clock.elapsedMicroseconds + 2000000;
         _notice.value = '';
@@ -468,6 +509,8 @@ class _MediaOverlaysState extends ConsumerState<_MediaOverlays> {
 
   @override
   void dispose() {
+    _glyphs.clear();
+    _metrics.glyphCacheBytes = 0;
     _metrics.disposed++;
     if (_counted) _metrics.active--;
     if (_metrics.active == 0) _metrics.canvasFps = 0;

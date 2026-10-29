@@ -132,6 +132,29 @@ class BilibiliApi {
     await _get(path, cancellation, query: query, forceRefresh: forceRefresh),
   );
 
+  Future<Map<String, Object?>> getPgc(
+    String path,
+    CancellationSignal cancellation, {
+    Map<String, Object> query = const {},
+  }) async => jsonObject(
+    await _get(path, cancellation, query: query, responseKey: 'result'),
+  );
+
+  Future<Map<String, Object?>> getLive(
+    String path,
+    CancellationSignal cancellation, {
+    Map<String, Object> query = const {},
+    bool signed = false,
+  }) async => jsonObject(
+    await _get(
+      path,
+      cancellation,
+      query: query,
+      signed: signed,
+      liveOrigin: true,
+    ),
+  );
+
   Future<Object?> _get(
     String path,
     CancellationSignal cancellation, {
@@ -139,6 +162,8 @@ class BilibiliApi {
     bool signed = false,
     bool allowGuest = false,
     bool forceRefresh = false,
+    bool liveOrigin = false,
+    String responseKey = 'data',
   }) async {
     if (cancellation.isCancelled || _scope.isCancelled) {
       throw const AppFailure(FailureKind.cancelled, '请求已取消');
@@ -171,7 +196,7 @@ class BilibiliApi {
     final removeScope = _scope.onCancel(() => token.cancel('session_changed'));
     try {
       final response = await client.get<Object?>(
-        'https://api.bilibili.com$path',
+        '${liveOrigin ? 'https://api.live.bilibili.com' : 'https://api.bilibili.com'}$path',
         queryParameters: parameters,
         cancelToken: token,
         options: Options(
@@ -193,7 +218,7 @@ class BilibiliApi {
         if (code == -403 || code == -352) _imageKey = null;
         throw businessFailure(code);
       }
-      return envelope['data'];
+      return envelope[responseKey];
     } on DioException catch (error) {
       if (error.response?.statusCode == 401) _unauthorized();
       rethrow;

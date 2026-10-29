@@ -15,6 +15,8 @@ import '../ui/features/auth/views/account_page.dart';
 import '../ui/features/auth/views/qr_login_page.dart';
 import '../ui/features/library/views/library_page.dart';
 import '../domain/library/library.dart';
+import '../domain/playback/playback_target.dart';
+import '../ui/features/content/views/content_pages.dart';
 import 'providers/auth_providers.dart';
 import '../domain/discovery/home_feed.dart';
 import '../ui/core/theme/tv_theme.dart';
@@ -28,6 +30,44 @@ GoRouter appRouter(Ref ref) {
   final router = GoRouter(
     initialLocation: '/home',
     routes: [
+      GoRoute(
+        path: '/season/:id',
+        builder: (context, state) =>
+            SeasonPage(id: state.pathParameters['id']!),
+      ),
+      GoRoute(
+        path: '/watch/pgc/:season/:episode',
+        builder: (context, state) {
+          final target = PlaybackTarget.pgc(
+            seasonId: state.pathParameters['season']!,
+            episodeId: state.pathParameters['episode']!,
+          );
+          return Theme(
+            data: tvTheme(),
+            child: PlayerPage(
+              videoId: target.contentId,
+              target: target,
+              pageId: state.pageKey.value,
+            ),
+          );
+        },
+      ),
+      GoRoute(
+        path: '/watch/live/:room',
+        builder: (context, state) {
+          final target = PlaybackTarget.live(
+            roomId: state.pathParameters['room']!,
+          );
+          return Theme(
+            data: tvTheme(),
+            child: PlayerPage(
+              videoId: target.contentId,
+              target: target,
+              pageId: state.pageKey.value,
+            ),
+          );
+        },
+      ),
       GoRoute(
         path: '/settings/logs',
         builder: (context, state) => const DiagnosticsPage(),
@@ -106,6 +146,14 @@ GoRouter appRouter(Ref ref) {
                 path: '/history',
                 builder: (context, state) =>
                     const LibraryPage(historyOnly: true, branchIndex: 4),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/pgc',
+                builder: (context, state) => const ContentBrowsePage(),
               ),
             ],
           ),

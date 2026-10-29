@@ -1,0 +1,71 @@
+{
+  "note": "Diagnostic VM timeline snapshot from rejected physical-pixel candidate; not an acceptance window. Surface submit wait dominates frame raster duration.",
+  "renderer": "Impeller OpenGLES",
+  "events": [
+    {
+      "name": "PAINT (root)",
+      "count": 326,
+      "p95Us": 266
+    },
+    {
+      "name": "LayerTree::Preroll",
+      "count": 326,
+      "p95Us": 48
+    },
+    {
+      "name": "LayerTree::Paint",
+      "count": 326,
+      "p95Us": 442
+    },
+    {
+      "name": "CompositorContext::ScopedFrame::Raster",
+      "count": 326,
+      "p95Us": 503
+    },
+    {
+      "name": "RenderPassGLES::EncodeCommandsInReactor",
+      "count": 336,
+      "p95Us": 187
+    },
+    {
+      "name": "ReactorGLES::Operation",
+      "count": 338,
+      "p95Us": 266
+    },
+    {
+      "name": "ReactorGLES::React",
+      "count": 330,
+      "p95Us": 410
+    },
+    {
+      "name": "SurfaceFrame::Submit",
+      "count": 325,
+      "p95Us": 16914
+    },
+    {
+      "name": "Rasterizer::DrawToSurfaces",
+      "count": 324,
+      "p95Us": 17459
+    },
+    {
+      "name": "Rasterizer::DoDraw",
+      "count": 324,
+      "p95Us": 17531
+    },
+    {
+      "name": "GPURasterizer::Draw",
+      "count": 324,
+      "p95Us": 17622
+    },
+    {
+      "name": "BlitPassGLES::EncodeCommandsInReactor",
+      "count": 2,
+      "p95Us": 7
+    },
+    {
+      "name": "DoMakeRasterSnapshot",
+      "count": 2,
+      "p95Us": 1092
+    }
+  ]
+}

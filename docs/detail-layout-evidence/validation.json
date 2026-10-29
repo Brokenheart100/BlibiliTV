@@ -1,0 +1,81 @@
+{
+  "clientDate": "2026-10-29",
+  "scope": "Detail discovery grid, explicit tab refresh, season layout and grouped episodes",
+  "workspaceOnly": true,
+  "checks": {
+    "flutterTests": {
+      "passed": 307,
+      "failed": 0,
+      "addedSinceSearchBaseline": 12,
+      "log": ".m0/detail-redesign/full-tests-final.log"
+    },
+    "focusedDetailTests": {
+      "passed": 10,
+      "failed": 0,
+      "log": ".m0/detail-redesign/targeted-final.log"
+    },
+    "formatting": {
+      "files": 302,
+      "changed": 0,
+      "log": ".m0/detail-redesign/format-final.log"
+    },
+    "staticAnalysis": {
+      "status": "passed",
+      "issues": 0,
+      "log": ".m0/detail-redesign/analyze-final.log"
+    },
+    "generation": {
+      "status": "passed",
+      "log": ".m0/detail-redesign/generation-final.log",
+      "note": "No annotated sources changed after generation."
+    }
+  },
+  "native": {
+    "avd": "Mamba_TV_API36",
+    "device": "emulator-5554",
+    "api": 36,
+    "android": "16",
+    "abi": "x86_64",
+    "package": "app.mamba.mambatv.validation",
+    "entrypoint": "tool/m9_ui_main.dart",
+    "build": "debug",
+    "owner": "guest",
+    "readOnly": true,
+    "remoteWrites": 0,
+    "hotReload": "succeeded",
+    "runtimeErrors": [],
+    "inspected": [
+      "season hero dark and light",
+      "true optional metadata and poster",
+      "main tabs and episode range selection",
+      "D-pad from episode 1 to 13 across two ranges",
+      "Android Back returns to browse without exit dialog",
+      "vertical four-column video discovery and automatic continuation"
+    ],
+    "initialSeasonTitleTop": 20,
+    "textEntryEmulationAtFinish": false,
+    "note": "One driver tap timed out while the exit dialog blocked its target; after cancellation it completed. A subsequent guarded driver call failed. Both were test-control errors; after Back handling was corrected the native flow completed and runtime errors were empty."
+  },
+  "evidence": {
+    "protocol": "interface-spike.json",
+    "screenshots": [
+      "season-dark.png",
+      "season-light.png",
+      "season-episodes.png",
+      "season-episodes-light.png",
+      "video-discovery.png"
+    ]
+  },
+  "deferred": [
+    "Long and short reviews by user request"
+  ],
+  "outsideScope": [
+    "Physical ARM TV",
+    "New playback or 15-minute soak acceptance",
+    "M8 maximum-density performance acceptance",
+    "Account writes",
+    "Remote CI",
+    "Commit and push",
+    "Release"
+  ]
+}

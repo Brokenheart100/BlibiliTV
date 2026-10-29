@@ -20,6 +20,7 @@ void main() {
       await press(tester, LogicalKeyboardKey.arrowDown);
       await press(tester, LogicalKeyboardKey.arrowDown);
       await press(tester, LogicalKeyboardKey.arrowDown);
+      await press(tester, LogicalKeyboardKey.arrowDown);
       await press(tester, LogicalKeyboardKey.select);
       await press(tester, LogicalKeyboardKey.arrowRight);
       expect(FocusManager.instance.primaryFocus?.debugLabel, 'account-primary');

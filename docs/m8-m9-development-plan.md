@@ -1,8 +1,8 @@
 # M8／M9 详细开发计划
 
-> 本文已完整并入[总开发计划第 11 节](development-plan.md#11-m8m9详细开发计划)。旧章节锚点保留供既有文档引用，后续维护以总开发计划为准。
+> 本文的历史规划已并入[总开发计划第 11 节](development-plan.md#11-m8m9详细开发计划)。下方旧章节保留链接与当时估算，当前实施以总计划及 [M9 验收](m9-validation.md)／[ADR 0011](adr/0011-m9-typed-content-and-live.md) 为准：已实现类型化基础、PGC 与直播基础观看；数据库实际 v3→v4，Android 使用 Better Player／Media3；直播推荐受风控，投屏／下载／多账号仍延期。
 
-日期：2026-10-26。状态：M8 必交功能已实现，202 项回归及真实账号只读验证通过，持续弹幕性能未通过，尚未完成 M8 验收；M8-5 点赞／投币独立延期，M9 仍为规划。实际结果见 [M8 验收](m8-validation.md) 与 [ADR 0010](adr/0010-m8-media-overlays-and-discovery.md)。本文承接已发布的 [v1.0.0](https://github.com/Brokenheart100/BlibiliTV/releases/tag/v1.0.0)，细化 [总开发计划](development-plan.md) 中的 M8／M9；不改变 M0–M7 的历史验收记录。
+日期：2026-10-26。状态：M8 必交功能已实现，202 项回归及真实账号只读验证通过，持续弹幕性能未通过，尚未完成 M8 验收；M8-5 点赞／投币独立延期，M9 核心实施见 [验收](m9-validation.md)，可选模块继续规划。实际结果见 [M8 验收](m8-validation.md) 与 [ADR 0010](adr/0010-m8-media-overlays-and-discovery.md)。本文承接已发布的 [v1.0.0](https://github.com/Brokenheart100/BlibiliTV/releases/tag/v1.0.0)，细化 [总开发计划](development-plan.md) 中的 M8／M9；不改变 M0–M7 的历史验收记录。
 
 ## 1. 当前基线与交付目标
 
@@ -11,7 +11,7 @@
 | 发布 | v1.0.0，源码提交 `7eef332cc19caad9759b760a05bcd1bd4011be38` | 后续从该基线增量演进，不回退到原规划的 v0.1.0／v0.2.0 编号 |
 | 托管验证 | [CI](https://github.com/Brokenheart100/BlibiliTV/actions/runs/40210596029) 与 [发布流水线](https://github.com/Brokenheart100/BlibiliTV/actions/runs/40210598808) 成功；179 项 Flutter 测试、13 项流水线守卫 | 新功能增加有意义的回归；测试数量不是验收目标 |
 | 发布平台 | Android API 24 起；Release 为 armeabi-v7a／arm64-v8a，x86_64 留在 CI Debug artifacts | 不因新增功能放弃 ARM32；平台最低版本变化需单独决策 |
-| 技术栈 | Flutter、Riverpod Notifier／AsyncNotifier、Freezed、Dio、Drift、media_kit | 沿用 MVVM／整洁架构，不切换状态管理或重复引入播放器 |
+| 技术栈 | Flutter、Riverpod Notifier／AsyncNotifier、Freezed、Dio、Drift、Android Better Player／Media3 与 media_kit 回退 | 沿用 MVVM／整洁架构，不切换状态管理或重复引入播放器 |
 | 播放 | 当前是普通 UGC，`PlaybackRepository.resolve(videoId, partId)`；唯一引擎由 `PlaybackCoordinator` 管理 | M8 复用播放会话；M9 扩展类型化目标，不能把 roomId／episodeId 塞进 BVID |
 | 验证设备 | API 36 x86_64 TV 模拟器；M7 15 分钟／20 次进出／自然下一 P | 不把模拟器结果写成物理 ARM 电视通过；不恢复成 2 小时循环 |
 | 未完成验证 | 物理 TV、人工音画同步、真实账号写入、自然凭据续期；M7 存在单点 avsync 约 14.3 秒后恢复 | 纳入前置诊断与发布说明，不能用新增字幕／弹幕掩盖播放器时钟问题 |
@@ -238,7 +238,7 @@ Drift 按新增持久数据需要从当前 v2 升级到 v3：旧 UGC 记录回�
 4. 下载临时文件与完成 manifest 原子提交；任一轨缺失不标记完成。校验内容长度／ETag 或可用摘要；服务器 Range 行为或资源版本变化时不能直接续接旧字节。
 5. 可设置存储上限并预检可用空间；低空间、写入失败与应用强杀可恢复。只删除明确属于任务的文件，显示删除确认，普通“清临时缓存”不移除已完成离线视频。
 6. 离线库按账号隔离；退出／移除账号明确提供保留或删除本机文件的选项。受限内容能否离线播放取决于实际资源与权限模型，不能以本机存在文件推定长期有效。
-7. 后台／设备重启续传是第二批，另选 Android 调度方案。Media3 有专门 [下载组件](https://developer.android.com/media/media3/exoplayer/downloading-media)，但当前使用 media_kit，不能把该文档当成现成 Flutter API；后台工作需按 [Android 调度约束](https://developer.android.com/develop/background-work/background-tasks/persistent) 验证通知、生命周期与目标系统行为。
+7. 后台／设备重启续传是第二批，另选 Android 调度方案。Media3 有专门 [下载组件](https://developer.android.com/media/media3/exoplayer/downloading-media)，但 Better Player 的现有 Flutter 封装尚未提供本项目的离线端口，不能把该文档当成现成 Flutter API；后台工作需按 [Android 调度约束](https://developer.android.com/develop/background-work/background-tasks/persistent) 验证通知、生命周期与目标系统行为。
 
 **完成条件**：一条真实分离音视频完成下载，断网后画面与音轨可播放；暂停／重启／链接过期／Range 不支持／磁盘不足／删除／账号切换均有结果；未授权跨账号文件不显示。后台能力只有在应用退出／重启设备后实测通过才列为支持。
 
@@ -275,7 +275,7 @@ Drift 按新增持久数据需要从当前 v2 升级到 v3：旧 UGC 记录回�
 
 | 能力 | 初始方案 | 定版门槛 |
 | --- | --- | --- |
-| 播放 | 继续 media_kit 1.2.6／media_kit_video 2.0.1，版本以 lock 为准 | 现有 UGC 不退化；新增传输、原生字幕或本地双轨需 spike |
+| 播放 | Android Better Player 1.29.0／Media3 1.11.0；media_kit 保留 Windows／构建回退，版本以 lock 为准 | 现有 UGC 不退化；新增传输、原生字幕或本地双轨需 spike |
 | 字幕 | 首批复用 Dart JSON／集合及 Flutter 文本渲染，不新建通用字幕 SDK | 已实测 JSON 足以满足需求；额外格式出现再选成熟解析库 |
 | protobuf | 候选 [protobuf 6.1.0](https://pub.dev/packages/protobuf/versions/6.1.0) 与匹配 protoc_plugin／protoc | 协议确实需要、来源／许可明确、Dart 兼容、生成可重复；不手写二进制解码器 |
 | 弹幕画布 | 优先评测 [canvas_danmaku](https://pub.dev/packages/canvas_danmaku)，本次查阅版本 0.3.3，候选而非定版 | 真实视频合成、暂停／清空／seek／倍速、资源释放、性能预算及维护情况通过；UI 适配端口可替换 |

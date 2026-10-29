@@ -1,0 +1,81 @@
+{
+  "status": "failed",
+  "backend": "Better Player / Media3",
+  "readOnly": true,
+  "liveRequestedSeconds": 900,
+  "physicalTv": false,
+  "manualHearingVerified": false,
+  "cycles": [
+    {
+      "cycle": 1,
+      "kind": "ugc",
+      "liveAfterReturn": 0
+    },
+    {
+      "cycle": 2,
+      "kind": "pgc",
+      "liveAfterReturn": 0
+    },
+    {
+      "cycle": 3,
+      "kind": "live",
+      "liveAfterReturn": 0
+    },
+    {
+      "cycle": 4,
+      "kind": "ugc",
+      "liveAfterReturn": 0
+    },
+    {
+      "cycle": 5,
+      "kind": "pgc",
+      "liveAfterReturn": 0
+    },
+    {
+      "cycle": 6,
+      "kind": "live",
+      "liveAfterReturn": 0
+    },
+    {
+      "cycle": 7,
+      "kind": "ugc",
+      "liveAfterReturn": 0
+    },
+    {
+      "cycle": 8,
+      "kind": "pgc",
+      "liveAfterReturn": 0
+    },
+    {
+      "cycle": 9,
+      "kind": "live",
+      "liveAfterReturn": 0
+    },
+    {
+      "cycle": 10,
+      "kind": "ugc",
+      "liveAfterReturn": 0
+    },
+    {
+      "cycle": 11,
+      "kind": "pgc",
+      "liveAfterReturn": 0
+    },
+    {
+      "cycle": 12,
+      "kind": "live",
+      "liveAfterReturn": 0
+    },
+    {
+      "cycle": 13,
+      "kind": "ugc",
+      "liveAfterReturn": 0
+    },
+    {
+      "cycle": 14,
+      "kind": "pgc",
+      "liveAfterReturn": 0
+    }
+  ],
+  "hostRecordedAtUtc": "2026-10-28T14:49:52.387677Z"
+}

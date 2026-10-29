@@ -7,7 +7,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../app/providers/repository_providers.dart';
 import '../../../../app/providers/ui_providers.dart';
 import '../../../../domain/entities/app_models.dart';
 import '../../../../domain/library/personal_home.dart';
@@ -18,6 +17,7 @@ import '../../../core/widgets/tv_grid.dart';
 import '../../../core/widgets/tv_pill_tabs.dart';
 import '../../../core/widgets/tv_video_card.dart';
 import '../../../core/widgets/liquid_glass_card.dart';
+import '../../../core/widgets/tv_motion.dart';
 import '../../../core/widgets/tv_state_panel.dart';
 import '../../../core/focus/focus_memory.dart';
 import '../../settings/view_models/settings_view_model.dart';
@@ -131,35 +131,7 @@ class _PersonalHomeViewState extends ConsumerState<PersonalHomeView> {
         if (item.unavailableReason != null) return;
         await context.push<void>('/video/${item.video.id}');
       case PersonalSeason():
-        final scope = widget.session.scopeKey;
-        await showDialog<void>(
-          context: context,
-          builder: (_) => Consumer(
-            builder: (context, ref, _) {
-              final valid = ref.watch(sessionProvider).value?.scopeKey == scope;
-              return AlertDialog(
-                title: Text(valid ? item.title : '账号已变化'),
-                content: Text(
-                  valid
-                      ? [
-                          item.subtitle,
-                          item.progress,
-                          item.badge,
-                          '番剧与影视播放尚未开放。',
-                        ].where((value) => value.isNotEmpty).join('\n')
-                      : '请返回查看当前账号的内容。',
-                ),
-                actions: [
-                  TvButton(
-                    label: '返回列表',
-                    autofocus: true,
-                    onPressed: () => Navigator.pop(context),
-                  ),
-                ],
-              );
-            },
-          ),
-        );
+        await context.push<void>('/season/${item.id}');
     }
     if (mounted) await grid.restore();
   }
@@ -281,7 +253,19 @@ class _PersonalHomeViewState extends ConsumerState<PersonalHomeView> {
                   label: (tab) => tab.label,
                   tabKey: (tab) => ValueKey('personal-${tab.name}'),
                   onKey: _tabKey,
-                  onSelected: (tab) => setState(() => section = tab),
+                  onSelected: (tab) {
+                    grid.reset();
+                    ref
+                        .read(focusMemoryProvider)
+                        .forget(
+                          '${widget.session.scopeKey}:personal:${tab.name}',
+                        );
+                    setState(() => section = tab);
+                    ref.invalidate(provider);
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      if (mounted) tabs[tab.index].requestFocus();
+                    });
+                  },
                   reducedMotion: reduced,
                 ),
               ),
@@ -378,7 +362,7 @@ class _PersonalHomeViewState extends ConsumerState<PersonalHomeView> {
                           ref.read(provider.notifier).refresh(more: true),
                       hasMore: state.cursor != null,
                       loadingMore: state.loading,
-                      artworkAspectRatio: poster ? 2 / 3 : 16 / 9,
+                      artworkAspectRatio: poster ? 3 / 4 : 16 / 9,
                       minItemWidth: poster ? 150 : 214,
                     ),
             ),
@@ -418,69 +402,85 @@ class _PersonalCardState extends State<_PersonalCard> {
     canRequestFocus: false,
     skipTraversal: true,
     onKeyEvent: (_, event) => widget.bindings.onKey(event),
-    child: LiquidGlassCard(
+    child: TvFocusMotion(
       focused: focused,
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          focusNode: node,
-          onTap: widget.bindings.onPressed,
-          borderRadius: BorderRadius.circular(14),
-          onFocusChange: (value) {
-            setState(() => focused = value);
-            if (value) widget.bindings.onFocus();
-          },
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: SizedBox.expand(
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(12),
-                    child: widget.item.coverUrl == null
-                        ? Icon(
-                            widget.item is PersonalFolder
-                                ? CupertinoIcons.folder
-                                : CupertinoIcons.play_rectangle,
-                            size: 44,
-                            color: context.tvColors.accent,
-                          )
-                        : CachedNetworkImage(
-                            imageUrl: widget.item.coverUrl!,
-                            cacheManager: TvImageCache.manager,
-                            memCacheWidth: 640,
-                            fit: BoxFit.cover,
-                            placeholder: (_, _) =>
-                                const Center(child: Icon(CupertinoIcons.photo)),
-                            errorWidget: (_, _, _) =>
-                                const Center(child: Icon(CupertinoIcons.photo)),
-                          ),
+      reducedMotion: widget.bindings.reducedMotion,
+      child: LiquidGlassCard(
+        focused: focused,
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            focusNode: node,
+            onTap: widget.bindings.onPressed,
+            borderRadius: BorderRadius.circular(14),
+            onFocusChange: (value) {
+              setState(() => focused = value);
+              if (value) widget.bindings.onFocus();
+            },
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: SizedBox.expand(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: widget.item.coverUrl == null
+                          ? Icon(
+                              widget.item is PersonalFolder
+                                  ? CupertinoIcons.folder
+                                  : CupertinoIcons.play_rectangle,
+                              size: 44,
+                              color: context.tvColors.accent,
+                            )
+                          : CachedNetworkImage(
+                              imageUrl: widget.item.coverUrl!,
+                              cacheManager: TvImageCache.manager,
+                              memCacheWidth: widget.item is PersonalSeason
+                                  ? 480
+                                  : 640,
+                              maxWidthDiskCache: widget.item is PersonalSeason
+                                  ? 480
+                                  : 640,
+                              fit: widget.item is PersonalSeason
+                                  ? BoxFit.contain
+                                  : BoxFit.cover,
+                              placeholder: (_, _) => const Center(
+                                child: Icon(CupertinoIcons.photo),
+                              ),
+                              errorWidget: (_, _, _) => const Center(
+                                child: Icon(CupertinoIcons.photo),
+                              ),
+                            ),
+                    ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(8, 9, 8, 2),
-                child: Text(
-                  widget.item.title,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                    color: context.tvColors.text,
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(8, 9, 8, 2),
+                  child: Text(
+                    widget.item.title,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: context.tvColors.text,
+                    ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
-                child: Text(
-                  widget.item.subtitle,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(fontSize: 11, color: context.tvColors.muted),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
+                  child: Text(
+                    widget.item.subtitle,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 11,
+                      color: context.tvColors.muted,
+                    ),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

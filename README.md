@@ -11,6 +11,8 @@ M5 播放器控制与受限恢复已实现：画质／AAC 音轨、倍速／音�
 - [我的头像、投稿、收藏、追番／追剧与历史记录](docs/personal-home.md)
 - [TV 诊断日志与 Riverpod 状态记录](docs/diagnostics-logging.md)
 - [详细开发计划与验收标准](docs/development-plan.md)
+- [视频／番剧／影视／直播搜索与玻璃 Tabs／侧栏](docs/search-types-and-glass.md)
+- [详情推荐网格、Tabs 刷新与番剧资料页](docs/detail-layout-and-refresh.md)
 - [M8／M9 详细规划：字幕、弹幕、内容扩展与独立能力](docs/development-plan.md#11-m8m9详细开发计划)
 - [M0 验收记录与运行方式](docs/m0-validation.md)
 - [M1 验收记录与证据](docs/m1-validation.md)
@@ -33,7 +35,11 @@ M6 本机 176 项测试及 TV 模拟器集成验证通过；真实扫码后的�
 
 M7 已完成本机／模拟器发布准备：179 项回归、15 分钟 profile、20 次进出与自动连播、三 ABI Debug／测试签名 Release 和隔离升级；补齐品牌图标、TV banner、开源许可与随包材料。真实 TV 及人工音画尚未验收；原生 avsync 波动与全部边界见 [M7](docs/m7-validation.md)。
 
-M8 必交功能已实现：字幕轨道与样式／偏移、默认关闭的只读基础弹幕、UP 视频页、关注分页和基础搜索筛选，沿用 iOS 风格与遥控器焦点。202 项回归、真实账号只读及 20 次资源释放检查通过，远端写入为 0；**持续弹幕性能未通过，M8 尚未完成验收**，详见 [M8 验收](docs/m8-validation.md)。点赞／投币独立延期，M9 未开始。
+M8 必交功能已实现，沿用 iOS 风格与遥控器焦点；**最高密度持续弹幕性能仍未通过**，字幕组合按用户要求暂缓，详见 [M8 验收](docs/m8-validation.md)。点赞／投币独立延期。
+
+M9 工作区已接入类型化播放、番剧索引／选集／本地续播／下一集、房间号或链接直播、HLS 清晰度与重连，Drift 升至 v4。TV 模拟器 20 次混合切换、PGC 续播与自然下一集、15 分钟直播及原生清晰度／生命周期验证通过；直播推荐仍返回 -352。投屏／下载／多账号、物理 ARM、人工听感和发布仍未完成，见 [M9 验收](docs/m9-validation.md) 与 [ADR 0011](docs/adr/0011-m9-typed-content-and-live.md)。这些未提交增量不属于既有 v1.0.0 发布资产。
+
+2026-10-29 界面增量：Cue 提供短促焦点与 Tabs 胶囊动效，番剧／影视成为侧栏独立入口，历史记录继续第二位；番剧封面按实测原图改为 3:4 竖版、保比例解码和显示。见 [界面记录](docs/cue-tv-ui.md)。
 
 ## CI/CD
 
@@ -80,7 +86,7 @@ flutter drive --keep-app-running --no-uninstall-first --dart-define=MAMBA_VALIDA
 
 - `app/`：Riverpod 装配、启动、路由和生命周期。
 - `core/`、`domain/`：纯 Dart 结果类型、不可变业务模型、仓储接口。
-- `data/`：Web/WBI 内容与资源、本地偏好/续播、安全存储、Drift v2（保留 v1 迁移）、Dio 脱敏日志、media_kit 适配器；Fake 用于自动测试。
+- `data/`：Web/WBI 与 PGC／直播、本地偏好／续播、安全存储、Drift v4（保留 v1／v2／v3 迁移）、Dio 脱敏日志、Better Player／media_kit 适配器；Fake 用于自动测试。
 - `ui/`：TV 组件与焦点、页面、生成的 Riverpod ViewModel。
 
 依赖以 `pubspec.lock` 为准；生成文件随源码保留。正式签名、发布和完整业务能力按开发计划继续推进。

@@ -11,6 +11,7 @@ import '../../../../app/providers/repository_providers.dart';
 import '../../../../app/providers/ui_providers.dart';
 import '../../../../core/result.dart';
 import '../../../../domain/playback/playback.dart';
+import '../../../../domain/playback/playback_target.dart';
 import '../../../core/theme/tv_theme.dart';
 import '../../../core/widgets/glass_panel.dart';
 import '../../../core/widgets/tv_button.dart';
@@ -25,11 +26,13 @@ class PlayerPage extends ConsumerStatefulWidget {
     required this.pageId,
     this.partId,
     this.remoteResume,
+    this.target,
     super.key,
   });
   final String videoId, pageId;
   final String? partId;
   final Duration? remoteResume;
+  final PlaybackTarget? target;
   @override
   ConsumerState<PlayerPage> createState() => _PlayerPageState();
 }
@@ -63,9 +66,9 @@ class _PlayerPageState extends ConsumerState<PlayerPage> {
         ownerKey: routeOwner!,
       );
       unawaited(
-        vm.start(
-          widget.videoId,
-          partId: widget.partId,
+        vm.startTarget(
+          widget.target ??
+              PlaybackTarget.ugc(bvid: widget.videoId, cid: widget.partId),
           remoteResume: widget.remoteResume,
         ),
       );
@@ -138,6 +141,20 @@ class _PlayerPageState extends ConsumerState<PlayerPage> {
       return KeyEventResult.ignored;
     }
     _show();
+    if (!ref.read(provider).capabilities.seek) {
+      const allowed = [0, 2, 4, 5, 10];
+      final at = allowed.indexOf(index);
+      if (event.logicalKey == LogicalKeyboardKey.arrowLeft) {
+        nodes[allowed[(at - 1).clamp(0, allowed.length - 1)]].requestFocus();
+      } else if (event.logicalKey == LogicalKeyboardKey.arrowRight) {
+        nodes[allowed[(at + 1).clamp(0, allowed.length - 1)]].requestFocus();
+      } else if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
+        nodes[index >= 5 ? 2 : 0].requestFocus();
+      } else if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
+        nodes[index == 0 ? 2 : 5].requestFocus();
+      }
+      return KeyEventResult.handled;
+    }
     final phase = ref.read(provider).phase;
     if (phase == PlayerPhase.resolving || phase == PlayerPhase.opening) {
       return KeyEventResult.handled;
@@ -410,8 +427,8 @@ class _PlayerPageState extends ConsumerState<PlayerPage> {
     if (!identityChanged && !leaving && state.partId.isNotEmpty) {
       ref.watch(
         subtitleChoiceProvider(
-          videoId: widget.videoId,
-          partId: state.partId,
+          videoId: state.overlayVideoId ?? widget.videoId,
+          partId: state.overlayPartId ?? state.partId,
           scopeKey: routeScope ?? routeOwner ?? 'guest',
         ).select((_) => null),
       );
@@ -468,12 +485,14 @@ class _PlayerPageState extends ConsumerState<PlayerPage> {
                   ),
                 if (engine != null &&
                     state.partId.isNotEmpty &&
+                    (state.capabilities.subtitles ||
+                        state.capabilities.danmaku) &&
                     !retry &&
                     !busy)
                   PlaybackOverlays(
                     engine: engine,
-                    videoId: widget.videoId,
-                    partId: state.partId,
+                    videoId: state.overlayVideoId ?? widget.videoId,
+                    partId: state.overlayPartId ?? state.partId,
                     scopeKey: routeScope ?? routeOwner ?? 'guest',
                     controlsVisible: controls,
                   ),
@@ -622,7 +641,9 @@ class _PlayerPageState extends ConsumerState<PlayerPage> {
                                       ),
                                       const Spacer(),
                                       Text(
-                                        '${qualityLabel(state.quality)} · AVC · ${state.rate}×',
+                                        state.target is LiveTarget
+                                            ? '直播 · ${state.qualities.where((q) => q.id == state.quality).firstOrNull?.label ?? state.quality}'
+                                            : '${qualityLabel(state.quality)} · AVC · ${state.rate}×',
                                         style: const TextStyle(
                                           fontSize: 11,
                                           color: Colors.white70,
@@ -631,22 +652,24 @@ class _PlayerPageState extends ConsumerState<PlayerPage> {
                                     ],
                                   ),
                                   const SizedBox(height: 8),
-                                  _PlayerProgress(provider: provider),
+                                  if (state.capabilities.seek)
+                                    _PlayerProgress(provider: provider),
                                   const SizedBox(height: 8),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      button(
-                                        1,
-                                        'player-rewind',
-                                        '后退 10 秒',
-                                        () => unawaited(
-                                          vm.seekBy(
-                                            const Duration(seconds: -10),
+                                      if (state.capabilities.seek)
+                                        button(
+                                          1,
+                                          'player-rewind',
+                                          '后退 10 秒',
+                                          () => unawaited(
+                                            vm.seekBy(
+                                              const Duration(seconds: -10),
+                                            ),
                                           ),
+                                          icon: CupertinoIcons.gobackward_10,
                                         ),
-                                        icon: CupertinoIcons.gobackward_10,
-                                      ),
                                       const SizedBox(width: 10),
                                       button(
                                         2,
@@ -662,17 +685,18 @@ class _PlayerPageState extends ConsumerState<PlayerPage> {
                                             : CupertinoIcons.play_fill,
                                       ),
                                       const SizedBox(width: 10),
-                                      button(
-                                        3,
-                                        'player-forward',
-                                        '快进 10 秒',
-                                        () => unawaited(
-                                          vm.seekBy(
-                                            const Duration(seconds: 10),
+                                      if (state.capabilities.seek)
+                                        button(
+                                          3,
+                                          'player-forward',
+                                          '快进 10 秒',
+                                          () => unawaited(
+                                            vm.seekBy(
+                                              const Duration(seconds: 10),
+                                            ),
                                           ),
+                                          icon: CupertinoIcons.goforward_10,
                                         ),
-                                        icon: CupertinoIcons.goforward_10,
-                                      ),
                                     ],
                                   ),
                                   const SizedBox(height: 8),
@@ -687,48 +711,55 @@ class _PlayerPageState extends ConsumerState<PlayerPage> {
                                         '清晰度',
                                         () => _openMenu(5),
                                       ),
-                                      button(
-                                        6,
-                                        'player-rate',
-                                        '${state.rate}×',
-                                        () => _openMenu(6),
-                                      ),
-                                      button(
-                                        7,
-                                        'player-audio',
-                                        '音轨',
-                                        () => _openMenu(7),
-                                      ),
-                                      button(
-                                        8,
-                                        'player-parts',
-                                        '选集',
-                                        () => _openMenu(8),
-                                      ),
-                                      button(
-                                        9,
-                                        'player-auto-next',
-                                        state.autoNext ? '连播：开' : '连播：关',
-                                        () => vm.setAutoNext(!state.autoNext),
-                                      ),
+                                      if (state.capabilities.rate)
+                                        button(
+                                          6,
+                                          'player-rate',
+                                          '${state.rate}×',
+                                          () => _openMenu(6),
+                                        ),
+                                      if (state.capabilities.audioTracks)
+                                        button(
+                                          7,
+                                          'player-audio',
+                                          '音轨',
+                                          () => _openMenu(7),
+                                        ),
+                                      if (state.capabilities.parts)
+                                        button(
+                                          8,
+                                          'player-parts',
+                                          '选集',
+                                          () => _openMenu(8),
+                                        ),
+                                      if (state.capabilities.parts)
+                                        button(
+                                          9,
+                                          'player-auto-next',
+                                          state.autoNext ? '连播：开' : '连播：关',
+                                          () => vm.setAutoNext(!state.autoNext),
+                                        ),
                                       button(
                                         10,
                                         'player-volume',
                                         '音量 ${state.volume.round()}%',
                                         () => _openMenu(10),
                                       ),
-                                      button(
-                                        11,
-                                        'player-next',
-                                        '下一集',
-                                        () => unawaited(vm.nextPart()),
-                                      ),
-                                      button(
-                                        12,
-                                        'player-enhancements',
-                                        '字幕与弹幕',
-                                        () => unawaited(_enhancements(state)),
-                                      ),
+                                      if (state.capabilities.parts)
+                                        button(
+                                          11,
+                                          'player-next',
+                                          '下一集',
+                                          () => unawaited(vm.nextPart()),
+                                        ),
+                                      if (state.capabilities.subtitles ||
+                                          state.capabilities.danmaku)
+                                        button(
+                                          12,
+                                          'player-enhancements',
+                                          '字幕与弹幕',
+                                          () => unawaited(_enhancements(state)),
+                                        ),
                                     ],
                                   ),
                                   if (state.notice != null)

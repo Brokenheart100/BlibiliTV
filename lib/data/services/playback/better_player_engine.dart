@@ -144,20 +144,24 @@ class BetterPlayerEngine implements PlaybackEngine {
     _nativePosition = null;
     _emit(const EngineSnapshot());
     try {
-      final manifest = await LoopbackDashManifest.serve(
-        buildDashManifest(source),
-      );
+      final manifest = source.transport == PlaybackTransport.dash
+          ? await LoopbackDashManifest.serve(buildDashManifest(source))
+          : null;
       if (_disposed) {
-        await manifest.close();
+        await manifest?.close();
         _check();
       }
       await _manifest?.close();
       _manifest = manifest;
       await controller
           .setNetworkDataSource(
-            manifest.uri.toString(),
-            formatHint: bp.VideoFormat.dash,
-            headers: bilibiliMediaHeaders,
+            manifest?.uri.toString() ?? source.videoUrl,
+            formatHint: switch (source.transport) {
+              PlaybackTransport.dash => bp.VideoFormat.dash,
+              PlaybackTransport.hls => bp.VideoFormat.hls,
+              _ => null,
+            },
+            headers: {...bilibiliMediaHeaders, ...source.headers},
             useCache: false,
           )
           .timeout(const Duration(seconds: 30));
@@ -279,30 +283,61 @@ class BetterPlayerEngine implements PlaybackEngine {
   }
 }
 
-class BetterPlayerSurface extends StatelessWidget {
+class BetterPlayerSurface extends StatefulWidget {
   const BetterPlayerSurface(this.engine, {super.key});
   final BetterPlayerEngine engine;
   @override
-  Widget build(BuildContext context) => ColoredBox(
-    color: const Color(0xFF000000),
-    child: ValueListenableBuilder<bp.VideoPlayerValue>(
-      valueListenable: engine.controller,
-      child: bp.PlayerEngineView(engine.controller),
-      builder: (context, value, child) {
-        final size = value.size;
-        return ClipRect(
-          child: SizedBox.expand(
-            child: FittedBox(
-              fit: BoxFit.contain,
-              child: SizedBox(
-                width: size != null && size.width > 0 ? size.width : 1,
-                height: size != null && size.height > 0 ? size.height : 1,
-                child: child,
+  State<BetterPlayerSurface> createState() => _BetterPlayerSurfaceState();
+}
+
+class _BetterPlayerSurfaceState extends State<BetterPlayerSurface> {
+  late final size = ValueNotifier<Size?>(widget.engine.controller.value.size);
+  void _geometryChanged() => size.value = widget.engine.controller.value.size;
+  @override
+  void initState() {
+    super.initState();
+    widget.engine.controller.addListener(_geometryChanged);
+  }
+
+  @override
+  void didUpdateWidget(covariant BetterPlayerSurface oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.engine != widget.engine) {
+      oldWidget.engine.controller.removeListener(_geometryChanged);
+      widget.engine.controller.addListener(_geometryChanged);
+      _geometryChanged();
+    }
+  }
+
+  @override
+  void dispose() {
+    widget.engine.controller.removeListener(_geometryChanged);
+    size.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => RepaintBoundary(
+    child: ColoredBox(
+      color: const Color(0xFF000000),
+      child: ValueListenableBuilder<Size?>(
+        valueListenable: size,
+        child: bp.PlayerEngineView(widget.engine.controller),
+        builder: (context, size, child) {
+          return ClipRect(
+            child: SizedBox.expand(
+              child: FittedBox(
+                fit: BoxFit.contain,
+                child: SizedBox(
+                  width: size != null && size.width > 0 ? size.width : 1,
+                  height: size != null && size.height > 0 ? size.height : 1,
+                  child: child,
+                ),
               ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     ),
   );
 }

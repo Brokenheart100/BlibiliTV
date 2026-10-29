@@ -211,3 +211,134 @@ final class RelatedVideosFamily extends $Family
   @override
   String toString() => r'relatedVideosProvider';
 }
+
+/// The related endpoint is finite. Continue with the existing discovery feed
+/// rather than inventing pagination parameters for that endpoint.
+
+@ProviderFor(DetailDiscovery)
+final detailDiscoveryProvider = DetailDiscoveryFamily._();
+
+/// The related endpoint is finite. Continue with the existing discovery feed
+/// rather than inventing pagination parameters for that endpoint.
+final class DetailDiscoveryProvider
+    extends $AsyncNotifierProvider<DetailDiscovery, CatalogState> {
+  /// The related endpoint is finite. Continue with the existing discovery feed
+  /// rather than inventing pagination parameters for that endpoint.
+  DetailDiscoveryProvider._({
+    required DetailDiscoveryFamily super.from,
+    required ({String id, String pageId, String ownerKey, String scopeKey})
+    super.argument,
+  }) : super(
+         retry: null,
+         name: r'detailDiscoveryProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
+
+  @override
+  String debugGetCreateSourceHash() => _$detailDiscoveryHash();
+
+  @override
+  String toString() {
+    return r'detailDiscoveryProvider'
+        ''
+        '$argument';
+  }
+
+  @$internal
+  @override
+  DetailDiscovery create() => DetailDiscovery();
+
+  @override
+  bool operator ==(Object other) {
+    return other is DetailDiscoveryProvider && other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
+  }
+}
+
+String _$detailDiscoveryHash() => r'a712710ab79578e28018640ce4ae6e2a9e9e5f73';
+
+/// The related endpoint is finite. Continue with the existing discovery feed
+/// rather than inventing pagination parameters for that endpoint.
+
+final class DetailDiscoveryFamily extends $Family
+    with
+        $ClassFamilyOverride<
+          DetailDiscovery,
+          AsyncValue<CatalogState>,
+          CatalogState,
+          FutureOr<CatalogState>,
+          ({String id, String pageId, String ownerKey, String scopeKey})
+        > {
+  DetailDiscoveryFamily._()
+    : super(
+        retry: null,
+        name: r'detailDiscoveryProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
+
+  /// The related endpoint is finite. Continue with the existing discovery feed
+  /// rather than inventing pagination parameters for that endpoint.
+
+  DetailDiscoveryProvider call({
+    required String id,
+    required String pageId,
+    required String ownerKey,
+    required String scopeKey,
+  }) => DetailDiscoveryProvider._(
+    argument: (id: id, pageId: pageId, ownerKey: ownerKey, scopeKey: scopeKey),
+    from: this,
+  );
+
+  @override
+  String toString() => r'detailDiscoveryProvider';
+}
+
+/// The related endpoint is finite. Continue with the existing discovery feed
+/// rather than inventing pagination parameters for that endpoint.
+
+abstract class _$DetailDiscovery extends $AsyncNotifier<CatalogState> {
+  late final _$args =
+      ref.$arg
+          as ({String id, String pageId, String ownerKey, String scopeKey});
+  String get id => _$args.id;
+  String get pageId => _$args.pageId;
+  String get ownerKey => _$args.ownerKey;
+  String get scopeKey => _$args.scopeKey;
+
+  FutureOr<CatalogState> build({
+    required String id,
+    required String pageId,
+    required String ownerKey,
+    required String scopeKey,
+  });
+  @$mustCallSuper
+  @override
+  WhenComplete runBuild() {
+    final ref = this.ref as $Ref<AsyncValue<CatalogState>, CatalogState>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<AsyncValue<CatalogState>, CatalogState>,
+              AsyncValue<CatalogState>,
+              Object?,
+              Object?
+            >;
+    return element.handleCreate(
+      ref,
+      () => build(
+        id: _$args.id,
+        pageId: _$args.pageId,
+        ownerKey: _$args.ownerKey,
+        scopeKey: _$args.scopeKey,
+      ),
+    );
+  }
+}

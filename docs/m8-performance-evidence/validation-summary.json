@@ -1,0 +1,43 @@
+{
+  "status": "not-accepted",
+  "playbackRegression": "passed",
+  "report": "better-final-rejected-native.json",
+  "requestedSeconds": 900,
+  "cumulativeMediaAtEndMs": 899931,
+  "elapsedSecondsIncludingCleanup": 902,
+  "naturalPartTransitions": [
+    {
+      "atSeconds": 436,
+      "fromPart": "40027950776",
+      "toPart": "40027951034"
+    }
+  ],
+  "resourceCycles": 20,
+  "homeCycles": 10,
+  "nativeErrorCount": 0,
+  "nativeEnginesCreated": 37,
+  "nativeEnginesReleased": 37,
+  "maximumEngines": 1,
+  "liveEnginesAfterReturn": 0,
+  "overlaysCreated": 38,
+  "overlaysDisposed": 38,
+  "activeOverlays": 0,
+  "activeSchedulers": 0,
+  "glyphCacheBytesAfterReturn": 0,
+  "glyphCacheHits": 1941,
+  "glyphCacheMisses": 160,
+  "maximumObservedGlyphBytes": 1977100.0,
+  "performanceFailures": [
+    "both: frame P95 exceeds 16.7 ms",
+    "Danmaku raster P95 incremental budget exceeds 3 ms"
+  ],
+  "remoteWrites": 0,
+  "flutterTests": 253,
+  "pipelineGuardTests": 13,
+  "staticAnalysis": "passed",
+  "formatting": "263 files unchanged",
+  "manualLipSyncVerified": false,
+  "physicalTv": false,
+  "mcpHotReload": "passed",
+  "mcpRuntimeErrors": 0
+}

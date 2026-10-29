@@ -1,5 +1,6 @@
 import '../../core/result.dart';
 import '../entities/app_models.dart';
+import '../playback/playback_target.dart';
 
 enum LibrarySection { local, remote, folders, folder, watchLater }
 
@@ -13,6 +14,7 @@ final class LibraryEntry {
     this.folderId,
     this.count = 0,
     this.unavailableReason,
+    this.target,
   });
   final String key;
   final VideoSummary video;
@@ -20,6 +22,7 @@ final class LibraryEntry {
   final Duration position;
   final DateTime? updatedAt;
   final int count;
+  final PlaybackTarget? target;
 }
 
 final class FavouriteFolder {
@@ -62,6 +65,10 @@ abstract interface class LocalHistoryRepository {
   Future<Result<void>> rememberVideo(String ownerKey, VideoSummary video);
   Future<Result<void>> remove(String ownerKey, String videoId);
   Future<Result<void>> clear(String ownerKey);
+}
+
+abstract interface class TypedLocalHistoryRepository {
+  Future<Result<void>> removeTarget(String ownerKey, PlaybackTarget target);
 }
 
 abstract interface class LibraryRepository {
